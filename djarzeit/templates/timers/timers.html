@@ -1,11 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>ArZeit</title>
-    </head>
-    <body>
-        <p>
-            Welcome to DjArZeit!
-        </p>
-    </body>
-</html>
+{% include 'base.html' %}
+
+{% block arzeit_content %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Timer</th>
+            <th scope="col">Today</th>
+            <th scope="col">Start/Stop</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for timer in timers %}
+        <tr>
+            <td>
+                <a href="{% url 'timer' id=timer.id %}">{{ timer.name }}</a>
+            </td>
+            <td>
+                ...
+            </td>
+            <td>
+                <button class="btn btn-primary">
+                    Start
+                </button>
+                <button class="btn btn-warning">
+                    Stop
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

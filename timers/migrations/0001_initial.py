@@ -12,6 +12,7 @@ class Migration(SchemaMigration):
         db.create_table('timers_timer', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('active', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal('timers', ['Timer'])
 
@@ -20,7 +21,7 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('timer', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['timers.Timer'])),
             ('start', self.gf('django.db.models.fields.DateTimeField')()),
-            ('end', self.gf('django.db.models.fields.DateTimeField')()),
+            ('end', self.gf('django.db.models.fields.DateTimeField')(blank=True, null=True)),
             ('notes', self.gf('django.db.models.fields.CharField')(max_length=1000)),
         ))
         db.send_create_signal('timers', ['Interval'])
@@ -59,11 +60,11 @@ class Migration(SchemaMigration):
     models = {
         'timers.interval': {
             'Meta': {'object_name': 'Interval'},
-            'end': ('django.db.models.fields.DateTimeField', [], {}),
+            'end': ('django.db.models.fields.DateTimeField', [], {'blank': 'True', 'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'notes': ('django.db.models.fields.CharField', [], {'max_length': '1000'}),
             'start': ('django.db.models.fields.DateTimeField', [], {}),
-            'tags': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['timers.Tags']", 'symmetrical': 'False'}),
+            'tags': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['timers.Tags']"}),
             'timer': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['timers.Timer']"})
         },
         'timers.tags': {
@@ -73,6 +74,7 @@ class Migration(SchemaMigration):
         },
         'timers.timer': {
             'Meta': {'object_name': 'Timer'},
+            'active': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         }
