@@ -1,40 +1,75 @@
-{% include 'base.html' %}
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block static_content %}
+<script src="{% static 'timers/timers.js' %}"></script>
+{% endblock %}
 
 {% block arzeit_content %}
-<form id="new_timer" method="post" action="{% url 'new' %}">
-    {% csrf_token %}
-    <label for="timer_name">Create new timer:</label>
-    <input type="text" name="timer_name" id="timer_name" class="input input-small" />
-    <button type="submit" class="btn btn-primary" id="new_timer_btn">Create</button>
-</form>
 
 <table class="table table-striped">
     <thead>
         <tr>
-            <th scope="col">Timer</th>
+            <th scope="col">Name</th>
+            <th scope="col">Last Week</th>
             <th scope="col">Today</th>
-            <th scope="col">Start/Stop</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
-        {% for timer in timers %}
-        <tr>
-            <td>
-                <a href="{% url 'timer' id=timer.id %}">{{ timer.name }}</a>
-            </td>
-            <td>
-                ...
-            </td>
-            <td>
-                <button class="btn btn-primary">
-                    Start
-                </button>
-                <button class="btn btn-warning">
-                    Stop
-                </button>
+        {% for cat in categories %}
+        <tr class="category_row" id="category_{{ cat.id }}">
+            <th scope="row">
+                <a href="{% url 'category' id=cat.id %}">{{ cat.name }}<a/>
+            </th>
+            <td>{{ cat.last_week }}</td>
+            <td>{{ cat.today }}</td>
+            <td><button class="btn btn-small">-</button></td>
+        </tr>
+            <tr class="timer_row category_{{ cat.id }}">
+            {% for timer in cat.timers %}
+                <th scope="row">
+                    <a href="{% url 'timer' id=timer.id %}">{{ timer.name }}</a>
+                </th>
+                <td>{{ timer.last_week }}</td>
+                <td>{{ timer.today }}</td>
+                <td>
+                    <button class="btn btn-primary ajax_form" id="startstop_{{ timer.id }}">
+                        {% if timer.active %}
+                            Stop
+                        {% else %}
+                            Start
+                        {% endif %}
+                    </button>
+                </td>
+            {% empty %}
+                <td colspan="4">
+                    There are no timers in this category.
+                </td>
+            {% endfor %}
+            </tr>
+        <tr class="add_timer_row category_{{ cat.id }}">
+            <td colspan="4">
+                <form id="new_timer_{{ cat.id }}" method="post" action="{% url 'new_timer' %}">
+                    {% csrf_token %}
+                    <label for="timer_name">New timer</label>
+                    <input type="hidden" name="category_id" value="{{ cat.id }}" />
+                    <input type="text" name="timer_name" class="input input-medium" />
+                    <button type="submit" class="btn btn-primary" id="new_timer_btn">
+                        Create
+                    </button>
+                </form>
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+
+<form id="new_timer" method="post" action="{% url 'new_category' %}">
+    {% csrf_token %}
+    <label for="category_name">New category</label>
+    <input type="text" name="category_name" id="category_name" class="input input-medium" />
+    <button type="submit" class="btn btn-primary" id="new_category_btn">Create</button>
+</form>
+
 {% endblock %}
