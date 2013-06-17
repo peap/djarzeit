@@ -17,5 +17,5 @@ JSON_TEMPLATE_TO_SERVER = {
 
 def get_new_json_response():
     response = deepcopy(JSON_TEMPLATE_TO_CLIENT)
-    response['server_time'] = datetime.now()
+    response['server_time'] = datetime.now().isoformat()
     return response

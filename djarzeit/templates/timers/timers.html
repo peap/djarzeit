@@ -1,6 +1,13 @@
 {% include 'base.html' %}
 
 {% block arzeit_content %}
+<form id="new_timer" method="post" action="{% url 'new' %}">
+    {% csrf_token %}
+    <label for="timer_name">Create new timer:</label>
+    <input type="text" name="timer_name" id="timer_name" class="input input-small" />
+    <button type="submit" class="btn btn-primary" id="new_timer_btn">Create</button>
+</form>
+
 <table class="table table-striped">
     <thead>
         <tr>
