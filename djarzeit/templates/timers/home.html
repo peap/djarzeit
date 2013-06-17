@@ -26,28 +26,33 @@
             <td>{{ cat.today }}</td>
             <td><button class="btn btn-small">-</button></td>
         </tr>
-            <tr class="timer_row category_{{ cat.id }}">
             {% for timer in cat.timers %}
+            <tr id="timer_row_{{ timer.id }}" class="timer_row category_{{ cat.id }}">
                 <th scope="row">
                     <a href="{% url 'timer' id=timer.id %}">{{ timer.name }}</a>
                 </th>
                 <td>{{ timer.last_week }}</td>
                 <td>{{ timer.today }}</td>
                 <td>
-                    <button class="btn btn-primary ajax_form" id="startstop_{{ timer.id }}">
-                        {% if timer.active %}
-                            Stop
-                        {% else %}
-                            Start
-                        {% endif %}
-                    </button>
+                    <form method="post" action="{% url 'startstop' id=timer.id %}" class="startstop_form">
+                        {% csrf_token %}
+                        <button class="btn btn-primary" id="startstop_{{ timer.id }}">
+                            {% if timer.active %}
+                                Stop
+                            {% else %}
+                                Start
+                            {% endif %}
+                        </button>
+                    </form>
                 </td>
+            </tr>
             {% empty %}
+            <tr class="timer_row category_{{ cat.id }}">
                 <td colspan="4">
                     There are no timers in this category.
                 </td>
-            {% endfor %}
             </tr>
+            {% endfor %}
         <tr class="add_timer_row category_{{ cat.id }}">
             <td colspan="4">
                 <form id="new_timer_{{ cat.id }}" method="post" action="{% url 'new_timer' %}">

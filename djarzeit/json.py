@@ -15,7 +15,9 @@ JSON_TEMPLATE_TO_SERVER = {
 }
 
 
+TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
+
 def get_new_json_response():
     response = deepcopy(JSON_TEMPLATE_TO_CLIENT)
-    response['server_time'] = datetime.now().isoformat()
+    response['server_time'] = datetime.now().strftime(TIME_FORMAT)
     return response

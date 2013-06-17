@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.db import models
 
@@ -63,11 +63,26 @@ class Timer(models.Model):
     )
 
     def start(self):
-        self.active = True
+        interval = Interval()
+        interval.timer = self
+        interval.start = datetime.now()
+        interval.full_clean()
+        interval.save()
 
+        self.active = True
+        self.save()
 
     def stop(self):
+        interval = Interval.objects.get(
+            timer=self,
+            end=None,
+        )
+        interval.end = datetime.now()
+        interval.full_clean()
+        interval.save()
+
         self.active = False
+        self.save()
 
     @property
     def today(self):
@@ -75,12 +90,14 @@ class Timer(models.Model):
         Total time for today.
         """
         today = datetime.today()
-        intervals = Interval.objects().filter(
+        intervals = Interval.objects.filter(
             timer=self,
             start__year=today.year,
             start__month=today.month,
             start__day=today.day,
         )
+        print(intervals)
+        total = timedelta(0)
         for interval in intervals:
             total += interval.length
         return total.total_seconds

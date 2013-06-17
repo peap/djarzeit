@@ -1,3 +1,4 @@
+from datetime import datetime
 from json import dumps
 
 from django.contrib import messages
@@ -5,7 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect, get_object_or_404
 
 from djarzeit.context import ArZeitContext
-from djarzeit.json import get_new_json_response
+from djarzeit.json import get_new_json_response, TIME_FORMAT
 from timers.models import Category, Timer, Interval, Tags
 
 
@@ -13,6 +14,7 @@ def home(request):
     categories = Category.objects.all()
     context = {
         'categories': categories,
+        'server_time': datetime.now().strftime(TIME_FORMAT)
     }
     context = ArZeitContext(request, context)
     return render_to_response('timers/home.html', {}, context)
@@ -70,18 +72,12 @@ def timer(request, id):
     return render_to_response('timers/timer.html', context)
 
 
-# TODO: create an AJAX-only decorator
 def startstop(request, id):
-    if not request.is_ajax():
-        messages.error('Invalid request.')
-        return redirect('home')
-
     timer = get_object_or_404(Timer, id=id)
 
-    if time.active:
+    if timer.active:
         timer.stop()
     else:
         timer.start()
 
-    json = get_new_json_response()
-    return HttpResponse(dumps(json), mimetype='application/json')
+    return redirect('home')
