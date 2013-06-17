@@ -4,6 +4,7 @@ from json import dumps
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect, get_object_or_404
+from django.utils.timezone import now
 
 from djarzeit.context import ArZeitContext
 from djarzeit.json import get_new_json_response, TIME_FORMAT
@@ -14,7 +15,7 @@ def home(request):
     categories = Category.objects.all()
     context = {
         'categories': categories,
-        'server_time': datetime.now().strftime(TIME_FORMAT)
+        'server_time': now().strftime(TIME_FORMAT)
     }
     context = ArZeitContext(request, context)
     return render_to_response('timers/home.html', {}, context)

@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
 from django.db import models
+from django.utils.timezone import now
 
 
 class Category(models.Model):
@@ -65,7 +66,7 @@ class Timer(models.Model):
     def start(self):
         interval = Interval()
         interval.timer = self
-        interval.start = datetime.now()
+        interval.start = now()
         interval.full_clean()
         interval.save()
 
@@ -77,7 +78,7 @@ class Timer(models.Model):
             timer=self,
             end=None,
         )
-        interval.end = datetime.now()
+        interval.end = now()
         interval.full_clean()
         interval.save()
 
@@ -96,7 +97,6 @@ class Timer(models.Model):
             start__month=today.month,
             start__day=today.day,
         )
-        print(intervals)
         total = timedelta(0)
         for interval in intervals:
             total += interval.length
@@ -137,12 +137,12 @@ class Interval(models.Model):
     @property
     def length(self):
         """
-        Length of the interval. Returns datetime.datetime.
+        Length of the interval. Returns datetime.timedelta object.
         """
-        if self.end is not None:
-            length = self.end - self.start
+        if self.end is None:
+            length = now() - self.start
         else:
-            length = datetime.now() - self.start
+            length = self.end - self.start
         return length
 
 
