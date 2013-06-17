@@ -6,26 +6,60 @@ from django.shortcuts import render_to_response, redirect, get_object_or_404
 
 from djarzeit.context import ArZeitContext
 from djarzeit.json import get_new_json_response
-from timers.models import Timer, Interval, Tags
+from timers.models import Category, Timer, Interval, Tags
 
 
 def home(request):
-    timers = Timer.objects.all()
+    categories = Category.objects.all()
     context = {
-        'timers': timers,
+        'categories': categories,
     }
     context = ArZeitContext(request, context)
-    return render_to_response('timers/timers.html', {}, context)
+    return render_to_response('timers/home.html', {}, context)
 
 
-def new(request):
+def new_category(request):
+    name = request.POST.get('category_name')
+    if not name:
+        messages.error(request, 'Please choose a category name.')
+        return redirect('home')
+
+    category = Category()
+    category.name = request.POST.get('category_name')
+    category.full_clean()
+    category.save()
+    messages.success(request, 'Created a new category.')
+
+    return redirect('home')
+
+
+def new_timer(request):
+    category_id = request.POST.get('category_id')
+    name = request.POST.get('timer_name')
+    if not category_id:
+        messages.error(request, 'Please choose a category for this new timer.')
+        return redirect('home')
+    if not name:
+        messages.error(request, 'Please choose a timer name.')
+        return redirect('home')
+
+    category = get_object_or_404(Category, id=category_id)
     timer = Timer()
-    timer.name = request.POST.get('timer_name')
+    timer.category = category
+    timer.name = name
     timer.full_clean()
     timer.save()
-    json = get_new_json_response()
-    json['data']['id'] = timer.id
-    return HttpResponse(dumps(json))
+    messages.success(request, 'Created a new timer.')
+
+    return redirect('home')
+
+
+def category(request, id):
+    category = get_object_or_404(Category, id=id)
+    context = {
+        'category': category,
+    }
+    return render_to_response('timers/category.html', context)
 
 
 def timer(request, id):
@@ -50,4 +84,4 @@ def startstop(request, id):
         timer.start()
 
     json = get_new_json_response()
-    return HttpResponse(dumps(json))
+    return HttpResponse(dumps(json), mimetype='application/json')
