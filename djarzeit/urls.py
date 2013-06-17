@@ -7,8 +7,11 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'timers.views.home', name='home'),
+
     url(r'^categories/new/$', 'timers.views.new_category', name='new_category'),
     url(r'^categories/(?P<id>[0-9]{1,20})/$', 'timers.views.category', name='category'),
+    url(r'^categories/(?P<id>[0-9]{1,20})/delete/$', 'timers.views.delete_category', name='delete_category'),
+
     url(r'^timers/new/$', 'timers.views.new_timer', name='new_timer'),
     url(r'^timers/(?P<id>[0-9]{1,20})/$', 'timers.views.timer', name='timer'),
     url(r'^timers/(?P<id>[0-9]{1,20})/startstop/$', 'timers.views.startstop', name='startstop'),

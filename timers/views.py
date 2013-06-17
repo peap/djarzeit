@@ -56,6 +56,13 @@ def new_timer(request):
     return redirect('home')
 
 
+def delete_category(request, id):
+    # TODO: Delete child categories
+    # TODO: Delete child timers
+    category = get_object_or_404(Category, id=id)
+    category.delete()
+    return redirect('home')
+
 def category(request, id):
     category = get_object_or_404(Category, id=id)
     context = {

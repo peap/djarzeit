@@ -13,7 +13,7 @@
             <th scope="col">Name</th>
             <th scope="col">Last Week</th>
             <th scope="col">Today</th>
-            <th scope="col"></th>
+            <th scope="col">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -24,7 +24,15 @@
             </th>
             <td>{{ cat.last_week }}</td>
             <td>{{ cat.today }}</td>
-            <td><button class="btn btn-small">-</button></td>
+            <td>
+                <button class="btn btn-small hide-btn">Hide</button>
+                <form method="post" action="{% url 'delete_category' id=cat.id %}"
+                      class="delete_category_form">
+                    {% csrf_token %}
+                    <input type="hidden" name="category_id" value="{{ cat.id }}" />
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
         </tr>
             {% for timer in cat.timers %}
             <tr id="timer_row_{{ timer.id }}" class="timer_row category_{{ cat.id }}">
