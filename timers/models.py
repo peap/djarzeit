@@ -9,6 +9,7 @@ class Category(models.Model):
     parent = models.ForeignKey('self',
         blank=True,
         null=True,
+        db_index=True,
     )
 
     name = models.CharField(
@@ -24,22 +25,24 @@ class Category(models.Model):
     )
 
     @property
-    def timers(self):
-        return Timer.objects.filter(category=self)
-
-    @property
     def today(self):
         """
         Total time in this category today.
         """
-        pass
+        total = timedelta(0)
+        for timer in self.timer_set.all():
+            total += timer.today
+        return total
+
 
     @property
     def last_week(self):
         """
         Total time in this category last week (a week is Monday to Sunday).
         """
-        pass
+        total = timedelta(0)
+        for timer in self.timer_set.all():
+            total += timer.last_week
 
 
 class Timer(models.Model):
@@ -66,8 +69,6 @@ class Timer(models.Model):
     def start(self):
         interval = Interval()
         interval.timer = self
-        interval.start = now()
-        interval.full_clean()
         interval.save()
 
         self.active = True
@@ -79,7 +80,6 @@ class Timer(models.Model):
             end=None,
         )
         interval.end = now()
-        interval.full_clean()
         interval.save()
 
         self.active = False
@@ -90,7 +90,7 @@ class Timer(models.Model):
         """
         Total time for today.
         """
-        today = datetime.today()
+        today = now()
         intervals = Interval.objects.filter(
             timer=self,
             start__year=today.year,
@@ -104,12 +104,38 @@ class Timer(models.Model):
 
     @property
     def last_week(self):
-        pass
+        today = now()
+        year, week, dow = today.isocalendar()
+        if week == 1:
+            last_week = 52
+            year = today.year - 1
+        else:
+            last_week = this_week - 1
+            year = today.year
+        intervals = Interval.objects.filter(
+            timer=self,
+            start__year=year,
+            week=last_week,
+        )
+        total = timedelta(0)
+        for interval in intervals:
+            total += interval.length
+        return total
 
 
 class Interval(models.Model):
 
     timer = models.ForeignKey('Timer')
+
+    week = models.IntegerField(
+        verbose_name='Week',
+        db_index=True,
+    )
+
+    year = models.IntegerField(
+        verbose_name='Year',
+        db_index=True,
+    )
 
     start = models.DateTimeField(
         verbose_name='Start Time',
@@ -124,7 +150,8 @@ class Interval(models.Model):
 
     tags = models.ManyToManyField('Tags',
         blank=True,
-        null=True
+        null=True,
+        db_index=True,
     )
 
     notes = models.CharField(
@@ -133,6 +160,14 @@ class Interval(models.Model):
         blank=True,
         null=True,
     )
+
+    def __init__(self, *args, **kwargs):
+        today = now()
+        year, week, dow = today.isocalendar()
+        self.week = week
+        self.year = today.year
+        self.start = now()
+        super().__init__(*args, **kwargs)
 
     @property
     def length(self):
