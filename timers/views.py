@@ -13,8 +13,10 @@ from timers.models import Category, Timer, Interval, Tags
 
 def home(request):
     categories = Category.objects.all()
+    active_timers = Timer.objects.filter(active=True)
     context = {
         'categories': categories,
+        'active_timers': active_timers,
         'server_time': now().strftime(TIME_FORMAT)
     }
     context = ArZeitContext(request, context)

@@ -14,13 +14,26 @@
     </head>
     <body>
         <div class="container">
-            <h1>ArZeit!</h1>
-            <p>
-                Last updated at
-                <span id="server_time">{{ server_time }}</span>
-            </p>
-
-            <div id="messages">
+            <div class="row">
+                <div class="span5">
+                    <h1>ArZeit!</h1>
+                </div>
+                <div class="span7 text-right">
+                    &lt;User&gt; | &lt;Settings&gt;
+                </div>
+            </div>
+            <div class="row">
+                <div class="span5">
+                    Last updated at
+                    <span id="server_time">{{ server_time }}</span>
+                </div>
+                <div class="span7 text-right">
+                    {% for timer in active_timers %}
+                    Current: {{ timer.name }}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row" id="messages">
                 {% if messages %}
                 <ul class="messages">
                     {% for message in messages %}
@@ -32,8 +45,10 @@
                 {% endif %}
             </div>
 
+            <div class="row">
             {% block arzeit_content %}
             {% endblock %}
+            </div>
 
         </div>
     </body>
