@@ -29,12 +29,11 @@
                 <form method="post" action="{% url 'delete_category' id=cat.id %}"
                       class="delete_category_form">
                     {% csrf_token %}
-                    <input type="hidden" name="category_id" value="{{ cat.id }}" />
                     <button type="submit">Delete</button>
                 </form>
             </td>
         </tr>
-            {% for timer in cat.timers %}
+            {% for timer in cat.timer_set.all %}
             <tr id="timer_row_{{ timer.id }}" class="timer_row category_{{ cat.id }}">
                 <th scope="row">
                     <a href="{% url 'timer' id=timer.id %}">{{ timer.name }}</a>
@@ -51,6 +50,11 @@
                                 Start
                             {% endif %}
                         </button>
+                    </form>
+                    <form method="post" action="{% url 'delete_timer' id=timer.id %}"
+                          class="delete_timer_form">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
                     </form>
                 </td>
             </tr>

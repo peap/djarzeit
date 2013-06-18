@@ -14,6 +14,7 @@ urlpatterns = patterns('',
 
     url(r'^timers/new/$', 'timers.views.new_timer', name='new_timer'),
     url(r'^timers/(?P<id>[0-9]{1,20})/$', 'timers.views.timer', name='timer'),
+    url(r'^timers/(?P<id>[0-9]{1,20})/delete/$', 'timers.views.delete_timer', name='delete_timer'),
     url(r'^timers/(?P<id>[0-9]{1,20})/startstop/$', 'timers.views.startstop', name='startstop'),
 
     # Uncomment the admin/doc line below to enable admin documentation:

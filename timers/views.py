@@ -64,6 +64,13 @@ def delete_category(request, id):
     category.delete()
     return redirect('home')
 
+
+def delete_timer(request, id):
+    timer = get_object_or_404(Timer, id=id)
+    timer.delete()
+    return redirect('home')
+
+
 def category(request, id):
     category = get_object_or_404(Category, id=id)
     context = {
