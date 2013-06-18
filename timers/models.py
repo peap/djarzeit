@@ -30,10 +30,11 @@ class Category(models.Model):
         Total time in this category today.
         """
         total = timedelta(0)
+        for category in self.category_set.all():
+            total += timer.today
         for timer in self.timer_set.all():
             total += timer.today
         return total
-
 
     @property
     def last_week(self):
@@ -41,8 +42,11 @@ class Category(models.Model):
         Total time in this category last week (a week is Monday to Sunday).
         """
         total = timedelta(0)
+        for category in self.category_set.all():
+            total += timer.last_week
         for timer in self.timer_set.all():
             total += timer.last_week
+        return total
 
 
 class Timer(models.Model):
@@ -88,7 +92,7 @@ class Timer(models.Model):
     @property
     def today(self):
         """
-        Total time for today.
+        Total time for today as a datetime.timedelta object.
         """
         today = now()
         intervals = Interval.objects.filter(
@@ -100,22 +104,18 @@ class Timer(models.Model):
         total = timedelta(0)
         for interval in intervals:
             total += interval.length
-        return total.total_seconds
+        return total
 
     @property
     def last_week(self):
-        today = now()
-        year, week, dow = today.isocalendar()
-        if week == 1:
-            last_week = 52
-            year = today.year - 1
-        else:
-            last_week = this_week - 1
-            year = today.year
+        """
+        Total time for last_week as a datetime.timedelta object.
+        """
+        year, week, dow = (now() - timedelta(days=7)).isocalendar()
         intervals = Interval.objects.filter(
             timer=self,
             start__year=year,
-            week=last_week,
+            week=week,
         )
         total = timedelta(0)
         for interval in intervals:
@@ -164,9 +164,9 @@ class Interval(models.Model):
     def __init__(self, *args, **kwargs):
         today = now()
         year, week, dow = today.isocalendar()
-        self.week = week
-        self.year = today.year
-        self.start = now()
+        kwargs['week'] = week
+        kwargs['year'] = today.year
+        kwargs['start'] = now()
         super().__init__(*args, **kwargs)
 
     @property
