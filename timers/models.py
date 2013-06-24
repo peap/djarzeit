@@ -103,7 +103,7 @@ class Interval(models.Model):
         null=True,
     )
 
-    tags = models.ManyToManyField('Tags',
+    tags = models.ManyToManyField('tags.Tags',
         blank=True,
         null=True,
         db_index=True,
@@ -134,18 +134,3 @@ class Interval(models.Model):
         else:
             length = self.end - self.start
         return length
-
-
-class Tags(models.Model):
-    
-    name = models.CharField(
-        verbose_name='Name',
-        max_length=25,
-    )
-
-    description = models.CharField(
-        verbose_name='Description',
-        max_length=1000,
-        blank=True,
-        null=True,
-    )

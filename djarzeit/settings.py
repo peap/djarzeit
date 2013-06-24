@@ -121,6 +121,7 @@ INSTALLED_APPS = (
     'south',
     'account',
     'categories',
+    'tags',
     'timers',
 )
 
