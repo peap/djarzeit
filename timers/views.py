@@ -11,7 +11,7 @@ from djarzeit.json import get_new_json_response, TIME_FORMAT
 from timers.models import Category, Timer, Interval, Tags
 
 
-def home(request):
+def timers(request):
     categories = Category.objects.all()
     active_timers = Timer.objects.filter(active=True)
     context = {
@@ -21,21 +21,6 @@ def home(request):
     }
     context = ArZeitContext(request, context)
     return render_to_response('timers/home.html', {}, context)
-
-
-def new_category(request):
-    name = request.POST.get('category_name')
-    if not name:
-        messages.error(request, 'Please choose a category name.')
-        return redirect('home')
-
-    category = Category()
-    category.name = request.POST.get('category_name')
-    category.full_clean()
-    category.save()
-    messages.success(request, 'Created a new category.')
-
-    return redirect('home')
 
 
 def new_timer(request):
@@ -59,26 +44,10 @@ def new_timer(request):
     return redirect('home')
 
 
-def delete_category(request, id):
-    # TODO: Delete child categories
-    # TODO: Delete child timers
-    category = get_object_or_404(Category, id=id)
-    category.delete()
-    return redirect('home')
-
-
 def delete_timer(request, id):
     timer = get_object_or_404(Timer, id=id)
     timer.delete()
     return redirect('home')
-
-
-def category(request, id):
-    category = get_object_or_404(Category, id=id)
-    context = {
-        'category': category,
-    }
-    return render_to_response('timers/category.html', context)
 
 
 def timer(request, id):

@@ -4,54 +4,9 @@ from django.db import models
 from django.utils.timezone import now
 
 
-class Category(models.Model):
-
-    parent = models.ForeignKey('self',
-        blank=True,
-        null=True,
-        db_index=True,
-    )
-
-    name = models.CharField(
-        verbose_name='Category',
-        max_length=100,
-    )
-
-    description = models.CharField(
-        verbose_name='Description',
-        max_length=1000,
-        blank=True,
-        null=True,
-    )
-
-    @property
-    def today(self):
-        """
-        Total time in this category today.
-        """
-        total = timedelta(0)
-        for category in self.category_set.all():
-            total += timer.today
-        for timer in self.timer_set.all():
-            total += timer.today
-        return total
-
-    @property
-    def last_week(self):
-        """
-        Total time in this category last week (a week is Monday to Sunday).
-        """
-        total = timedelta(0)
-        for category in self.category_set.all():
-            total += timer.last_week
-        for timer in self.timer_set.all():
-            total += timer.last_week
-        return total
-
-
 class Timer(models.Model):
 
-    category = models.ForeignKey('Category')
+    category = models.ForeignKey('categories.Category')
 
     name = models.CharField(
         verbose_name='Name',

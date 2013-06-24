@@ -7,22 +7,17 @@ from django.db import models
 
 class Migration(SchemaMigration):
 
-    def forwards(self, orm):
-        # Adding model 'Category'
-        db.create_table('timers_category', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(null=True, to=orm['timers.Category'], blank=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('description', self.gf('django.db.models.fields.CharField')(null=True, blank=True, max_length=1000)),
-        ))
-        db.send_create_signal('timers', ['Category'])
+    depends_on = (
+        ('categories', '0001_initial'),
+    )
 
+    def forwards(self, orm):
         # Adding model 'Timer'
         db.create_table('timers_timer', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('category', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['timers.Category'])),
+            ('category', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['categories.Category'])),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('description', self.gf('django.db.models.fields.CharField')(null=True, blank=True, max_length=1000)),
+            ('description', self.gf('django.db.models.fields.CharField')(null=True, max_length=1000, blank=True)),
             ('active', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal('timers', ['Timer'])
@@ -35,7 +30,7 @@ class Migration(SchemaMigration):
             ('year', self.gf('django.db.models.fields.IntegerField')(db_index=True)),
             ('start', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('end', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('notes', self.gf('django.db.models.fields.CharField')(null=True, blank=True, max_length=1000)),
+            ('notes', self.gf('django.db.models.fields.CharField')(null=True, max_length=1000, blank=True)),
         ))
         db.send_create_signal('timers', ['Interval'])
 
@@ -52,15 +47,12 @@ class Migration(SchemaMigration):
         db.create_table('timers_tags', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=25)),
-            ('description', self.gf('django.db.models.fields.CharField')(null=True, blank=True, max_length=1000)),
+            ('description', self.gf('django.db.models.fields.CharField')(null=True, max_length=1000, blank=True)),
         ))
         db.send_create_signal('timers', ['Tags'])
 
 
     def backwards(self, orm):
-        # Deleting model 'Category'
-        db.delete_table('timers_category')
-
         # Deleting model 'Timer'
         db.delete_table('timers_timer')
 
@@ -75,35 +67,35 @@ class Migration(SchemaMigration):
 
 
     models = {
-        'timers.category': {
+        'categories.category': {
             'Meta': {'object_name': 'Category'},
-            'description': ('django.db.models.fields.CharField', [], {'null': 'True', 'blank': 'True', 'max_length': '1000'}),
+            'description': ('django.db.models.fields.CharField', [], {'null': 'True', 'max_length': '1000', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'null': 'True', 'to': "orm['timers.Category']", 'blank': 'True'})
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'null': 'True', 'blank': 'True', 'to': "orm['categories.Category']"})
         },
         'timers.interval': {
             'Meta': {'object_name': 'Interval'},
             'end': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'notes': ('django.db.models.fields.CharField', [], {'null': 'True', 'blank': 'True', 'max_length': '1000'}),
+            'notes': ('django.db.models.fields.CharField', [], {'null': 'True', 'max_length': '1000', 'blank': 'True'}),
             'start': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'tags': ('django.db.models.fields.related.ManyToManyField', [], {'null': 'True', 'to': "orm['timers.Tags']", 'symmetrical': 'False', 'db_index': 'True', 'blank': 'True'}),
+            'tags': ('django.db.models.fields.related.ManyToManyField', [], {'null': 'True', 'blank': 'True', 'symmetrical': 'False', 'db_index': 'True', 'to': "orm['timers.Tags']"}),
             'timer': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['timers.Timer']"}),
             'week': ('django.db.models.fields.IntegerField', [], {'db_index': 'True'}),
             'year': ('django.db.models.fields.IntegerField', [], {'db_index': 'True'})
         },
         'timers.tags': {
             'Meta': {'object_name': 'Tags'},
-            'description': ('django.db.models.fields.CharField', [], {'null': 'True', 'blank': 'True', 'max_length': '1000'}),
+            'description': ('django.db.models.fields.CharField', [], {'null': 'True', 'max_length': '1000', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '25'})
         },
         'timers.timer': {
             'Meta': {'object_name': 'Timer'},
             'active': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'category': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['timers.Category']"}),
-            'description': ('django.db.models.fields.CharField', [], {'null': 'True', 'blank': 'True', 'max_length': '1000'}),
+            'category': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['categories.Category']"}),
+            'description': ('django.db.models.fields.CharField', [], {'null': 'True', 'max_length': '1000', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         }
