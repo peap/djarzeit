@@ -31,6 +31,12 @@
                             <li class="{% if app == 'tags' %}active{% endif %}">
                                 <a href="{% url 'tags' %}">Tags</a>
                             </li>
+                            <li class="disabled{% if app == 'reports' %}active{% endif %}">
+                                <a href="#">Reports</a>
+                            </li>
+                            <li class="disabled{% if app == 'calendar' %}active{% endif %}">
+                                <a href="#">Calendar</a>
+                            </li>
                         </ul>
                     </div>
                 </div> <!-- .span12 -->
