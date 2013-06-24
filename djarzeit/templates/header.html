@@ -4,7 +4,7 @@
     </div>
     <div class="span7 text-right">
     {% if user.is_authenticated %}
-        <a href="#account_info" role="button" data-toggle="modal">{{ user.name }}</a>
+        <a href="#account_info" role="button" data-toggle="modal">{{ user.username }}</a>
         |
         <a href="{% url 'logout' %}">Logout</a>
     {% else %}

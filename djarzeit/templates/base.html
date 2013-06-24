@@ -16,6 +16,7 @@
     <body>
         <div class="container">
             {% include 'header.html' %}
+            <hr>
             {% if user.is_authenticated %}
             <div class="row">
                 <div class="span12">
@@ -35,7 +36,6 @@
                 </div> <!-- .span12 -->
             </div> <!-- .row -->
             {% endif %}
-            <hr>
             <div class="row">
                 <div class="span12">
                     {% block arzeit_content %}

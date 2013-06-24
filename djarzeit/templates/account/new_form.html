@@ -1,9 +1,32 @@
-<form method="post" action="{% url 'new_account' %}" class="form" id="new_account_form">
+<form method="post" action="{% url 'new_account' %}" class="form-horizontal" id="new_account_form">
     {% csrf_token %}
-    <label for="name" class="accessibility">Name</label>
-    <input type="text" name="name" id="name" placeholder="name" />
-    <label for="name" class="accessibility">Email</label>
-    <input type="text" name="email" id="email" placeholder="email" />
-    <label for="name" class="accessibility">Password</label>
-    <input type="password" name="password" id="password" placeholder="password" />
+    <div class="control-group">
+        <label for="name_first" class="control-label">First Name</label>
+        <div class="controls">
+            <input type="text" name="name_first" id="name_first" placeholder="Buster" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label for="name_last" class="control-label">Last Name</label>
+        <div class="controls">
+            <input type="text" name="name_last" id="name_last" placeholder="Bluth" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label for="name" class="control-label">Email</label>
+        <div class="controls">
+            <input type="text" name="email" id="email" placeholder="baby_buster@army.com" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label for="name" class="control-label">Password</label>
+        <div class="controls">
+            <input type="password" name="password" id="password" placeholder="motherboy" />
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+        </div>
+    </div>
 </form>
