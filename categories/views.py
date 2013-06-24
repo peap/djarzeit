@@ -11,7 +11,7 @@ class CategoriesContext(ArZeitContext):
 
 
 def categories(request):
-    categories = Category.objects.filter(user=request.user)
+    categories = Category.objects.filter(user=request.user.id)
     context = CategoriesContext(request, {
         'categories': categories,
     })

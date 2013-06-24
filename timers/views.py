@@ -16,8 +16,8 @@ class TimersContext(ArZeitContext):
 
 
 def timers(request):
-    categories = Category.objects.filter(user=request.user)
-    active_timers = Timer.objects.filter(category__user=request.user, active=True)
+    categories = Category.objects.filter(user=request.user.id)
+    active_timers = Timer.objects.filter(category__user=request.user.id, active=True)
     context = TimersContext(request, {
         'categories': categories,
         'active_timers': active_timers,

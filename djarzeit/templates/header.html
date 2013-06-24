@@ -10,7 +10,7 @@
         <a href="{% url 'logout' %}">Logout</a>
     {% else %}
         <a href="#login" role="button" data-toggle="modal">Login</a>
-        {% include 'account/login.html' %}
+        {% include 'account/login_modal.html' %}
         |
         <a href="#new_account" role="button" data-toggle="modal">Sign Up</a>
         {% include 'account/new_account.html' %}

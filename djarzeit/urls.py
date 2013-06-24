@@ -10,7 +10,7 @@ import timers.urls
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', 'timers.views.timers', name='timers'),
+    url(r'^$', 'account.views.login', name='home'),
 
     url(r'^account/', include(account.urls)),
     url(r'^categories/', include(categories.urls)),

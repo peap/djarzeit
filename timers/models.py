@@ -3,10 +3,13 @@ from datetime import datetime, timedelta
 from django.db import models
 from django.utils.timezone import now
 
+from categories.models import Category
+from tags.models import Tag
+
 
 class Timer(models.Model):
 
-    category = models.ForeignKey('categories.Category')
+    category = models.ForeignKey(Category)
 
     name = models.CharField(
         verbose_name='Name',
@@ -80,7 +83,7 @@ class Timer(models.Model):
 
 class Interval(models.Model):
 
-    timer = models.ForeignKey('Timer')
+    timer = models.ForeignKey(Timer)
 
     week = models.IntegerField(
         verbose_name='Week',
@@ -103,7 +106,7 @@ class Interval(models.Model):
         null=True,
     )
 
-    tags = models.ManyToManyField('tags.Tags',
+    tags = models.ManyToManyField(Tag,
         blank=True,
         null=True,
         db_index=True,

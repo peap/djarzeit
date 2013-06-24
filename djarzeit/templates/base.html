@@ -15,6 +15,7 @@
     <body>
         <div class="container">
             {% include 'header.html' %}
+            {% if user %}
             <div class="row">
                 <div class="span12">
                     <div class="tabbable">
@@ -32,6 +33,7 @@
                     </div>
                 </div> <!-- .span12 -->
             </div> <!-- .row -->
+            {% endif %}
             <div class="row">
                 <div class="span12">
                     {% block arzeit_content %}

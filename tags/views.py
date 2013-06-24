@@ -5,7 +5,7 @@ from django.utils.timezone import now
 
 from djarzeit.context import ArZeitContext
 from djarzeit.json import get_new_json_response, TIME_FORMAT
-from tags.models import Tags
+from tags.models import Tag
 
 
 class TagsContext(ArZeitContext):
