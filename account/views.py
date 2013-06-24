@@ -1,16 +1,17 @@
 from django.http import HttpResponse
 
 
-def account(request):
-    '''
-    Process account settings changes from modal on base page.
-    '''
+def login(request):
     return HttpResponse('hi')
 
 
-def login(request):
+def logout(request):
+    return HttpResponse('hi')
+
+
+def account(request):
     '''
-    Process a login request.
+    Process account settings changes from modal on base page.
     '''
     return HttpResponse('hi')
 

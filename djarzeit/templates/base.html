@@ -20,10 +20,10 @@
                 </div>
                 <div class="span7 text-right">
                     {% if user.is_authenticated %}
-                    {{ user.name }} |
                     <a href="#account_info" role="button" data-toggle="modal">
-                        <i class="icon-cog"></i>
-                    </a>
+                        {{ user.name }} <i class="icon-cog"></i>
+                    </a> | 
+                    <a href="{% url 'logout' %}">Logout</a>
                     {% else %}
                     <a href="#login" role="button" data-toggle="modal">
                         Login
