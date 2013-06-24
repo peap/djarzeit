@@ -5,18 +5,22 @@
     <div class="span7 text-right">
     {% if user.is_authenticated %}
         <a href="#account_info" role="button" data-toggle="modal">{{ user.name }}</a>
-        {% include 'account/account.html' %}
         |
         <a href="{% url 'logout' %}">Logout</a>
     {% else %}
         <a href="#login" role="button" data-toggle="modal">Login</a>
-        {% include 'account/login_modal.html' %}
         |
         <a href="#new_account" role="button" data-toggle="modal">Sign Up</a>
-        {% include 'account/new_account.html' %}
     {% endif %}
     </div>
 </div> <!-- .row -->
+
+{% if user.is_authenticated %}
+    {% include 'account/account.html' %}
+{% else %}
+    {% include 'account/login_modal.html' %}
+    {% include 'account/new_account.html' %}
+{% endif %}
 
 <div class="row">
     <div class="span5">

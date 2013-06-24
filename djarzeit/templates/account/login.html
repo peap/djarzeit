@@ -2,12 +2,6 @@
 
 {% block arzeit_content %}
 
-<form method="post" action="{% url 'login' %}" id="login_form">
-    <label for="username">Email</label>
-    <input type="text" name="username" id="username" class="input"/>
-    <label for="username">Password</label>
-    <input type="password" name="password" id="password" class="input"/>
-    <button type="submit">Login</button>
-</form>
+{% include 'account/login_form.html' %}
 
 {% endblock %}
