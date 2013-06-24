@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.utils.timezone import now
+from django.contrib.auth.decorators import login_required
 
 from djarzeit.context import ArZeitContext
 from djarzeit.json import get_new_json_response, TIME_FORMAT
@@ -12,6 +13,7 @@ class TagsContext(ArZeitContext):
     app = 'tags'
 
 
+@login_required
 def tags(request):
     tags = Tag.objects.filter(user=request.user.id)
     context = TagsContext(request, {
@@ -20,10 +22,12 @@ def tags(request):
     return render_to_response('tags/tags.html', {}, context)
 
 
+@login_required
 def new_tag(request):
     return HttpResponse('hi')
 
 
+@login_required
 def tag(request, id):
     tag = get_object_or_404(Tag, id=id)
     context = {
@@ -32,6 +36,7 @@ def tag(request, id):
     return HttpResponse('hi')
 
 
+@login_required
 def delete_tag(request, id):
     tag = get_object_or_404(Tag, id=id)
     tag.delete()

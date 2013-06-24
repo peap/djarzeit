@@ -4,5 +4,8 @@
     <input type="text" name="email" id="email" placeholder="email" />
     <label for="username" aria-hidden="true" class="accessibility">Password</label>
     <input type="password" name="password" id="password" placeholder="password"/>
+    {% if next_url %}
+    <input type="hidden" name="next_url" value="{{ next_url }}" />
+    {% endif %}
     <button type="submit" class="btn btn-primary">Login</button>
 </form>

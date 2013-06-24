@@ -4,6 +4,7 @@ from json import dumps
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 from categories.models import Category
 from djarzeit.context import ArZeitContext
@@ -15,6 +16,7 @@ class TimersContext(ArZeitContext):
     app = 'timers'
 
 
+@login_required
 def timers(request):
     categories = Category.objects.filter(user=request.user.id)
     active_timers = Timer.objects.filter(category__user=request.user.id, active=True)
@@ -25,6 +27,7 @@ def timers(request):
     return render_to_response('timers/timers.html', {}, context)
 
 
+@login_required
 def new_timer(request):
     category_id = request.POST.get('category_id')
     name = request.POST.get('timer_name')
@@ -46,12 +49,6 @@ def new_timer(request):
     return redirect('timers')
 
 
-def delete_timer(request, id):
-    timer = get_object_or_404(Timer, id=id)
-    timer.delete()
-    return redirect('timers')
-
-
 def timer(request, id):
     timer = get_object_or_404(Timer, id=id)
     context = {
@@ -60,12 +57,18 @@ def timer(request, id):
     return render_to_response('timers/timer.html', context)
 
 
+@login_required
 def startstop(request, id):
     timer = get_object_or_404(Timer, id=id)
-
     if timer.active:
         timer.stop()
     else:
         timer.start()
+    return redirect('timers')
 
+
+@login_required
+def delete_timer(request, id):
+    timer = get_object_or_404(Timer, id=id)
+    timer.delete()
     return redirect('timers')

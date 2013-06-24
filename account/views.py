@@ -18,20 +18,25 @@ class AccountContext(ArZeitContext):
 
 def login(request):
     if request.POST:
+        next_url = request.POST.get('next_url')
         email = request.POST.get('email')
         password = request.POST.get('password')
         user = authenticate(username=email, password=password)
         if user is not None:
             if user.is_active:
                 dj_login(request, user)
-                return redirect('timers')
+                if next_url:
+                    return redirect(next_url)
+                else:
+                    return redirect('timers')
             else:
                 messages.error(request, 'Your account is inactive.')
         else:
             messages.error(request, 'Invalid login credentials')
         return redirect('home')
     else:
-        context = AccountContext(request, {})
+        next_url = request.GET.get('next')
+        context = AccountContext(request, {'next_url': next_url})
         return render_to_response('account/login.html', {}, context)
 
 
