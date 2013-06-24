@@ -14,60 +14,30 @@
     </head>
     <body>
         <div class="container">
+            {% include 'header.html' %}
             <div class="row">
-                <div class="span5">
-                    <h1>ArZeit!</h1>
-                </div>
-                <div class="span7 text-right">
-                    {% if user.is_authenticated %}
-                    <a href="#account_info" role="button" data-toggle="modal">
-                        {{ user.name }} <i class="icon-cog"></i>
-                    </a> | 
-                    <a href="{% url 'logout' %}">Logout</a>
-                    {% else %}
-                    <a href="#login" role="button" data-toggle="modal">
-                        Login
-                    </a> | 
-                    <a href="#new_account" role="button" data-toggle="modal">
-                        Sign Up
-                    </a>
-                    {% endif %}
-                </div>
-            </div>
-            {% if user.is_authenticated %}
-                {% include 'account/account.html' %}
-            {% else %}
-                {% include 'account/login.html' %}
-                {% include 'account/new_account.html' %}
-            {% endif %}
+                <div class="span12">
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs">
+                            <li class="{% if app == 'timers' %}active{% endif %}">
+                                <a href="{% url 'timers' %}">Timers</a>
+                            </li>
+                            <li class="{% if app == 'categories' %}active{% endif %}">
+                                <a href="{% url 'categories' %}">Categories</a>
+                            </li>
+                            <li class="{% if app == 'tags' %}active{% endif %}">
+                                <a href="{% url 'tags' %}">Tags</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div> <!-- .span12 -->
+            </div> <!-- .row -->
             <div class="row">
-                <div class="span5">
-                    Last updated at
-                    <span id="server_time">{{ server_time }}</span>
-                </div>
-                <div class="span7 text-right">
-                    {% for timer in active_timers %}
-                    Current: {{ timer.name }}
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="row" id="messages">
-                {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                    <li {% if message.tags %}class="{{ message.tags }}"{% endif %}>
-                        {{ message }}
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-            </div>
-
-            <div class="row">
-            {% block arzeit_content %}
-            {% endblock %}
-            </div>
-
-        </div>
+                <div class="span12">
+                    {% block arzeit_content %}
+                    {% endblock %}
+                </div> <!-- .span12 -->
+            </div> <!-- .row -->
+        </div> <!-- .container -->
     </body>
 </html>

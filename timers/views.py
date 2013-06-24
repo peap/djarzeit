@@ -4,23 +4,25 @@ from json import dumps
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect, get_object_or_404
-from django.utils.timezone import now
 
+from categories.models import Category
 from djarzeit.context import ArZeitContext
-from djarzeit.json import get_new_json_response, TIME_FORMAT
-from timers.models import Category, Timer, Interval, Tags
+from djarzeit.json import get_new_json_response
+from timers.models import Timer, Interval
+
+
+class TimersContext(ArZeitContext):
+    app = 'timers'
 
 
 def timers(request):
-    categories = Category.objects.all()
-    active_timers = Timer.objects.filter(active=True)
-    context = {
+    categories = Category.objects.filter(user=request.user)
+    active_timers = Timer.objects.filter(category__user=request.user, active=True)
+    context = TimersContext(request, {
         'categories': categories,
         'active_timers': active_timers,
-        'server_time': now().strftime(TIME_FORMAT)
-    }
-    context = ArZeitContext(request, context)
-    return render_to_response('timers/home.html', {}, context)
+    })
+    return render_to_response('timers/timers.html', {}, context)
 
 
 def new_timer(request):
@@ -28,10 +30,10 @@ def new_timer(request):
     name = request.POST.get('timer_name')
     if not category_id:
         messages.error(request, 'Please choose a category for this new timer.')
-        return redirect('home')
+        return redirect('timers')
     if not name:
         messages.error(request, 'Please choose a timer name.')
-        return redirect('home')
+        return redirect('timers')
 
     category = get_object_or_404(Category, id=category_id)
     timer = Timer()
@@ -41,13 +43,13 @@ def new_timer(request):
     timer.save()
     messages.success(request, 'Created a new timer.')
 
-    return redirect('home')
+    return redirect('timers')
 
 
 def delete_timer(request, id):
     timer = get_object_or_404(Timer, id=id)
     timer.delete()
-    return redirect('home')
+    return redirect('timers')
 
 
 def timer(request, id):
@@ -66,4 +68,4 @@ def startstop(request, id):
     else:
         timer.start()
 
-    return redirect('home')
+    return redirect('timers')

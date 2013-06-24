@@ -1,18 +1,21 @@
-from datetime import datetime
-from json import dumps
-
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect, get_object_or_404
-from django.utils.timezone import now
 
 from djarzeit.context import ArZeitContext
-from djarzeit.json import get_new_json_response, TIME_FORMAT
-from timers.models import Category, Timer, Interval, Tags
+from categories.models import Category
+
+
+class CategoriesContext(ArZeitContext):
+    app = 'categories'
 
 
 def categories(request):
-    return HttpResponse('hi')
+    categories = Category.objects.filter(user=request.user)
+    context = CategoriesContext(request, {
+        'categories': categories,
+    })
+    return render_to_response('categories/categories.html', {}, context)
 
 
 def new_category(request):
@@ -31,8 +34,6 @@ def new_category(request):
 
 
 def delete_category(request, id):
-    # TODO: Delete child categories
-    # TODO: Delete child timers
     category = get_object_or_404(Category, id=id)
     category.delete()
     return redirect('home')

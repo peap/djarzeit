@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block arzeit_context %}
+
+<ul>
+    {% for tag in tags %}
+        <li>{{ tag.name }}</li>
+    {% empty %}
+        <li>You haven't created any tags</li>
+    {% endfor %}
+</ul>
+
+{% endblock%}

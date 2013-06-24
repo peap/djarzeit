@@ -8,8 +8,16 @@ from djarzeit.json import get_new_json_response, TIME_FORMAT
 from tags.models import Tags
 
 
+class TagsContext(ArZeitContext):
+    app = 'tags'
+
+
 def tags(request):
-    return HttpResponse('hi')
+    tags = Tag.objects.filter(user=request.user)
+    context = TagsConext(request, {
+        'tags': tags,
+    })
+    return render_to_response(request, {}, context)
 
 
 def new_tag(request):
@@ -17,7 +25,7 @@ def new_tag(request):
 
 
 def tag(request, id):
-    tag = get_object_or_404(Tag, id=id, user=request.user)
+    tag = get_object_or_404(Tag, id=id)
     context = {
         'tag': tag,
     }

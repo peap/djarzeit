@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block arzeit_context %}
+
+<ul>
+    {% for cat in categories %}
+        <li>{{ cat.name }}</li>
+    {% empty %}
+        <li>You haven't created any categories</li>
+    {% endfor %}
+</ul>
+
+{% endblock%}
