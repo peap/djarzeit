@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect, get_object_or_404
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 
 from djarzeit.context import ArZeitContext
@@ -22,6 +23,15 @@ def categories(request):
 
 @login_required
 def new_category(request):
+    parent_id = request.POST.get('category_parent_id')
+    if parent_id == 'root':
+        parent_cat = None
+    else:
+        try:
+            parent_cat = Category.objects.get(pk=int(parent_id))
+        except (ValueError, ObjectDoesNotExist) as e:
+            messages.error(request, 'Please choose a valid parent category.')
+            return redirect('categories')
     name = request.POST.get('category_name')
     if not name:
         messages.error(request, 'Please choose a category name.')
@@ -29,7 +39,9 @@ def new_category(request):
 
     category = Category()
     category.user = request.user
+    category.parent = parent_cat
     category.name = request.POST.get('category_name')
+    category.description = request.POST.get('category_desc')
     category.full_clean()
     category.save()
     messages.success(request, 'Created a new category.')

@@ -1,13 +1,18 @@
 {% extends 'base.html' %}
 
-{% block arzeit_context %}
+{% block arzeit_content %}
 
-<ul>
+<dl>
     {% for cat in categories %}
-        <li>{{ cat.name }}</li>
+        <dt>{{ cat.name }}</dt>
+        <dd>{{ cat.description }}</dd>
     {% empty %}
-        <li>You haven't created any categories</li>
+        <dt>You haven't created any categories</dt>
     {% endfor %}
-</ul>
+</dl>
 
-{% endblock%}
+<hr>
+
+{% include 'categories/new_root_category_form.html' %}
+
+{% endblock %}

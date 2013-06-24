@@ -1,0 +1,24 @@
+<form method="post" action="{% url 'new_category' %}" class="form-horizontal" id="new_category_form">
+    {% csrf_token %}
+    <fieldgroup>
+    <legend>New Root Category</legend>
+    <input type="hidden" name="category_parent_id" value="root" />
+    <div class="control-group">
+        <label for="category_name" class="control-label">Name</label>
+        <div class="controls">
+            <input type="text" name="category_name" id="category_name" class="input input-medium" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label for="category_desc" class="control-label">Description</label>
+        <div class="controls">
+            <textarea name="category_desc" id="category_desc"></textarea>
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <button type="submit" class="btn btn-primary" id="new_category_btn">Create</button>
+        </div>
+    </div>
+    </fieldgroup>
+</form>

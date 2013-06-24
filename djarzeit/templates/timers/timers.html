@@ -88,11 +88,4 @@
     </tbody>
 </table>
 
-<form id="new_timer" method="post" action="{% url 'new_category' %}">
-    {% csrf_token %}
-    <label for="category_name">New category</label>
-    <input type="text" name="category_name" id="category_name" class="input input-medium" />
-    <button type="submit" class="btn btn-primary" id="new_category_btn">Create</button>
-</form>
-
 {% endblock %}
