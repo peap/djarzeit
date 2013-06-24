@@ -13,11 +13,11 @@ class TagsContext(ArZeitContext):
 
 
 def tags(request):
-    tags = Tag.objects.filter(user=request.user)
-    context = TagsConext(request, {
+    tags = Tag.objects.filter(user=request.user.id)
+    context = TagsContext(request, {
         'tags': tags,
     })
-    return render_to_response(request, {}, context)
+    return render_to_response('tags/tags.html', {}, context)
 
 
 def new_tag(request):
