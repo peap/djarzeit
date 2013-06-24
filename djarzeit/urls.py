@@ -1,5 +1,7 @@
 from django.conf.urls import patterns, include, url
 
+import account.urls
+
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
@@ -16,6 +18,8 @@ urlpatterns = patterns('',
     url(r'^timers/(?P<id>[0-9]{1,20})/$', 'timers.views.timer', name='timer'),
     url(r'^timers/(?P<id>[0-9]{1,20})/delete/$', 'timers.views.delete_timer', name='delete_timer'),
     url(r'^timers/(?P<id>[0-9]{1,20})/startstop/$', 'timers.views.startstop', name='startstop'),
+
+    url(r'^account/', include(account.urls)),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
