@@ -30,17 +30,22 @@ def login(request):
 
 
 def new_account(request):
-    return HttpResponse('hi')
+    if request.POST:
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+    else:
+        context = AccountContext(request, {})
+        return render_to_response('account/new.html', {}, context)
 
 
 @login_required
 def logout(request):
+    logout(request, request.user)
+    messages.success(request, 'Successfully logged out.')
     return redirect('home')
 
 
 @login_required
 def account(request):
-    '''
-    Process account settings changes from modal on base page.
-    '''
     return HttpResponse('hi')

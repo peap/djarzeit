@@ -16,10 +16,10 @@
 </div> <!-- .row -->
 
 {% if user.is_authenticated %}
-    {% include 'account/account.html' %}
+    {% include 'account/account_modal.html' %}
 {% else %}
     {% include 'account/login_modal.html' %}
-    {% include 'account/new_account.html' %}
+    {% include 'account/new_modal.html' %}
 {% endif %}
 
 <div class="row">
