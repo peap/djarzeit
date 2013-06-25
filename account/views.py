@@ -21,9 +21,9 @@ def login(request):
         return redirect('timers')
     if request.POST:
         next_url = request.POST.get('next_url')
-        email = request.POST.get('email')
+        username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(username=email, password=password)
+        user = authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
                 dj_login(request, user)
@@ -47,9 +47,10 @@ def new_account(request):
         name_first = request.POST.get('name_first')
         name_last = request.POST.get('name_last')
         email = request.POST.get('email')
+        username = request.POST.get('username')
         password = request.POST.get('password')
         try:
-            user = User.objects.create_user(email, email, password)
+            user = User.objects.create_user(username, email, password)
             user.first_name = name_first
             user.last_name = name_last
         except IntegrityError as e:
@@ -63,7 +64,7 @@ def new_account(request):
         else:
             user.save()
             messages.success(request, 'New user created!')
-            login(request, user)
+            dj_login(request, user)
         return redirect('timers')
     else:
         context = AccountContext(request, {})

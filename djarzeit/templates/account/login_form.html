@@ -1,9 +1,9 @@
 <form method="post" action="{% url 'login' %}" class="form-inline" id="login_form{{ id }}">
     {% csrf_token %}
-    <label for="email" aria-hidden="true" class="accessibility">Email</label>
-    <input type="email" name="email" id="email{{ id }}" placeholder="email" required>
+    <label for="username" aria-hidden="true" class="accessibility">Username</label>
+    <input type="text" name="username" id="username{{ id }}" placeholder="username" required>
     <label for="username" aria-hidden="true" class="accessibility">Password</label>
-    <input type="password" name="password" id="password{{ id }}" placeholder="password"/>
+    <input type="password" name="password" id="password{{ id }}" placeholder="password" required>
     {% if next_url %}
     <input type="hidden" name="next_url" value="{{ next_url }}" />
     {% endif %}
