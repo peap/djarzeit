@@ -4,11 +4,14 @@
 <html lang="en">
     <head>
         <title>ArZeit</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="{% static 'djarzeit/bootstrap/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'djarzeit/bootstrap/css/bootstrap-responsive.min.css' %}">
+        <link rel="stylesheet" href="{% static 'djarzeit/base.css' %}">
 
         <script src="{% static 'djarzeit/jquery-2.0.2.min.js' %}"></script>
         <script src="{% static 'djarzeit/bootstrap/js/bootstrap.min.js' %}"></script>
-        <link rel="stylesheet" href="{% static 'djarzeit/bootstrap/css/bootstrap.min.css' %}">
-        <link rel="stylesheet" href="{% static 'djarzeit/base.css' %}">
 
         {% block static_content %}
         {% endblock %}
@@ -33,9 +36,6 @@
                             </li>
                             <li class="disabled{% if app == 'reports' %}active{% endif %}">
                                 <a href="#">Reports</a>
-                            </li>
-                            <li class="disabled{% if app == 'calendar' %}active{% endif %}">
-                                <a href="#">Calendar</a>
                             </li>
                         </ul>
                     </div>
