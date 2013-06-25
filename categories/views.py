@@ -14,9 +14,9 @@ class CategoriesContext(ArZeitContext):
 
 @login_required
 def categories(request):
-    categories = Category.objects.filter(user=request.user.id)
+    root_categories = Category.objects.filter(user=request.user.id, parent=None)
     context = CategoriesContext(request, {
-        'categories': categories,
+        'root_categories': root_categories,
     })
     return render_to_response('categories/categories.html', {}, context)
 

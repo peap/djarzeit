@@ -2,17 +2,20 @@
 
 {% block arzeit_content %}
 
-<dl>
-    {% for cat in categories %}
-        <dt>{{ cat.name }}</dt>
-        <dd>{{ cat.description }}</dd>
-    {% empty %}
-        <dt>You haven't created any categories</dt>
-    {% endfor %}
-</dl>
+{% for cat in root_categories %}
+    {% include 'categories/listing.html' %}
+{% empty %}
+    <div class="well">
+        <div class="row">
+            <div class="span12">
+                You haven't created any categories
+            </div>
+        </div>
+    </div>
+{% endfor %}
 
 <hr>
-
-{% include 'categories/new_root_category_form.html' %}
+<h3>New Root Category</h3>
+{% include 'categories/new_form.html' with parent_id='root' %}
 
 {% endblock %}

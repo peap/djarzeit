@@ -1,0 +1,13 @@
+<div id="new_category_{{ parent_id }}" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            &times;
+        </button>
+        <h2>New Category</h2>
+    </div>
+    <div class="modal-body">
+        {% include 'categories/new_form.html' with parent_id=parent_id %}
+    </div>
+    <div class="modal-footer">
+    </div>
+</div>

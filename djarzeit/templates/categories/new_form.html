@@ -1,8 +1,6 @@
 <form method="post" action="{% url 'new_category' %}" class="form-horizontal" id="new_category_form">
     {% csrf_token %}
-    <fieldgroup>
-    <legend>New Root Category</legend>
-    <input type="hidden" name="category_parent_id" value="root" />
+    <input type="hidden" name="category_parent_id" value="{{ parent_id }}" />
     <div class="control-group">
         <label for="category_name" class="control-label">Name</label>
         <div class="controls">
@@ -20,5 +18,4 @@
             <button type="submit" class="btn btn-primary" id="new_category_btn">Create</button>
         </div>
     </div>
-    </fieldgroup>
 </form>

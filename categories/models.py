@@ -33,7 +33,7 @@ class Category(models.Model):
         """
         total = timedelta(0)
         for category in self.category_set.all():
-            total += timer.today
+            total += category.today
         for timer in self.timer_set.all():
             total += timer.today
         return total
@@ -45,7 +45,7 @@ class Category(models.Model):
         """
         total = timedelta(0)
         for category in self.category_set.all():
-            total += timer.last_week
+            total += category.last_week
         for timer in self.timer_set.all():
             total += timer.last_week
         return total
