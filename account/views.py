@@ -1,5 +1,5 @@
-from django.db import IntegrityError
 from django.contrib import messages
+from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import redirect, render_to_response
 from django.core.exceptions import ValidationError
@@ -17,6 +17,8 @@ class AccountContext(ArZeitContext):
 
 
 def login(request):
+    if request.user.is_authenticated():
+        return redirect('timers')
     if request.POST:
         next_url = request.POST.get('next_url')
         email = request.POST.get('email')
@@ -60,8 +62,9 @@ def new_account(request):
                 messages.error(request, err)
         else:
             user.save()
-            messages.success(request, 'New user created! Please log in.')
-        return redirect('home')
+            messages.success(request, 'New user created!')
+            login(request, user)
+        return redirect('timers')
     else:
         context = AccountContext(request, {})
         return render_to_response('account/new.html', {}, context)

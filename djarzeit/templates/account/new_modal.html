@@ -11,3 +11,13 @@
     <div class="modal-footer">
     </div>
 </div>
+
+<script type="text/javascript">
+    function setFocusNewAccount(){
+        var div_id = '#new_account';
+        $(div_id).on('shown', function(){
+            $(this).find('.modal-body input[type="text"]').first().focus();
+        });
+    }
+    setFocusNewAccount();
+</script>

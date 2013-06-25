@@ -1,8 +1,8 @@
 from django.contrib import messages
-from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import requires_csrf_token
 
 from djarzeit.context import ArZeitContext
 from categories.models import Category
@@ -13,6 +13,7 @@ class CategoriesContext(ArZeitContext):
 
 
 @login_required
+@requires_csrf_token
 def categories(request):
     root_categories = Category.objects.filter(user=request.user.id, parent=None)
     context = CategoriesContext(request, {
@@ -36,7 +37,6 @@ def new_category(request):
     if not name:
         messages.error(request, 'Please choose a category name.')
         return redirect('categories')
-
     category = Category()
     category.user = request.user
     category.parent = parent_cat
@@ -44,8 +44,7 @@ def new_category(request):
     category.description = request.POST.get('category_desc')
     category.full_clean()
     category.save()
-    messages.success(request, 'Created a new category.')
-
+    messages.success(request, 'Created new category.')
     return redirect('categories')
 
 
@@ -62,4 +61,5 @@ def category(request, id):
 def delete_category(request, id):
     category = get_object_or_404(Category, id=id)
     category.delete()
+    messages.success(request, 'Deleted category.')
     return redirect('categories')
