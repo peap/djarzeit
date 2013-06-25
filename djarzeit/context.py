@@ -5,7 +5,7 @@ from timers.models import Timer
 
 
 class ArZeitContext(RequestContext):
-    app = None
+    tab = None
 
     def __init__(self, request, context, **kwargs):
         active_timers = Timer.objects.filter(
@@ -13,7 +13,7 @@ class ArZeitContext(RequestContext):
             active=True
         )
         context.update({
-            'app': self.app,
+            'tab': self.tab,
             'server_time': now(),
             'active_timers': active_timers,
         })

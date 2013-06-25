@@ -25,29 +25,29 @@
                 <div class="span12">
                     <div class="tabbable">
                         <ul class="nav nav-tabs">
-                            <li class="{% if app == 'timers' %}active{% endif %}">
+                            <li class="{% if tab == 'timers' %}active{% endif %}">
                                 <a href="{% url 'timers' %}">Timers</a>
                             </li>
-                            <li class="{% if app == 'categories' %}active{% endif %}">
+                            <li class="{% if tab == 'categories' %}active{% endif %}">
                                 <a href="{% url 'categories' %}">Categories</a>
                             </li>
-                            <li class="{% if app == 'tags' %}active{% endif %}">
+                            <li class="{% if tab == 'tags' %}active{% endif %}">
                                 <a href="{% url 'tags' %}">Tags</a>
                             </li>
-                            <li class="disabled{% if app == 'reports' %}active{% endif %}">
+                            <li class="disabled{% if tab == 'reports' %}active{% endif %}">
                                 <a href="#">Reports</a>
                             </li>
                         </ul>
                     </div>
                 </div> <!-- .span12 -->
-            </div> <!-- .row -->
+            </div> <!-- .row-fluid -->
             {% endif %}
             <div class="row">
                 <div class="span12">
                     {% block arzeit_content %}
                     {% endblock %}
                 </div> <!-- .span12 -->
-            </div> <!-- .row -->
+            </div> <!-- .row-fluid -->
         </div> <!-- .container -->
     </body>
 </html>

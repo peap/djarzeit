@@ -8,7 +8,7 @@ from tags.models import Tag
 
 
 class TagsContext(ArZeitContext):
-    app = 'tags'
+    tab = 'tags'
 
 
 @login_required
