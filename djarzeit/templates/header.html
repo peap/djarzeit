@@ -36,12 +36,13 @@
 
 <div class="row" id="messages">
     {% if messages %}
-    <ul class="messages">
+    <div class="messages">
         {% for message in messages %}
-        <li {% if message.tags %}class="{{ message.tags }}"{% endif %}>
+        <div class="alert {{ message.tags }}">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
             {{ message }}
-        </li>
+        </div>
         {% endfor %}
-    </ul>
+    </div>
     {% endif %}
 </div> <!-- .row -->

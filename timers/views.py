@@ -71,4 +71,5 @@ def startstop(request, id):
 def delete_timer(request, id):
     timer = get_object_or_404(Timer, id=id)
     timer.delete()
+    messages.success(request, 'Deleted timer.')
     return redirect('timers')
