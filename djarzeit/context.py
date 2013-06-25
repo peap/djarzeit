@@ -16,5 +16,6 @@ class ArZeitContext(RequestContext):
             'tab': self.tab,
             'server_time': now(),
             'active_timers': active_timers,
+            'path': request.path,
         })
         super().__init__(request, context, **kwargs)

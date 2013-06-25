@@ -1,5 +1,7 @@
 <div id="account_info" class="modal hide fade">
     <form method="post" action="{% url 'account' %}" id="account_form">
+        {% csrf_token %}
+        <input type="hidden" name="next_url" value="{{ path }}" />
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                 &times;
