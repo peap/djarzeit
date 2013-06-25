@@ -1,0 +1,5 @@
+<form method="post" action="{% url 'delete_category' id=cat_id %}"
+      class="form-inline delete_category_form">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Delete</button>
+</form>
