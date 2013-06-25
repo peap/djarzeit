@@ -31,6 +31,7 @@ def timers(request):
 def new_timer(request):
     category_id = request.POST.get('category_id')
     name = request.POST.get('timer_name')
+    desc = request.POST.get('timer_desc')
     if not category_id:
         messages.error(request, 'Please choose a category for this new timer.')
         return redirect('timers')
@@ -42,6 +43,7 @@ def new_timer(request):
     timer = Timer()
     timer.category = category
     timer.name = name
+    timer.description = desc
     timer.full_clean()
     timer.save()
     messages.success(request, 'Created a new timer.')

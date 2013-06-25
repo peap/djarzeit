@@ -1,10 +1,24 @@
 {% load timer_tags %}
 <div class="accordion-group">
     <div class="accordion-heading">
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="accordion{{ cat.id }}"
-           href="#accordion_category_{{ cat.id }}">
-            {{ cat.name }}
-        </a>
+        <div class="row">
+            <div class="span2">
+                <a class="accordion-toggle" data-toggle="collapse"
+                   data-parent="accordion{{ cat.id }}"
+                   href="#accordion_category_{{ cat.id }}">
+                    {{ cat.name }}
+                </a>
+            </div>
+            <div class="span5">
+                {{ cat.description }}
+            </div>
+            <div class="span1">
+                {{ cat.last_week|format_timedelta }}
+            </div>
+            <div class="span1">
+                {{ cat.today|format_timedelta }}
+            </div>
+        </div>
     </div>
     <div id="accordion_category_{{ cat.id }}" class="accordion-body collapse in">
         <div class="accordion-inner">
@@ -33,7 +47,7 @@
                     </div>
                     <div class="span1">
                         <form method="post" action="{% url 'startstop' id=timer.id %}"
-                              class="startstop_form form-inline">
+                              class="form-inline startstop_form">
                             {% csrf_token %}
                             {% if timer.active %}
                                 <button class="btn btn-danger btn-span"
@@ -50,7 +64,7 @@
                     </div>
                     <div class="span1">
                         <form method="post" action="{% url 'delete_timer' id=timer.id %}"
-                              class="delete_timer_form form-inline">
+                              class="form-inline delete_timer_form">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-inverse">Delete</button>
                         </form>
@@ -65,12 +79,18 @@
             {% endfor %}
                 <div class="row">
                     <div class="span12">
-                        <form id="new_timer_{{ cat.id }}" method="post"
+                        <form id="new_timer_{{ cat.id }}" method="post" class="form-inline"
                               action="{% url 'new_timer' %}">
                             {% csrf_token %}
-                            <label for="timer_name">New timer</label>
                             <input type="hidden" name="category_id" value="{{ cat.id }}" />
-                            <input type="text" name="timer_name" class="input input-medium" />
+                            <label for="timer_name_{{ cat.id }}" aria-hidden="true"
+                                   class="accessibility">Timer name</label>
+                            <input type="text" name="timer_name" id="timer_name_{{ cat.id }}"
+                                   class="input input-medium" placeholder="Name" required>
+                            <label for="timer_desc_{{ cat.id }}" aria-hidden="true"
+                                   class="accessibility">Description</label>
+                            <input type="text" name="timer_desc" id="timer_desc_{{ cat.id }}"
+                                   class="input input-large" placeholder="Description">
                             <button type="submit" class="btn btn-primary" id="new_timer_btn">
                                 Create
                             </button>
