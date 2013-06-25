@@ -16,13 +16,6 @@ class Timer(models.Model):
         max_length=100,
     )
 
-    description = models.CharField(
-        verbose_name='Description',
-        max_length=1000,
-        blank=True,
-        null=True,
-    )
-
     active = models.BooleanField(
         verbose_name='Active',
         default=False,

@@ -9,9 +9,6 @@
                     {{ cat.name }}
                 </a>
             </div>
-            <div class="span5">
-                {{ cat.description }}
-            </div>
             <div class="span1">
                 {{ cat.last_week|format_timedelta }}
             </div>
@@ -35,9 +32,6 @@
                 <div class="row">
                     <div class="span2">
                         <a href="{% url 'timer' id=timer.id %}">{{ timer.name }}</a>
-                    </div>
-                    <div class="span5">
-                        {{ timer.description }}
                     </div>
                     <div class="span1">
                         {{ timer.last_week|format_timedelta }}
@@ -87,10 +81,6 @@
                                    class="accessibility">Timer name</label>
                             <input type="text" name="timer_name" id="timer_name_{{ cat.id }}"
                                    class="input input-medium" placeholder="Name" required>
-                            <label for="timer_desc_{{ cat.id }}" aria-hidden="true"
-                                   class="accessibility">Description</label>
-                            <input type="text" name="timer_desc" id="timer_desc_{{ cat.id }}"
-                                   class="input input-large" placeholder="Description">
                             <button type="submit" class="btn btn-primary" id="new_timer_btn">
                                 Create
                             </button>
