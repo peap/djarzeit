@@ -18,10 +18,10 @@ class TimersContext(ArZeitContext):
 
 @login_required
 def timers(request):
-    categories = Category.objects.filter(user=request.user.id)
+    root_categories = Category.objects.filter(user=request.user.id, parent=None)
     active_timers = Timer.objects.filter(category__user=request.user.id, active=True)
     context = TimersContext(request, {
-        'categories': categories,
+        'root_categories': root_categories,
         'active_timers': active_timers,
     })
     return render_to_response('timers/timers.html', {}, context)

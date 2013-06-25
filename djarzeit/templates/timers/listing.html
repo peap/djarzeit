@@ -1,0 +1,26 @@
+<div class="accordion-group">
+    <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="accordion{{ cat.id }}"
+           href="#accordion_category_{{ cat.id }}">
+            {{ cat.name }}
+        </a>
+    </div>
+    <div id="accordion_category_{{ cat.id }}" class="accordion-body collapse in">
+        <div class="accordion-inner">
+            {% if cat.category_set.all %}
+                <div class="accordion" id="accordion{{ cat.id }}">
+                {% with template_name='timers/listing.html' %}
+                    {% for subcat in cat.category_set.all %}
+                        {% include template_name with cat=subcat %}
+                    {% endfor %}
+                {% endwith %}
+                </div>
+            {% endif %}
+            {% for timer in cat.timer_set.all %}
+                <div class="well">
+                    {{ timer.name }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

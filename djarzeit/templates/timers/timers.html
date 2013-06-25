@@ -7,6 +7,16 @@
 
 {% block arzeit_content %}
 
+<div>
+    <button class="btn btn-small" id="toggle_all">Show All</button>
+</div>
+{% for cat in root_categories %}
+    <div class="accordion" id="accordion{{ cat.id }}">
+        {% include 'timers/listing.html' %}
+    </div>
+{% endfor %}
+
+{% comment %}
 <table class="table table-striped">
     <thead>
         <tr>
@@ -87,5 +97,6 @@
         {% endfor %}
     </tbody>
 </table>
+{% endcomment %}
 
 {% endblock %}
