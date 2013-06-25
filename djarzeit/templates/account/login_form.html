@@ -1,7 +1,7 @@
 <form method="post" action="{% url 'login' %}" class="form-inline" id="login_form{{ id }}">
     {% csrf_token %}
     <label for="email" aria-hidden="true" class="accessibility">Email</label>
-    <input type="text" name="email" id="email{{ id }}" placeholder="email" />
+    <input type="email" name="email" id="email{{ id }}" placeholder="email" required>
     <label for="username" aria-hidden="true" class="accessibility">Password</label>
     <input type="password" name="password" id="password{{ id }}" placeholder="password"/>
     {% if next_url %}
