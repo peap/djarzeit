@@ -7,8 +7,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <link rel="stylesheet" href="{% static 'djarzeit/bootstrap/css/bootstrap.min.css' %}">
-        <link rel="stylesheet" href="{% static 'djarzeit/bootstrap/css/bootstrap-responsive.min.css' %}">
         <link rel="stylesheet" href="{% static 'djarzeit/base.css' %}">
+        <link rel="stylesheet" href="{% static 'djarzeit/bootstrap/css/bootstrap-responsive.min.css' %}">
 
         <script src="{% static 'djarzeit/jquery-2.0.2.min.js' %}"></script>
         <script src="{% static 'djarzeit/bootstrap/js/bootstrap.min.js' %}"></script>
@@ -18,8 +18,9 @@
     </head>
     <body>
         <div class="container">
-            {% include 'header.html' %}
-            <hr>
+            <div id="arzeit-header">
+                {% include 'header.html' %}
+            </div>
             {% if user.is_authenticated %}
             <div class="row">
                 <div class="span12">
