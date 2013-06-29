@@ -1,0 +1,25 @@
+.accessibility {
+    position: absolute;
+    left: -1000px;
+}
+
+.error {
+    color: red;
+}
+
+.success {
+    color: green;
+}
+
+#arzeit-header {
+    border-bottom: 1px solid black;
+    margin-bottom: 10px;
+}
+
+#arzeit-account-controls {
+    padding-top: 1em;
+}
+
+.accordion-heading {
+    background-color: #C3C4DE;
+}
