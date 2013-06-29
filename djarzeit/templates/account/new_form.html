@@ -1,33 +1,33 @@
 <form method="post" action="{% url 'new_account' %}" class="form-horizontal" id="new_account_form">
     {% csrf_token %}
     <div class="control-group">
-        <label for="name_first" class="control-label">First Name</label>
+        <label for="name_first" class="control-label accessibility">First Name</label>
         <div class="controls">
-            <input type="text" name="name_first" id="name_first" placeholder="Buster" />
+            <input type="text" name="name_first" id="name_first" placeholder="first name" />
         </div>
     </div>
     <div class="control-group">
-        <label for="name_last" class="control-label">Last Name</label>
+        <label for="name_last" class="control-label accessibility">Last Name</label>
         <div class="controls">
-            <input type="text" name="name_last" id="name_last" placeholder="Bluth" />
+            <input type="text" name="name_last" id="name_last" placeholder="last name" />
         </div>
     </div>
     <div class="control-group">
-        <label for="email" class="control-label">Email</label>
+        <label for="email" class="control-label accessibility">Email</label>
         <div class="controls">
-            <input type="email" name="email" id="email" placeholder="baby_buster@army.com" required>
+            <input type="email" name="email" id="email" placeholder="email" required>
         </div>
     </div>
     <div class="control-group">
-        <label for="username" class="control-label">Username</label>
+        <label for="username" class="control-label accessibility">Username</label>
         <div class="controls">
-            <input type="text" name="username" id="username" placeholder="hotbrother" required>
+            <input type="text" name="username" id="username" placeholder="username" required>
         </div>
     </div>
     <div class="control-group">
-        <label for="name" class="control-label">Password</label>
+        <label for="name" class="control-label accessibility">Password</label>
         <div class="controls">
-            <input type="password" name="password" id="password" placeholder="motherboy" />
+            <input type="password" name="password" id="password" placeholder="password" />
         </div>
     </div>
     <div class="control-group">
