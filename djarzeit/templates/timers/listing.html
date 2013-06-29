@@ -2,18 +2,11 @@
 <div class="accordion-group">
     <div class="accordion-heading">
         <div class="row">
-            <div class="span2">
-                <a class="accordion-toggle" data-toggle="collapse"
-                   data-parent="accordion{{ cat.id }}"
-                   href="#accordion_category_{{ cat.id }}">
+            <div class="span12">
+                <a href="#accordion_category_{{ cat.id }}" class="accordion-toggle"
+                   data-toggle="collapse" data-parent="accordion{{ cat.id }}">
                     {{ cat.name }}
                 </a>
-            </div>
-            <div class="span1 timer-last-week">
-                {{ cat.last_week|format_timedelta }}
-            </div>
-            <div class="span1 timer-today">
-                {{ cat.today|format_timedelta }}
             </div>
         </div>
     </div>
@@ -30,18 +23,10 @@
             {% endif %}
             {% for timer in cat.timer_set.all %}
                 <div class="row">
-                    <div class="span2">
+                    <div class="span12">
                         <a href="{% url 'timer' id=timer.id %}">{{ timer.name }}</a>
-                    </div>
-                    <div class="span1 timer-last-week">
-                        {{ timer.last_week|format_timedelta }}
-                    </div>
-                    <div class="span1 timer-today">
-                        {{ timer.today|format_timedelta }}
-                    </div>
-                    <div class="span1">
                         <form method="post" action="{% url 'startstop' id=timer.id %}"
-                              class="form-inline startstop_form">
+                              class="form-inline startstop-form pull-right">
                             {% csrf_token %}
                             {% if timer.active %}
                                 <button class="btn btn-danger"
@@ -54,13 +39,6 @@
                                     Start
                                 </button>
                             {% endif %}
-                        </form>
-                    </div>
-                    <div class="span1">
-                        <form method="post" action="{% url 'delete_timer' id=timer.id %}"
-                              class="form-inline delete_timer_form">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-inverse">Delete</button>
                         </form>
                     </div>
                 </div>
