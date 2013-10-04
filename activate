@@ -1,0 +1,40 @@
+#!/bin/sh
+
+if ! TEST=$(which python3) ; then
+    echo "You need python3 to run this project."
+    return 1
+fi
+
+if ! TEST=$(which virtualenv) ; then
+    echo "You need virtualenv to run this project."
+    return 2
+fi
+
+VENV=venv
+
+if [ ! -d $VENV ] ; then
+    virtualenv -p /usr/bin/python3 $VENV
+fi
+
+source venv/bin/activate
+
+INSTALLED=$(pip freeze)
+REQUIRED=$(cat requirements.txt)
+NUM_INSTALLED=$(echo "$INSTALLED" | wc -l)
+NUM_REQUIRED=$(echo "$REQUIRED" | wc -l)
+
+if [ "$INSTALLED" != "$REQUIRED" ] ; then
+    if [ $NUM_INSTALLED -lt $NUM_REQUIRED ] ; then
+        pip install -r requirements.txt
+    fi
+    if [ $NUM_INSTALLED -gt $NUM_REQUIRED ] ; then
+        echo "You have more pip packages installed that are in requirements.txt."
+        echo "You might want to update requirements.txt."
+        return 3
+    fi
+    if [ $NUM_INSTALLED -eq $NUM_REQUIRED ] ; then
+        echo "Your installed pip packages don't match those in requirements.txt."
+        echo "You might want to correct this"
+        return 4
+    fi
+fi
