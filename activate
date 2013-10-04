@@ -1,21 +1,5 @@
 #!/bin/sh
 
-if ! TEST=$(which python3) ; then
-    echo "You need python3 to run this project."
-    return 1
-fi
-
-if ! TEST=$(which virtualenv) ; then
-    echo "You need virtualenv to run this project."
-    return 2
-fi
-
-VENV=venv
-
-if [ ! -d $VENV ] ; then
-    virtualenv -p /usr/bin/python3 $VENV
-fi
-
 source venv/bin/activate
 
 INSTALLED=$(pip freeze)
