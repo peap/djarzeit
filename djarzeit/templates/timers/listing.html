@@ -3,7 +3,7 @@
 
   <div class="accordion-heading">
     <div class="row">
-      <div class="span12">
+      <div class="col-xs-12">
         <a href="#accordion_category_{{ cat.id }}" class="accordion-toggle"
             data-toggle="collapse" data-parent="accordion{{ cat.id }}">
           {{ cat.name }}
@@ -25,7 +25,7 @@
     {% endif %}
     {% for timer in cat.timer_set.all %}
       <div class="row">
-        <div class="span12">
+        <div class="col-xs-12">
           <a href="{% url 'timer' id=timer.id %}">{{ timer.name }}</a>
           <form method="post" action="{% url 'startstop' id=timer.id %}"
               class="form-inline startstop-form pull-right">
@@ -44,13 +44,13 @@
       </div>
     {% empty %}
       <div class="row">
-        <div class="span12">
+        <div class="col-xs-12">
           You haven't created any timers in this category.
         </div>
       </div>
     {% endfor %}
       <div class="row">
-        <div class="span12">
+        <div class="col-xs-12">
           <form id="new_timer_{{ cat.id }}" method="post" class="form-inline"
               action="{% url 'new_timer' %}">
             {% csrf_token %}
