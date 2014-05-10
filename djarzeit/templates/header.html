@@ -5,7 +5,9 @@
         </div>
         <div class="pull-right" id="arzeit-account-controls">
         {% if user.is_authenticated %}
-            <a href="#account_info" role="button" data-toggle="modal">{{ user.username }}</a>
+            <a href="#account_info" role="button" data-toggle="modal">
+                {{ user.username }}
+            </a>
             |
             <a href="{% url 'logout' %}">Logout</a>
         {% else %}
@@ -25,25 +27,32 @@
 {% endif %}
 
 <div class="row">
-    <span class="pull-left">
-        <span id="server_time">{{ server_time }}</span>
-    </span>
-    <span class="pull-right">
-        {% for timer in active_timers %}
-        Current: {{ timer.name }}
-        {% endfor %}
-    </span>
+    <div class="span12">
+        <span class="pull-left">
+            <span id="server_time">{{ server_time }}</span>
+        </span>
+        <span class="pull-right">
+            Current:
+            {% for timer in active_timers %}
+            <a href="{% url 'timer' timer.pk %}">{{ timer.name }}</a> 
+            {% endfor %}
+        </span>
+    </div> <!-- .span12 -->
 </div> <!-- .row -->
 
 <div class="row" id="messages">
+    <div class="span12">
     {% if messages %}
-    <div class="messages">
+        <div class="messages">
         {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            {{ message }}
-        </div>
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert">
+                    &times;
+                </button>
+            </div>
         {% endfor %}
-    </div>
+        </div>
     {% endif %}
-</div> <!-- .row -->
+    </div> <!-- .span12 -->
+</div> <!-- #messages -->
