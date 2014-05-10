@@ -11,17 +11,6 @@
 
 <div class="panel-body">
   
-  {% if cat.category_set.all %}
-    {# Avoid run-away recursion problem by using "with" for the template name #}
-    {% with template_name='timers/listing.html' %}
-      {% for subcat in cat.category_set.all %}
-        <div class="panel panel-default" id="timers_for_{{ subcat.id }}">
-          {% include template_name with cat=subcat %}
-        </div>
-      {% endfor %}
-    {% endwith %}
-  {% endif %}
-
   <table class="table">
     <thead>
       <tr>
@@ -58,33 +47,46 @@
         </td>
       </tr>
     {% empty %}
-      <tr colspan="3">
-        <td>
+      <tr>
+        <td colspan="3">
           You haven't created any timers in this category.
         </td>
       </tr>
     {% endfor %}
     </tbody>
-    <tfoot></tfoot>
+    <tfoot>
+      <tr>
+        <td colspan="3">
+          <form id="new_timer_{{ cat.id }}" method="post" class="form-inline"
+              action="{% url 'new_timer' %}">
+            {% csrf_token %}
+            <input type="hidden" name="category_id" value="{{ cat.id }}" />
+            <div class="input-group">
+              <label for="timer_name_{{ cat.id }}" aria-hidden="true"
+                  class="accessibility">Timer name</label>
+              <input type="text" name="timer_name" id="timer_name_{{ cat.id }}"
+                  class="form-control" placeholder="new {{ cat.name }} timer..." required>
+              <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary" id="new_timer_btn">
+                  Create
+                </button>
+              </span>
+            </div>
+          </form>
+        </td>
+      </tr>
+    </tfoot>
   </table>
 
-</div> <!-- .panel-body -->
+  {% if cat.category_set.all %}
+    {# Avoid run-away recursion problem by using "with" for the template name #}
+    {% with template_name='timers/listing.html' %}
+      {% for subcat in cat.category_set.all %}
+        <div class="panel panel-default" id="timers_for_{{ subcat.id }}">
+          {% include template_name with cat=subcat %}
+        </div>
+      {% endfor %}
+    {% endwith %}
+  {% endif %}
 
-<div class="panel-footer">
-  <form id="new_timer_{{ cat.id }}" method="post" class="form-inline"
-      action="{% url 'new_timer' %}">
-    {% csrf_token %}
-    <input type="hidden" name="category_id" value="{{ cat.id }}" />
-    <div class="input-group">
-      <label for="timer_name_{{ cat.id }}" aria-hidden="true"
-          class="accessibility">Timer name</label>
-      <input type="text" name="timer_name" id="timer_name_{{ cat.id }}"
-          class="form-control" placeholder="new {{ cat.name }} timer..." required>
-      <span class="input-group-btn">
-        <button type="submit" class="btn btn-primary" id="new_timer_btn">
-          Create
-        </button>
-      </span>
-    </div>
-  </form>
-</div>
+</div> <!-- .panel-body -->

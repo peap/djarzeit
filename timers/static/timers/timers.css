@@ -2,6 +2,6 @@
     text-align: right;
 }
 
-.panel-body td:last-child {
+.panel-body td:last-child:not([colspan]) {
     text-align: right;
 }
