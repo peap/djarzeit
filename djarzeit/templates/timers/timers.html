@@ -8,12 +8,12 @@
 {% block arzeit_content %}
 
 <div>
-    <button class="btn btn-small" id="toggle_all">Hide All</button>
+  <button class="btn btn-small" id="toggle_all">Hide All</button>
 </div>
 {% for cat in root_categories %}
-    <div class="accordion" id="accordion{{ cat.id }}">
-        {% include 'timers/listing.html' %}
-    </div>
+  <div class="accordion" id="accordion{{ cat.id }}">
+    {% include 'timers/listing.html' %}
+  </div>
 {% endfor %}
 
 {% endblock %}

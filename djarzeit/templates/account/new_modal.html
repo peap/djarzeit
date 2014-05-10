@@ -1,23 +1,19 @@
 <div id="new_account" class="modal hide fade">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-            &times;
-        </button>
-        <h2>Sign Up</h2>
-    </div>
-    <div class="modal-body">
-        {% include 'account/new_form.html' %}
-    </div>
-    <div class="modal-footer">
-    </div>
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+      &times;
+    </button>
+    <h2>Sign Up</h2>
+  </div>
+  <div class="modal-body">
+    {% include 'account/new_form.html' %}
+  </div>
+  <div class="modal-footer">
+  </div>
 </div>
 
 <script type="text/javascript">
-    function setFocusNewAccount(){
-        var div_id = '#new_account';
-        $(div_id).on('shown', function(){
-            $(this).find('.modal-body input[type="text"]').first().focus();
-        });
-    }
-    setFocusNewAccount();
+$('#new_account').on('shown', function(){
+    $(this).find('.modal-body input[type="text"]').first().focus();
+});
 </script>

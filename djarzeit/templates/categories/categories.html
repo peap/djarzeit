@@ -3,18 +3,19 @@
 {% block arzeit_content %}
 
 {% for cat in root_categories %}
-    {% include 'categories/listing.html' %}
+  {% include 'categories/listing.html' %}
 {% empty %}
-    <div class="well">
-        <div class="row">
-            <div class="span12">
-                You haven't created any categories
-            </div>
-        </div>
+  <div class="well">
+    <div class="row">
+      <div class="span12">
+        You haven't created any categories
+      </div>
     </div>
+  </div>
 {% endfor %}
 
 <hr>
+
 <h3>New Root Category</h3>
 {% include 'categories/new_form.html' with parent_id='root' %}
 
