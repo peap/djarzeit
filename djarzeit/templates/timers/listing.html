@@ -1,71 +1,90 @@
 {% load timer_tags %}
-<div class="accordion-group">
 
-  <div class="accordion-heading">
-    <div class="row">
-      <div class="col-xs-12">
-        <a href="#accordion_category_{{ cat.id }}" class="accordion-toggle"
-            data-toggle="collapse" data-parent="accordion{{ cat.id }}">
-          {{ cat.name }}
-        </a>
-      </div>
-    </div>
-  </div>
+<div class="panel-heading">
+  <h3 class="panel-title">
+    {{ cat.name }}
+    <span class="pull-right">
+      Total today: {{ cat.today|format_timedelta }}
+    </span>
+  </h3>
+</div> <!-- .panel-heading -->
 
-  <div id="accordion_category_{{ cat.id }}" class="accordion-body collapse in">
-    <div class="accordion-inner">
-    {% if cat.category_set.all %}
-      <div class="accordion" id="accordion{{ cat.id }}">
+<div class="panel-body">
+  
+  {% if cat.category_set.all %}
+    {% for subcat in cat.category_set.all %}
+      <div class="panel panel-default" id="timers_for_{{ subcat.id }}">
+      {# Avoid run-away recursion problem by using with for the template name #}
       {% with template_name='timers/listing.html' %}
-        {% for subcat in cat.category_set.all %}
-          {% include template_name with cat=subcat %}
-        {% endfor %}
+        {% include template_name with cat=subcat %}
       {% endwith %}
       </div>
-    {% endif %}
+    {% endfor %}
+  {% endif %}
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col" class="col-xs-8">Timer</th>
+        <th scope="col" class="col-xs-2">Time Today</th>
+        <th scope="col" class="col-xs-2">Start/Stop</th>
+      </tr>
+    </thead>
+    <tbody>
     {% for timer in cat.timer_set.all %}
-      <div class="row">
-        <div class="col-xs-12">
+      <tr{% if timer.active %} class="active"{% endif %}>
+        <td>
           <a href="{% url 'timer' id=timer.id %}">{{ timer.name }}</a>
+        </td>
+        <td>
+          {{ timer.today|format_timedelta }}
+        </td>
+        <td>
           <form method="post" action="{% url 'startstop' id=timer.id %}"
-              class="form-inline startstop-form pull-right">
+              class="form-inline startstop-form">
             {% csrf_token %}
             {% if timer.active %}
-              <button class="btn btn-danger" id="startstop_{{ timer.id }}">
+              <button type="submit" class="btn btn-danger"
+                  id="startstop_{{ timer.id }}">
                 Stop
               </button>
             {% else %}
-              <button class="btn btn-success" id="startstop_{{ timer.id }}">
+              <button type="submit" class="btn btn-success"
+                  id="startstop_{{ timer.id }}">
                 Start
               </button>
             {% endif %}
           </form>
-        </div>
-      </div>
+        </td>
+      </tr>
     {% empty %}
-      <div class="row">
-        <div class="col-xs-12">
+      <tr colspan="3">
+        <td>
           You haven't created any timers in this category.
-        </div>
-      </div>
+        </td>
+      </tr>
     {% endfor %}
-      <div class="row">
-        <div class="col-xs-12">
-          <form id="new_timer_{{ cat.id }}" method="post" class="form-inline"
-              action="{% url 'new_timer' %}">
-            {% csrf_token %}
-            <input type="hidden" name="category_id" value="{{ cat.id }}" />
-            <label for="timer_name_{{ cat.id }}" aria-hidden="true"
-                class="accessibility">Timer name</label>
-            <input type="text" name="timer_name" id="timer_name_{{ cat.id }}"
-                class="input input-medium" placeholder="Name" required>
-            <button type="submit" class="btn btn-primary" id="new_timer_btn">
-              Create
-            </button>
-          </form>
-        </div>
-      </div>
-    </div> <!-- .accordion-inner -->
-  </div> <!-- .accordion-body -->
+    </tbody>
+    <tfoot></tfoot>
+  </table>
 
+</div> <!-- .panel-body -->
+
+<div class="panel-footer" style="text-align: right;">
+  <form id="new_timer_{{ cat.id }}" method="post" class="form-inline"
+      action="{% url 'new_timer' %}">
+    {% csrf_token %}
+    <input type="hidden" name="category_id" value="{{ cat.id }}" />
+    <div class="input-group">
+      <label for="timer_name_{{ cat.id }}" aria-hidden="true"
+          class="accessibility">Timer name</label>
+      <input type="text" name="timer_name" id="timer_name_{{ cat.id }}"
+          class="form-control" placeholder="new {{ cat.name }} timer..." required>
+      <span class="input-group-btn">
+        <button type="submit" class="btn btn-primary" id="new_timer_btn">
+          Create
+        </button>
+      </span>
+    </div>
+  </form>
 </div>

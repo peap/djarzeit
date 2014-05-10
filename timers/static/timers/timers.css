@@ -1,0 +1,7 @@
+.panel-body th:last-child {
+    text-align: right;
+}
+
+.panel-body td:last-child {
+    text-align: right;
+}

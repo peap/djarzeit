@@ -20,5 +20,7 @@ class ArZeitContext(RequestContext):
             'server_time': now(),
             'active_timers': active_timers,
             'path': request.path,
+            'extra_css': kwargs.pop('extra_css', ()),
+            'extra_js': kwargs.pop('extra_js', ()),
         })
         super().__init__(request, context, **kwargs)

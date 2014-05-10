@@ -1,15 +1,13 @@
 {% extends 'base.html' %}
 
-{% block static_content %}
+{% block arzeit_content %}
+
+{% include 'account/login_form.html' with id=1 %}
+
 <script type="text/javascript">
 $(document).ready(function(){
     $('#email1').focus();
 });
 </script>
-{% endblock %}
-
-{% block arzeit_content %}
-
-{% include 'account/login_form.html' with id=1 %}
 
 {% endblock %}

@@ -9,6 +9,9 @@
     <link rel="stylesheet"
         href="{% static 'djarzeit/bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'djarzeit/base.css' %}">
+    {% for href in extra_css %}
+    <link rel="stylesheet" href="{% static href %}">
+    {% endfor %}
   </head>
 
   <body>
@@ -21,7 +24,7 @@
         <div class="col-xs-12">
           <ul class="nav nav-tabs">
           {% for tab in TABS %}
-            <li {% if tab == active_tab %}class="active"{% endif %}>
+            <li{% if tab == active_tab %} class="active"{% endif %}>
               <a href="{% url tab %}">{{ tab|title }}</a>
             </li>
           {% endfor %}
@@ -36,11 +39,18 @@
         </div> <!-- .col-xs-12 -->
       </div> <!-- #arzeit-content -->
     </div> <!-- .container -->
-    <script src="{% static 'djarzeit/jquery-2.0.2.min.js' %}"></script>
-    <script src="{% static 'djarzeit/bootstrap/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'djarzeit/base.js' %}"></script>
-    {% block static_content %}
-    {% endblock %}
+
+    <script type="text/javascript"
+        src="{% static 'djarzeit/jquery-2.0.2.min.js' %}"></script>
+    <script type="text/javascript"
+        src="{% static 'djarzeit/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript"
+        src="{% static 'djarzeit/base.js' %}"></script>
+    {% for src in extra_js %}
+    <script type="text/javascript"
+        src="{% static src %}"></script>
+    {% endfor %}
+
   </body>
 
 </html>

@@ -17,10 +17,16 @@ def timers(request):
     root_categories = Category.objects.filter(user=request.user.id, parent=None)
     active_timers = Timer.objects.filter(
         category__user=request.user.id, active=True)
-    context = TimersContext(request, {
+    context = {
         'root_categories': root_categories,
         'active_timers': active_timers,
-    })
+    }
+    context = TimersContext(
+        request,
+        context,
+        extra_css=['timers/timers.css'],
+        extra_js=['timers/timers.js'],
+    )
     return render_to_response('timers/timers.html', {}, context)
 
 
