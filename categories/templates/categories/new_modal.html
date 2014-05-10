@@ -14,7 +14,11 @@
             &times;
           </button>
           <h4 class="modal-title" id="new_category_label_{{ cat.id }}">
+          {% if cat.id == 'root' %}
+            Create new root category
+          {% else %}
             Create new sub-category of {{ cat.name }}
+          {% endif %}
           </h4>
         </div> <!-- .modal-header -->
 
