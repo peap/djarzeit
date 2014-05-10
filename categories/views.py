@@ -54,7 +54,7 @@ def category(request, id):
     context = {
         'category': category,
     }
-    return render_to_response('timers/category.html', context)
+    return render_to_response('category/category.html', context)
 
 
 @login_required
