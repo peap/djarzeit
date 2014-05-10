@@ -3,8 +3,10 @@
 {% block arzeit_content %}
 
 {% for cat in root_categories %}
-  <div class="tree well" id="subcategories_for_{{ cat.id }}">
-    {% include 'categories/listing.html' with cat=cat %}
+  <div class="tree well">
+    <ul>
+      {% include 'categories/listing.html' with cat=cat %}
+    </ul>
   </div>
 {% empty %}
   <div class="well">
