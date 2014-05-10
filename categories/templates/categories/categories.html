@@ -3,12 +3,14 @@
 {% block arzeit_content %}
 
 {% for cat in root_categories %}
-  {% include 'categories/listing.html' %}
+  <div class="tree well" id="subcategories_for_{{ cat.id }}">
+    {% include 'categories/listing.html' with cat=cat %}
+  </div>
 {% empty %}
   <div class="well">
     <div class="row">
       <div class="col-xs-12">
-        You haven't created any categories
+        You haven't created any root categories.
       </div>
     </div>
   </div>
@@ -16,7 +18,10 @@
 
 <hr>
 
-<h3>New Root Category</h3>
-{% include 'categories/new_form.html' with parent_id='root' %}
+{% include 'categories/new_modal.html' with cat=FAKE_ROOT_PARENT %}
+<button type="button" class="btn btn-md btn-primary" data-toggle="modal"
+    data-target="#new_category_{{ FAKE_ROOT_PARENT.id }}">
+  Create new root category
+</button>
 
-{% endblock %}
+{% endblock arzeit_content %}

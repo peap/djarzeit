@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load staticfiles %}
 
 {% block arzeit_content %}
 
@@ -11,6 +10,15 @@
   <div class="panel panel-default" id="timers_for_{{ cat.id }}">
     {% include 'timers/listing.html' %}
   </div>
+{% empty %}
+  <div class="well">
+    <div class="row">
+      <div class="col-xs-12">
+        You haven't created any root categories in which to create timers.
+        You may create root categories in the Categories tab.
+      </div>
+    </div>
+  </div>
 {% endfor %}
 
-{% endblock %}
+{% endblock arzeit_content %}

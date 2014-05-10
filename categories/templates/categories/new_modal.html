@@ -1,13 +1,55 @@
-<div id="new_category_{{ parent_id }}" class="modal hide fade">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-      &times;
-    </button>
-    <h2>New sub-category</h2>
-  </div>
-  <div class="modal-body">
-    {% include 'categories/new_form.html' with parent_id=parent_id %}
-  </div>
-  <div class="modal-footer">
-  </div>
-</div>
+<div class="modal fade" id="new_category_{{ cat.id }}"
+    tabindex="-1" role="dialog" aria-hidden="true"
+    aria-labelledby="new_category_label_{{ cat.id }}">
+
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <form method="post" action="{% url 'new_category' cat_id=cat.id %}">
+        {% csrf_token %}
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"
+              aria-hidden="true">
+            &times;
+          </button>
+          <h4 class="modal-title" id="new_category_label_{{ cat.id }}">
+            Create new sub-category of {{ cat.name }}
+          </h4>
+        </div> <!-- .modal-header -->
+
+        <div class="modal-body">
+          <div class="control-group">
+            <label for="category_name" class="control-label">Name</label>
+            <div class="controls">
+              <input type="text" name="category_name" id="category_name"
+                  class="input input-medium" />
+            </div>
+          </div>
+          <div class="control-group">
+            <label for="category_desc" class="control-label">Description</label>
+            <div class="controls">
+              <textarea name="category_desc" id="category_desc"></textarea>
+            </div>
+          </div>
+        </div> <!-- .modal-body -->
+
+        <div class="modal-footer">
+          <div class="control-group">
+            <div class="controls">
+              <button type="button" class="btn" data-dismiss="modal">
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-primary">
+                Create
+              </button>
+            </div>
+          </div>
+        </div> <!-- .modal-footer -->
+
+      </form>
+
+    </div> <!-- .modal-content -->
+  </div> <!-- .modal-dialog -->
+
+</div> <!-- .modal -->

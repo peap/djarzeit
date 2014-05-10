@@ -1,34 +1,33 @@
-<div class="well">
-  <div class="row">
-    <div class="col-xs-3">
+{% include 'categories/new_modal.html' with cat=cat %}
+{% include 'categories/delete_modal.html' with cat=cat %}
+
+<ul>
+  <li>
+    <span class="tree-label">
+      <i class="glyphicon glyphicon-folder-open"></i>
       {{ cat.name }}
-    </div>
-    <div class="col-xs-6">
-      {{ cat.description }}
-    </div>
-    <div class="col-xs-1">
-      <a href="#">
-        <i class="icon-pencil"></i>
-      </a>
-      <a href="#delete_category_{{ cat.id }}" data-toggle="modal">
-        <i class="icon-remove"></i>
-      </a>
-    </div>
-  </div>
+    </span>
+    <span class="tree-buttons">
+      <button type="button" class="btn btn-xs" data-toggle="modal"
+          data-target="#new_category_{{ cat.id }}">
+        <i class="glyphicon glyphicon-plus"></i>
+      </button>
+      <button type="button" class="btn btn-xs" data-toggle="modal"
+          data-target="#delete_category_{{ cat.id }}">
+        <i class="glyphicon glyphicon-remove"></i>
+      </button>
+    </span>
+  </li>
+
   {% if cat.category_set.all %}
+    {# Avoid run-away recursion problem by using "with" for the template name #}
     {% with template_name='categories/listing.html' %}
       {% for subcat in cat.category_set.all %}
-        {% include template_name with cat=subcat %}
+        <li id="subcategories_for_{{ subcat.id }}">
+          {% include template_name with cat=subcat %}
+        </li>
       {% endfor %}
     {% endwith %}
   {% endif %}
-  <div class="row">
-    <div class="col-xs-12">
-      <a href="#new_category_{{ cat.id }}" data-toggle="modal">
-        Add sub-category
-      </a>
-    </div>
-  </div>
-</div>
-{% include 'categories/new_modal.html' with parent_id=cat.id %}
-{% include 'categories/delete_modal.html' with cat_id=cat.id %}
+
+</ul>

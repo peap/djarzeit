@@ -35,6 +35,8 @@
       Active:
       {% for timer in active_timers %}
       <a href="{% url 'timer' timer.pk %}">{{ timer.name }}</a> 
+      {% empty %}
+      (none)
       {% endfor %}
     </span>
   </div> <!-- .col-xs-12 -->

@@ -12,14 +12,14 @@
 <div class="panel-body">
   
   {% if cat.category_set.all %}
-    {% for subcat in cat.category_set.all %}
-      <div class="panel panel-default" id="timers_for_{{ subcat.id }}">
-      {# Avoid run-away recursion problem by using with for the template name #}
-      {% with template_name='timers/listing.html' %}
-        {% include template_name with cat=subcat %}
-      {% endwith %}
-      </div>
-    {% endfor %}
+    {# Avoid run-away recursion problem by using "with" for the template name #}
+    {% with template_name='timers/listing.html' %}
+      {% for subcat in cat.category_set.all %}
+        <div class="panel panel-default" id="timers_for_{{ subcat.id }}">
+          {% include template_name with cat=subcat %}
+        </div>
+      {% endfor %}
+    {% endwith %}
   {% endif %}
 
   <table class="table">
@@ -70,7 +70,7 @@
 
 </div> <!-- .panel-body -->
 
-<div class="panel-footer" style="text-align: right;">
+<div class="panel-footer">
   <form id="new_timer_{{ cat.id }}" method="post" class="form-inline"
       action="{% url 'new_timer' %}">
     {% csrf_token %}
