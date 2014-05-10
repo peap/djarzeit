@@ -1,15 +1,11 @@
-from datetime import datetime
-from json import dumps
-
 from django.contrib import messages
-from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect, get_object_or_404
+from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 
 from categories.models import Category
 from djarzeit.context import ArZeitContext
-from djarzeit.json import get_new_json_response
-from timers.models import Timer, Interval
+from timers.models import Timer
 
 
 class TimersContext(ArZeitContext):
@@ -19,7 +15,8 @@ class TimersContext(ArZeitContext):
 @login_required
 def timers(request):
     root_categories = Category.objects.filter(user=request.user.id, parent=None)
-    active_timers = Timer.objects.filter(category__user=request.user.id, active=True)
+    active_timers = Timer.objects.filter(
+        category__user=request.user.id, active=True)
     context = TimersContext(request, {
         'root_categories': root_categories,
         'active_timers': active_timers,
@@ -29,22 +26,21 @@ def timers(request):
 
 @login_required
 def new_timer(request):
-    category_id = request.POST.get('category_id')
     name = request.POST.get('timer_name')
-    if not category_id:
-        messages.error(request, 'Please choose a category for this new timer.')
-        return redirect('timers')
-    if not name:
-        messages.error(request, 'Please choose a timer name.')
-        return redirect('timers')
-
+    category_id = request.POST.get('category_id')
     category = get_object_or_404(Category, id=category_id)
-    timer = Timer()
-    timer.category = category
-    timer.name = name
-    timer.full_clean()
-    timer.save()
-    messages.success(request, 'Created a new timer.')
+
+    timer = Timer(category=category, name=name)
+    try:
+        timer.full_clean()
+    except ValidationError as e:
+        msg = 'Error creating new timer - '
+        for field, errors in e.message_dict.items():
+            msg += '{0}: {1}\n'.format(field, ' '.join(errors))
+        messages.error(request, msg)
+    else:
+        timer.save()
+        messages.success(request, 'Created a new timer.')
 
     return redirect('timers')
 
