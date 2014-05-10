@@ -32,7 +32,7 @@
       <span id="server_time">{{ server_time }}</span>
     </span>
     <span class="pull-right">
-      Current:
+      Active:
       {% for timer in active_timers %}
       <a href="{% url 'timer' timer.pk %}">{{ timer.name }}</a> 
       {% endfor %}

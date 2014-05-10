@@ -17,25 +17,23 @@
           {% include 'header.html' %}
       </div> <!-- #arzeit-header -->
       {% if user.is_authenticated %}
-      <div class="row" id="arzeit-tabs">
+      <div class="row" id="arzeit-nav">
         <div class="col-xs-12">
-          <div class="tabbable">
-            <ul class="nav nav-tabs">
-            {% for tab in TABS %}
-              <li class="{% if active_tab == tab %}active{% endif %}">
-                <a href="{% url tab %}">{{ tab|title }}</a>
-              </li>
-            {% endfor %}
-            </ul>
-          </div> <!-- .tabbable -->
+          <ul class="nav nav-tabs">
+          {% for tab in TABS %}
+            <li {% if tab == active_tab %}class="active"{% endif %}>
+              <a href="{% url tab %}">{{ tab|title }}</a>
+            </li>
+          {% endfor %}
+          </ul>
         </div> <!-- .col-xs-12 -->
-      </div> <!-- #arzeit-tabs -->
+      </div> <!-- #arzeit-nav -->
       {% endif %}
       <div class="row" id="arzeit-content">
-          <div class="col-xs-12">
-              {% block arzeit_content %}
-              {% endblock %}
-          </div> <!-- .col-xs-12 -->
+        <div class="col-xs-12">
+          {% block arzeit_content %}
+          {% endblock %}
+        </div> <!-- .col-xs-12 -->
       </div> <!-- #arzeit-content -->
     </div> <!-- .container -->
     <script src="{% static 'djarzeit/jquery-2.0.2.min.js' %}"></script>
