@@ -44,11 +44,11 @@ def login(request):
 
 def new_account(request):
     if request.POST:
-        name_first = request.POST.get('name_first')
-        name_last = request.POST.get('name_last')
-        email = request.POST.get('email')
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        name_first = request.POST.get('new_name_first')
+        name_last = request.POST.get('new_name_last')
+        email = request.POST.get('new_email')
+        username = request.POST.get('new_username')
+        password = request.POST.get('new_password')
         try:
             user = User.objects.create_user(username, email, password)
             user.first_name = name_first

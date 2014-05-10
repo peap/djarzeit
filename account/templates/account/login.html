@@ -2,12 +2,95 @@
 
 {% block arzeit_content %}
 
-{% include 'account/login_form.html' with id=1 %}
+<h2>Login</h2>
 
-<script type="text/javascript">
-$(document).ready(function(){
-    $('#email1').focus();
-});
-</script>
+<div class="row">
+  <div class="col-xs-12">
+    <form method="post" action="{% url 'login' %}" id="login_form"
+        role="form" class="form-inline">
+      {% csrf_token %}
+      {% if next_url %}
+        <input type="hidden" name="next_url" value="{{ next_url }}" />
+      {% endif %}
+      <div class="form-group">
+        <label for="username" aria-hidden="true" class="accessibility">
+          Username
+        </label>
+        <input type="text" name="username" id="username" class="form-control"
+          placeholder="username" required>
+      </div>
+      <div class="form-group">
+        <label for="password" aria-hidden="true" class="accessibility">
+          Password
+        </label>
+        <input type="password" name="password" id="password" class="form-control"
+          placeholder="password" required>
+      </div>
+      <button type="submit" class="btn btn-primary">
+        Login
+      </button>
+    </form>
+  </div> <!-- .col-xs-12 -->
+</div> <!-- .row -->
 
-{% endblock %}
+<h2>Sign Up</h2>
+
+<div class="row">
+  <div class="col-xs-12">
+    <form method="post" action="{% url 'new_account' %}" id="new_account_form"
+         role="form" class="form-horizontal">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="new_name_first" class="control-label col-sm-2">
+          First Name
+        </label>
+        <div class="col-sm-10">
+          <input type="text" name="new_name_first" id="new_name_first"
+              class="form-control" placeholder="first name" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="new_name_last" class="control-label col-sm-2">
+          Last Name
+        </label>
+        <div class="col-sm-10">
+          <input type="text" name="new_name_last" id="new_name_last"
+              class="form-control" placeholder="last name" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="new_email" class="control-label col-sm-2">
+          Email
+        </label>
+        <div class="col-sm-10">
+          <input type="email" name="new_email" id="new_email"
+              class="form-control" placeholder="email" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="new_username" class="control-label col-sm-2">
+          Username
+        </label>
+        <div class="col-sm-10">
+          <input type="text" name="new_username" id="new_username"
+              class="form-control" placeholder="username" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="new_password" class="control-label col-sm-2">
+          Password</label>
+        <div class="col-sm-10">
+          <input type="password" name="new_password" id="new_password"
+              class="form-control" placeholder="password" />
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-primary">Sign Up</button>
+        </div>
+      </div>
+    </form>
+  </div> <!-- .col-xs-12 -->
+</div> <!-- .row -->
+
+{% endblock arzeit_content %}
