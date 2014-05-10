@@ -13,7 +13,7 @@ from djarzeit.context import ArZeitContext
 
 
 class AccountContext(ArZeitContext):
-    tab = 'account'
+    active_tab = 'account'
 
 
 def login(request):

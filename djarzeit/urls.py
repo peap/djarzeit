@@ -4,6 +4,7 @@ import account.urls
 import categories.urls
 import tags.urls
 import timers.urls
+import reports.urls
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -16,6 +17,7 @@ urlpatterns = patterns('',
     url(r'^categories/', include(categories.urls)),
     url(r'^tags/', include(tags.urls)),
     url(r'^timers/', include(timers.urls)),
+    url(r'^reports/', include(reports.urls)),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

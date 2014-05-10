@@ -13,7 +13,7 @@ from timers.models import Timer, Interval
 
 
 class TimersContext(ArZeitContext):
-    tab = 'timers'
+    active_tab = 'timers'
 
 
 @login_required

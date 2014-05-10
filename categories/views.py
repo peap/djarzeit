@@ -9,7 +9,7 @@ from categories.models import Category
 
 
 class CategoriesContext(ArZeitContext):
-    tab = 'categories'
+    active_tab = 'categories'
 
 
 @login_required

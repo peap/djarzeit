@@ -1,54 +1,56 @@
-{% load staticfiles %}
-
 <!DOCTYPE html>
+{% load staticfiles %}
 <html lang="en">
-    <head>
-        <title>ArZeit</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link rel="stylesheet" href="{% static 'djarzeit/bootstrap/css/bootstrap.min.css' %}">
-        <link rel="stylesheet" href="{% static 'djarzeit/base.css' %}">
-        <link rel="stylesheet" href="{% static 'djarzeit/bootstrap/css/bootstrap-responsive.min.css' %}">
+<head>
+    <title>ArZeit</title>
 
-        <script src="{% static 'djarzeit/jquery-2.0.2.min.js' %}"></script>
-        <script src="{% static 'djarzeit/bootstrap/js/bootstrap.min.js' %}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        {% block static_content %}
-        {% endblock %}
-    </head>
-    <body>
-        <div class="container">
-            <div id="arzeit-header">
-                {% include 'header.html' %}
-            </div>
-            {% if user.is_authenticated %}
-            <div class="row">
-                <div class="span12">
-                    <div class="tabbable">
-                        <ul class="nav nav-tabs">
-                            <li class="{% if tab == 'timers' %}active{% endif %}">
-                                <a href="{% url 'timers' %}">Timers</a>
-                            </li>
-                            <li class="{% if tab == 'categories' %}active{% endif %}">
-                                <a href="{% url 'categories' %}">Categories</a>
-                            </li>
-                            <li class="{% if tab == 'tags' %}active{% endif %}">
-                                <a href="{% url 'tags' %}">Tags</a>
-                            </li>
-                            <li class="disabled{% if tab == 'reports' %}active{% endif %}">
-                                <a href="#">Reports</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div> <!-- .span12 -->
-            </div> <!-- .row-fluid -->
-            {% endif %}
-            <div class="row">
-                <div class="span12">
-                    {% block arzeit_content %}
-                    {% endblock %}
-                </div> <!-- .span12 -->
-            </div> <!-- .row-fluid -->
-        </div> <!-- .container -->
-    </body>
+    <link rel="stylesheet" href="{% static 'djarzeit/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'djarzeit/bootstrap/css/bootstrap-responsive.min.css' %}">
+    <link rel="stylesheet" href="{% static 'djarzeit/base.css' %}">
+
+    <script src="{% static 'djarzeit/jquery-2.0.2.min.js' %}"></script>
+    <script src="{% static 'djarzeit/bootstrap/js/bootstrap.min.js' %}"></script>
+
+    {% block static_content %}
+    {% endblock %}
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div id="arzeit-header">
+            {% include 'header.html' %}
+        </div> <!-- #arzeit-header -->
+
+        {% if user.is_authenticated %}
+        <div class="row" id="arzeit-tabs">
+            <div class="span12">
+                <div class="tabbable">
+                    <ul class="nav nav-tabs">
+                    {% for tab in TABS %}
+                        <li class="{% if active_tab == tab %}active{% endif %}">
+                            <a href="{% url tab %}">{{ tab|title }}</a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div> <!-- .tabbable -->
+            </div> <!-- .span12 -->
+        </div> <!-- #arzeit-tabs -->
+        {% endif %}
+
+        <div class="row" id="arzeit-content">
+            <div class="span12">
+                {% block arzeit_content %}
+                {% endblock %}
+            </div> <!-- .span12 -->
+        </div> <!-- #arzeit-content -->
+
+    </div> <!-- .container -->
+
+</body>
+
 </html>
