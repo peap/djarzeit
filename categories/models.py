@@ -27,6 +27,26 @@ class Category(models.Model):
     )
 
     @property
+    def is_root_category(self):
+        return self.parent is None
+
+    @property
+    def root_parent(self):
+        """
+        The Category anscestor that is a root Category.
+        """
+        if self.is_root_category:
+            return self
+        else:
+            return self.parent.root_parent
+
+    def stop_all_timers(self):
+        for category in self.category_set.all():
+            category.stop_all_timers()
+        for timer in self.timer_set.filter(active=True):
+            timer.stop()
+
+    @property
     def today(self):
         """
         Total time in this category today.

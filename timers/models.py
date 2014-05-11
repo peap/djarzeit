@@ -22,6 +22,8 @@ class Timer(models.Model):
     )
 
     def start(self):
+        self.category.root_parent.stop_all_timers()
+
         interval = Interval()
         interval.timer = self
         interval.save()
