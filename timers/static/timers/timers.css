@@ -9,3 +9,7 @@
 .panel-heading {
     cursor: pointer;
 }
+
+.panel-body {
+    padding-right: 0px;
+}
