@@ -1,28 +1,49 @@
-<div id="account_info" class="modal hide fade">
-  <form method="post" action="{% url 'account' %}" id="account_form">
-    {% csrf_token %}
-    <input type="hidden" name="next_url" value="{{ path }}" />
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-        &times;
-      </button>
-      <h2>Account Settings</h2>
-    </div>
-    <div class="modal-body">
-      <dl class="dl-horizontal">
-        <dt>Username</dt>
-        <dd>{{ user.username }}</dd>
-        <dt>Name</dt>
-        <dd>{{ user.first_name }} {{ user.last_name }}</dd>
-        <dt>Email</dt>
-        <dd>{{ user.email }}</dd>
-        <dt>Date Joined</dt>
-        <dd>{{ user.date_joined }}</dd>
-      </dl>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn" data-dismiss="modal">Close</button>
-      <button type="submit" class="btn btn-primary">Save</button>
-    </div>
-  </form>
-</div>
+<div class="modal fade" id="account_info"
+    tabindex="-1" role="dialog" aria-hidden="true"
+    aria-labelledby="account_info_label">
+
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <form method="post" action="{% url 'account' %}" id="account_form">
+        {% csrf_token %}
+        <input type="hidden" name="next_url" value="{{ path }}" />
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"
+              aria-hidden="true">
+            &times;
+          </button>
+          <h4 class="modal-title" id="account_info_label">
+            Account Settings
+          </h4>
+        </div> <!-- .modal-header -->
+
+        <div class="modal-body">
+          <dl class="dl-horizontal">
+            <dt>Username</dt>
+            <dd>{{ user.username }}</dd>
+            <dt>Name</dt>
+            <dd>{{ user.first_name }} {{ user.last_name }}</dd>
+            <dt>Email</dt>
+            <dd>{{ user.email }}</dd>
+            <dt>Date Joined</dt>
+            <dd>{{ user.date_joined }}</dd>
+          </dl>
+        </div> <!-- .modal-body -->
+
+        <div class="modal-footer">
+          <button type="button" class="btn" data-dismiss="modal">
+            Close
+          </button>
+          <button type="submit" class="btn btn-primary">
+            Save
+          </button>
+        </div> <!-- .modal-footer -->
+
+      </form>
+
+    </div> <!-- .modal-content -->
+  </div> <!-- .modal-dialog -->
+
+</div> <!-- .modal -->
