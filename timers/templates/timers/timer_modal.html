@@ -1,0 +1,57 @@
+{% load timer_tags %}
+<div class="modal fade" id="timer_detail_{{ timer.id }}"
+    tabindex="-1" role="dialog" aria-hidden="true"
+    aria-labelledby="timer_detail_label_{{ timer.id }}">
+
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+            aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title" id="timer_detail_{{ timer.id }}">
+          Timer: {{ timer.name }}
+        </h4>
+      </div> <!-- .modal-header -->
+
+      <div class="modal-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col" class="col-xs-3">Start</th>
+              <th scope="col" class="col-xs-3">End</th>
+              <th scope="col" class="col-xs-3">Duration</th>
+              <th scope="col" class="col-xs-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for interval in timer.intervals_today %}
+            <tr>
+              <td>{{ interval.start|date:'h:m:s' }}</td>
+              <td>{{ interval.end|date:'h:m:s' }}</td>
+              <td>{{ interval.length|format_timedelta }}</td>
+              <td></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+          <tfoot>
+          </tfoot>
+        </table>
+      </div> <!-- .modal-body -->
+
+      <div class="modal-footer">
+        <div class="control-group">
+          <div class="controls">
+            <button type="button" class="btn" data-dismiss="modal">
+              Ok
+            </button>
+          </div>
+        </div>
+      </div> <!-- .modal-footer -->
+
+    </div> <!-- .modal-content -->
+  </div> <!-- .modal-dialog -->
+
+</div> <!-- .modal -->

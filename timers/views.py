@@ -51,8 +51,8 @@ def new_timer(request):
     return redirect('timers')
 
 
-def timer(request, id):
-    timer = get_object_or_404(Timer, id=id)
+def timer(request, timer_id):
+    timer = get_object_or_404(Timer, id=timer_id)
     context = {
         'timer': timer,
     }
@@ -60,8 +60,8 @@ def timer(request, id):
 
 
 @login_required
-def startstop(request, id):
-    timer = get_object_or_404(Timer, id=id)
+def startstop(request, timer_id):
+    timer = get_object_or_404(Timer, id=timer_id)
     if timer.active:
         timer.stop()
     else:
@@ -70,8 +70,8 @@ def startstop(request, id):
 
 
 @login_required
-def delete_timer(request, id):
-    timer = get_object_or_404(Timer, id=id)
+def delete_timer(request, timer_id):
+    timer = get_object_or_404(Timer, id=timer_id)
     timer.delete()
     messages.success(request, 'Deleted timer.')
     return redirect('timers')

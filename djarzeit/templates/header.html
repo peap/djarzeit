@@ -25,7 +25,11 @@
     <span class="pull-right">
       Active:
       {% for timer in active_timers %}
-      <a href="{% url 'timer' timer.pk %}">{{ timer.name }}</a> 
+        {% include 'timers/timer_modal.html' with timer=timer %}
+        <a href="#" data-toggle="modal"
+            data-target="#timer_detail_{{ timer.id }}">
+          {{ timer.name }}
+        </a> 
       {% empty %}
       (none)
       {% endfor %}

@@ -46,17 +46,21 @@ class Timer(models.Model):
         self.save()
 
     @property
-    def today(self):
-        """
-        Total time for today as a datetime.timedelta object.
-        """
+    def intervals_today(self):
         today = now()
-        intervals = Interval.objects.filter(
+        return Interval.objects.filter(
             timer=self,
             start__year=today.year,
             start__month=today.month,
             start__day=today.day,
         )
+
+    @property
+    def today(self):
+        """
+        Total time for today as a datetime.timedelta object.
+        """
+        intervals = self.intervals_today
         total = timedelta(0)
         for interval in intervals:
             total += interval.length
@@ -80,6 +84,9 @@ class Timer(models.Model):
 
 
 class Interval(models.Model):
+
+    class Meta:
+        ordering = ['-start']
 
     timer = models.ForeignKey(Timer)
 

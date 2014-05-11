@@ -31,7 +31,14 @@
     {% for timer in cat.timer_set.all %}
       <tr{% if timer.active %} class="active"{% endif %}>
         <td>
-          <a href="{% url 'timer' id=timer.id %}">{{ timer.name }}</a>
+        {% if not timer in active_timers %}
+          {# active timer modals are already included in the header #}
+          {% include 'timers/timer_modal.html' with timer=timer %}
+        {% endif %}
+          <a href="#" data-toggle="modal"
+              data-target="#timer_detail_{{ timer.id }}">
+            {{ timer.name }}
+          </a>
         </td>
         <td>
           {{ timer.last_week|format_timedelta }}
@@ -40,7 +47,7 @@
           {{ timer.today|format_timedelta }}
         </td>
         <td>
-          <form method="post" action="{% url 'startstop' id=timer.id %}"
+          <form method="post" action="{% url 'startstop' timer_id=timer.id %}"
               class="form-inline startstop-form">
             {% csrf_token %}
             {% if timer.active %}
