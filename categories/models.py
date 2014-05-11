@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 
 class Category(models.Model):
 
+    class Meta:
+        ordering = ['name']
+
     user = models.ForeignKey(User)
 
     parent = models.ForeignKey('self',

@@ -9,6 +9,9 @@ from tags.models import Tag
 
 class Timer(models.Model):
 
+    class Meta:
+        ordering = ['name']
+
     category = models.ForeignKey(Category)
 
     name = models.CharField(
