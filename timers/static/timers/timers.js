@@ -17,7 +17,17 @@ $(document).ready(function () {
     $('.panel-heading').on('click', function (e) {
         var $panel = $(this).closest('.panel');
         var $panel_body = $panel.find('.panel-body');
-        $panel_body.collapse('toggle');
+        var $clicked_col = $(e.target).closest('div');
+        if ($clicked_col.attr('data-toggle') === 'add_timer') {
+            var $target = $($clicked_col.attr('data-target'));
+            if ($target.is(':visible')) {
+                $target.addClass('hide');
+            } else {
+                $target.removeClass('hide');
+            }
+        } else {
+            $panel_body.collapse('toggle');
+        }
     });
 
 });
