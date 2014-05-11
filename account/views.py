@@ -64,6 +64,7 @@ def new_account(request):
         else:
             user.save()
             messages.success(request, 'New user created!')
+            user = authenticate(username=username, password=password)
             dj_login(request, user)
         return redirect('timers')
     else:
