@@ -1,12 +1,19 @@
 {% load timer_tags %}
 
 <div class="panel-heading">
-  <h3 class="panel-title">
-    {{ cat.name }}
-    <span class="pull-right">
-      Total today: {{ cat.today|format_timedelta }}
-    </span>
-  </h3>
+  <span class="panel-title">
+    <div class="row">
+      <div class="col-xs-4">
+        {{ cat.name }}
+      </div>
+      <div class="col-xs-3">
+        {{ cat.last_week|format_timedelta }}
+      </div>
+      <div class="col-xs-3">
+        {{ cat.today|format_timedelta }}
+      </div>
+    </div>
+  </span>
 </div> <!-- .panel-heading -->
 
 <div class="panel-body">
@@ -14,7 +21,8 @@
   <table class="table">
     <thead>
       <tr>
-        <th scope="col" class="col-xs-7">Timer</th>
+        <th scope="col" class="col-xs-4">Timer</th>
+        <th scope="col" class="col-xs-3">Time Last Week</th>
         <th scope="col" class="col-xs-3">Time Today</th>
         <th scope="col" class="col-xs-2">Start/Stop</th>
       </tr>
@@ -24,6 +32,9 @@
       <tr{% if timer.active %} class="active"{% endif %}>
         <td>
           <a href="{% url 'timer' id=timer.id %}">{{ timer.name }}</a>
+        </td>
+        <td>
+          {{ timer.last_week|format_timedelta }}
         </td>
         <td>
           {{ timer.today|format_timedelta }}
@@ -48,7 +59,7 @@
       </tr>
     {% empty %}
       <tr>
-        <td colspan="3">
+        <td colspan="4">
           You haven't created any timers in this category.
         </td>
       </tr>
@@ -56,7 +67,7 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan="3">
+        <td colspan="4">
           <form id="new_timer_{{ cat.id }}" method="post" class="form-inline"
               action="{% url 'new_timer' %}">
             {% csrf_token %}
