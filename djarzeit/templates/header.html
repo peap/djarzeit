@@ -30,9 +30,12 @@
       Active:
       {% spaceless %}
         {% for timer in active_timers %}
+          {% if forloop.counter0 > 0 %}
+            <span>, </span>
+          {% endif %}
           <a href="#" data-toggle="modal"
               data-target="#timer_detail_{{ timer.id }}"
-            >{% if forloop.counter0 > 0 %}, {% endif %}{{ timer.name }}</a>
+            >{{ timer.name }}</a>
         {% empty %}
           (none)
         {% endfor %}
