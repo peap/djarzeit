@@ -24,6 +24,7 @@ $(document).ready(function () {
                 $target.addClass('hide');
             } else {
                 $target.removeClass('hide');
+                $target.find('input[name=timer_name]').focus();
             }
         } else {
             $panel_body.collapse('toggle');
