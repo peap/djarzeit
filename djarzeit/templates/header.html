@@ -22,17 +22,21 @@
       <span id="server_time">{{ server_time }}</span>
     </span>
   {% if user.is_authenticated %}
+    {% for timer in active_timers %}
+      {# doing this for-loop up here to let spaceless work down below #}
+      {% include 'timers/timer_modal.html' with timer=timer %}
+    {% endfor %}
     <span class="pull-right">
       Active:
-      {% for timer in active_timers %}
-        {% include 'timers/timer_modal.html' with timer=timer %}
-        <a href="#" data-toggle="modal"
-            data-target="#timer_detail_{{ timer.id }}">
-          {{ timer.name }}
-        </a> 
-      {% empty %}
-      (none)
-      {% endfor %}
+      {% spaceless %}
+        {% for timer in active_timers %}
+          <a href="#" data-toggle="modal"
+              data-target="#timer_detail_{{ timer.id }}"
+            >{% if forloop.counter0 > 0 %}, {% endif %}{{ timer.name }}</a>
+        {% empty %}
+          (none)
+        {% endfor %}
+      {% endspaceless %}
     </span>
   {% endif %}
   </div> <!-- .col-xs-12 -->
