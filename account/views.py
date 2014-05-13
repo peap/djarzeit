@@ -86,7 +86,21 @@ def logout(request):
 @login_required
 def account(request):
     next_url = request.POST.get('next_url')
-    messages.warning(request, 'Account settings changes are not yet implemented.')
+    user = request.user
+    user.profile.timezone = request.POST.get('user_timezone')
+    try:
+        user.profile.full_clean()
+    except ValidationError as e:
+        for field, errors in e.message_dict.items():
+            messages.error(
+                request,
+                'Error updating profile - {0}: {1}'.format(
+                    field, errors,
+                )
+            )
+    else:
+        user.profile.save()
+        messages.success(request, 'Saved user profile.')
     if next_url:
         return redirect(next_url)
     return redirect('home')
