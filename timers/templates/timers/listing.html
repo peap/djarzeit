@@ -103,8 +103,22 @@
       </tr>
     {% endfor %}
     </tbody>
-    <tfoot class="hide" id="add_new_timer_in_{{ cat.id }}">
+    <tfoot>
       <tr>
+        <td colspan="4">
+        {% with n_archived=cat.archived_timers.count %}
+          {% if n_archived > 0 %}
+            {% include 'categories/archived_timers_modal.html' with cat=cat %}
+            Not showing
+            <a href="#" data-toggle="modal"
+                data-target="#archived_timers_{{ cat.id }}">
+              {{ n_archived }} archived timer{{ n_archived|pluralize }}.
+            </a>
+          {% endif %}
+        {% endwith %}
+        </td>
+      </tr>
+      <tr class="hide" id="add_new_timer_in_{{ cat.id }}">
         <td colspan="4">
           <form id="new_timer_{{ cat.id }}" method="post" class="form-inline"
               action="{% url 'new_timer' %}">
@@ -114,7 +128,8 @@
               <label for="timer_name_{{ cat.id }}" aria-hidden="true"
                   class="accessibility">Timer name</label>
               <input type="text" name="timer_name" id="timer_name_{{ cat.id }}"
-                  class="form-control" placeholder="new {{ cat.name }} timer..." required>
+                  class="form-control" placeholder="new {{ cat.name }} timer..."
+                  required>
               <span class="input-group-btn">
                 <button type="submit" class="btn btn-primary" id="new_timer_btn">
                   Create
