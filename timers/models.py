@@ -53,26 +53,46 @@ class Timer(models.Model):
         self.active = False
         self.save()
 
-    @property
-    def intervals_today(self):
+    def get_intervals_on_date(self, date):
         user_tz = pytz.timezone(self.category.user.profile.timezone)
-        today = user_tz.normalize(now().astimezone(user_tz))
-        today_midnight = datetime(today.year, today.month, today.day)
+        local_date = user_tz.normalize(date.astimezone(user_tz))
+        local_date_midnight = datetime(
+            local_date.year, local_date.month, local_date.day)
         return Interval.objects.filter(
             timer=self,
-            start__gt=today_midnight,
+            start__gt=local_date_midnight,
         )
+
+    def get_total_time_on_date(self, date):
+        intervals = self.get_intervals_on_date(date)
+        total = timedelta(0)
+        for interval in intervals:
+            total += interval.length
+        return total
+
+    @property
+    def intervals_yesterday(self):
+        yesterday = now() - timedelta(days=1)
+        return self.get_intervals_on_date(yesterday)
+
+    @property
+    def intervals_today(self):
+        return self.get_intervals_on_date(now())
+
+    @property
+    def yesterday(self):
+        """
+        Total time for today as a datetime.timedelta object.
+        """
+        yesterday = now() - timedelta(days=1)
+        return self.get_total_time_on_date(yesterday)
 
     @property
     def today(self):
         """
         Total time for today as a datetime.timedelta object.
         """
-        intervals = self.intervals_today
-        total = timedelta(0)
-        for interval in intervals:
-            total += interval.length
-        return total
+        return self.get_total_time_on_date(now())
 
     @property
     def last_week(self):

@@ -27,12 +27,42 @@
             </tr>
           </thead>
           <tbody>
-          {% for interval in timer.intervals_today %}
             <tr>
-              <td>{{ interval.start|date:'h:m:s' }}</td>
-              <td>{{ interval.end|date:'h:m:s' }}</td>
-              <td>{{ interval.length|format_timedelta }}</td>
+              <td colspan="4" align="center">
+                <em>Today...</em>
+              </td>
+            </tr>
+          {% for interval in timer.intervals_today %}
+            <tr class="active">
+              <td>{{ interval.start|date:'H:m:s' }}</td>
+              <td>{{ interval.end|date:'H:m:s' }}</td>
+              <td>{{ interval.length|format_timedelta_long }}</td>
               <td></td>
+            </tr>
+          {% empty %}
+            <tr class="active">
+              <td colspan="4">
+                Nothing today.
+              </td>
+            </tr>
+          {% endfor %}
+            <tr>
+              <td colspan="4" align="center">
+                <em>Yesterday...</em>
+              </td>
+            </tr>
+          {% for interval in timer.intervals_yesterday %}
+            <tr>
+              <td>{{ interval.start|date:'H:m:s' }}</td>
+              <td>{{ interval.end|date:'H:m:s' }}</td>
+              <td>{{ interval.length|format_timedelta_long }}</td>
+              <td></td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="4">
+                Nothing yesterday.
+              </td>
             </tr>
           {% endfor %}
           </tbody>
