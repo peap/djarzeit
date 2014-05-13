@@ -6,10 +6,10 @@
       <div class="col-xs-5">
         {{ cat.name }}
       </div>
-      <div class="col-xs-4">
+      <div class="col-xs-3">
         {{ cat.today|format_timedelta }}
       </div>
-      <div class="col-xs-3 text-right" data-toggle="add_timer"
+      <div class="col-xs-4 text-right" data-toggle="add_timer"
           data-target="#add_new_timer_in_{{ cat.id }}">
         <i class="glyphicon glyphicon-plus"></i>
       </div>
@@ -23,8 +23,8 @@
     <thead>
       <tr>
         <th scope="col" class="col-xs-5">Timer</th>
-        <th scope="col" class="col-xs-4">Today</th>
-        <th scope="col" class="col-xs-3">Actions</th>
+        <th scope="col" class="col-xs-3">Today</th>
+        <th scope="col" class="col-xs-4">Actions</th>
       </tr>
     </thead>
     <tbody>
