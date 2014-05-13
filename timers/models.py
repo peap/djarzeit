@@ -1,7 +1,5 @@
-from datetime import datetime, timedelta
-
 from django.db import models
-from django.utils.timezone import now
+from django.utils.timezone import datetime, now, timedelta
 
 from categories.models import Category
 from tags.models import Tag
@@ -56,11 +54,10 @@ class Timer(models.Model):
     @property
     def intervals_today(self):
         today = now()
+        today_midnight = datetime(today.year, today.month, today.day)
         return Interval.objects.filter(
             timer=self,
-            start__year=today.year,
-            start__month=today.month,
-            start__day=today.day,
+            start__gt=today_midnight,
         )
 
     @property
