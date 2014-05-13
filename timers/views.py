@@ -59,7 +59,7 @@ def new_timer(request):
         messages.error(request, msg)
     else:
         timer.save()
-        messages.success(request, 'Created new timer: {0}.'.format(timer.name))
+        messages.success(request, 'Created new timer: {0}.'.format(timer))
 
     return redirect('timers')
 
@@ -84,7 +84,33 @@ def edit_timer(request, timer_id):
     timer.category = category
     timer.full_clean()
     timer.save()
-    messages.success(request, 'Edited timer: {0}.'.format(timer.name))
+    messages.success(request, 'Edited timer: {0}.'.format(timer))
+    return redirect('timers')
+
+
+@login_required
+def archive_timer(request, timer_id):
+    timer = get_object_or_404(Timer, id=timer_id, category__user=request.user)
+    if timer.archived:
+        messages.error(request, 'Timer already archived.')
+        return redirect('timers')
+    timer.archived = True
+    timer.full_clean()
+    timer.save()
+    messages.success(request, 'Archived timer: {0}.'.format(timer))
+    return redirect('timers')
+
+
+@login_required
+def unarchive_timer(request, timer_id):
+    timer = get_object_or_404(Timer, id=timer_id, category__user=request.user)
+    if not timer.archived:
+        messages.error(request, 'Timer not archived.')
+        return redirect('timers')
+    timer.archived = False
+    timer.full_clean()
+    timer.save()
+    messages.success(request, 'Un-archived timer: {0}.'.format(timer))
     return redirect('timers')
 
 
@@ -92,5 +118,5 @@ def edit_timer(request, timer_id):
 def delete_timer(request, timer_id):
     timer = get_object_or_404(Timer, id=timer_id, category__user=request.user)
     timer.delete()
-    messages.success(request, 'Deleted timer: {0}.'.format(timer.name))
+    messages.success(request, 'Deleted timer: {0}.'.format(timer))
     return redirect('timers')

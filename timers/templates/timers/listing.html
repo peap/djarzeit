@@ -28,7 +28,7 @@
       </tr>
     </thead>
     <tbody>
-    {% for timer in cat.timer_set.all %}
+    {% for timer in cat.visible_timers %}
       <tr id="timer_{{ timer.id }}"
           {% if timer.active %}class="active"{% endif %}>
         <td>
@@ -78,7 +78,12 @@
                   </a>
                 </li>
                 <li class="divider"></li>
-                <li><a href="#">Archive this timer</a></li>
+                <li>
+                  <a href="#" data-toggle="modal"
+                      data-target="#timer_archive_{{ timer.id }}">
+                    Archive this timer
+                  </a>
+                </li>
                 <li>
                   <a href="#" data-toggle="modal"
                       data-target="#timer_delete_{{ timer.id }}">

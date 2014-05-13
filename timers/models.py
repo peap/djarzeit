@@ -24,6 +24,14 @@ class Timer(models.Model):
         default=False,
     )
 
+    archived = models.BooleanField(
+        verbose_name='Archived',
+        default=False,
+    )
+
+    def __str__(self):
+        return self.name
+
     def start(self):
         self.category.root_parent.stop_all_timers()
 

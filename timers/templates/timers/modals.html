@@ -164,3 +164,43 @@
     </div> <!-- .modal-content -->
   </div> <!-- .modal-dialog -->
 </div> <!-- #timer_delete_{{ timer.id }} -->
+
+<div class="modal fade" id="timer_archive_{{ timer.id }}"
+    tabindex="-1" role="dialog" aria-hidden="true"
+    aria-labelledby="timer_archive_label_{{ timer.id }}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="{% url 'archive_timer' timer_id=timer.id %}">
+        {% csrf_token %}
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"
+              aria-hidden="true">
+            &times;
+          </button>
+          <h4 class="modal-title" id="timer_archive_{{ timer.id }}">
+            Archive Timer: {{ timer.name }}
+          </h4>
+        </div> <!-- .modal-header -->
+
+        <div class="modal-body">
+          Are you sure you want to archive this timer?
+        </div> <!-- .modal-body -->
+
+        <div class="modal-footer">
+          <div class="control-group">
+            <div class="controls">
+              <button type="button" class="btn" data-dismiss="modal">
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-warning">
+                Archive
+              </button>
+            </div>
+          </div>
+        </div> <!-- .modal-footer -->
+
+      </form>
+    </div> <!-- .modal-content -->
+  </div> <!-- .modal-dialog -->
+</div> <!-- #timer_archive_{{ timer.id }} -->

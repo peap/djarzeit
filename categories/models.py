@@ -53,6 +53,9 @@ class Category(models.Model):
         else:
             return '{0.hierarchy_display} > {1.name}'.format(self.parent, self)
 
+    def visible_timers(self):
+        return self.timer_set.filter(archived=False)
+
     def stop_all_timers(self):
         for category in self.category_set.all():
             category.stop_all_timers()
