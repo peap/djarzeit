@@ -35,7 +35,7 @@ def timers(request):
 
 @login_required
 def startstop(request, timer_id):
-    timer = get_object_or_404(Timer, id=timer_id)
+    timer = get_object_or_404(Timer, id=timer_id, category__user=request.user)
     if timer.active:
         timer.stop()
     else:
@@ -47,7 +47,7 @@ def startstop(request, timer_id):
 def new_timer(request):
     name = request.POST.get('timer_name')
     category_id = request.POST.get('category_id')
-    category = get_object_or_404(Category, id=category_id)
+    category = get_object_or_404(Category, id=category_id, user=request.user)
 
     timer = Timer(category=category, name=name)
     try:
@@ -59,14 +59,14 @@ def new_timer(request):
         messages.error(request, msg)
     else:
         timer.save()
-        messages.success(request, 'Created a new timer.')
+        messages.success(request, 'Created new timer: {0}.'.format(timer.name))
 
     return redirect('timers')
 
 
 @login_required
 def edit_timer(request, timer_id):
-    timer = get_object_or_404(Timer, id=timer_id)
+    timer = get_object_or_404(Timer, id=timer_id, category__user=request.user)
     name = request.POST.get('new_timer_name').strip()
     if not name:
         messages.error(request, 'Invalid timer name.')
@@ -84,13 +84,13 @@ def edit_timer(request, timer_id):
     timer.category = category
     timer.full_clean()
     timer.save()
-    messages.success(request, 'Successfully edited timer.')
+    messages.success(request, 'Edited timer: {0}.'.format(timer.name))
     return redirect('timers')
 
 
 @login_required
 def delete_timer(request, timer_id):
-    timer = get_object_or_404(Timer, id=timer_id)
+    timer = get_object_or_404(Timer, id=timer_id, category__user=request.user)
     timer.delete()
-    messages.success(request, 'Deleted timer.')
+    messages.success(request, 'Deleted timer: {0}.'.format(timer.name))
     return redirect('timers')

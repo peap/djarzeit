@@ -18,7 +18,7 @@
 </div> <!-- .panel-heading -->
 
 <div class="panel-body" class="panel-collapse in">
-  
+
   <table class="table">
     <thead>
       <tr>
@@ -32,7 +32,7 @@
       <tr id="timer_{{ timer.id }}"
           {% if timer.active %}class="active"{% endif %}>
         <td>
-          {% include 'timers/timer_modals.html' with timer=timer %}
+          {% include 'timers/modals.html' with timer=timer %}
           {{ timer.name }}
         </td>
         <td>
@@ -79,7 +79,12 @@
                 </li>
                 <li class="divider"></li>
                 <li><a href="#">Archive this timer</a></li>
-                <li><a href="#">Delete this timer</a></li>
+                <li>
+                  <a href="#" data-toggle="modal"
+                      data-target="#timer_delete_{{ timer.id }}">
+                    Delete this timer
+                  </a>
+                </li>
               </ul>
             </div>
           </form>

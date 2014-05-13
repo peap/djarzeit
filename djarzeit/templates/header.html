@@ -22,10 +22,6 @@
       <span id="server_time">{{ server_time }}</span>
     </span>
   {% if user.is_authenticated %}
-    {% for timer in active_timers %}
-      {# doing this for-loop up here to let spaceless work down below #}
-      {% include 'timers/timer_modals.html' with timer=timer %}
-    {% endfor %}
     <span class="pull-right">
       Active:
       {% spaceless %}
