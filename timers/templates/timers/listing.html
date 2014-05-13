@@ -28,7 +28,7 @@
       </tr>
     </thead>
     <tbody>
-    {% for timer in cat.visible_timers %}
+    {% for timer in cat.unarchived_timers %}
       <tr id="timer_{{ timer.id }}"
           {% if timer.active %}class="active"{% endif %}>
         <td>
