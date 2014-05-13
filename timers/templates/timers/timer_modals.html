@@ -1,0 +1,126 @@
+{% load timer_tags %}
+
+<div class="modal fade" id="timer_history_{{ timer.id }}"
+    tabindex="-1" role="dialog" aria-hidden="true"
+    aria-labelledby="timer_history_label_{{ timer.id }}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+            aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title" id="timer_history_{{ timer.id }}">
+          Timer History: {{ timer.name }}
+        </h4>
+      </div> <!-- .modal-header -->
+
+      <div class="modal-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col" class="col-xs-3">Start</th>
+              <th scope="col" class="col-xs-3">End</th>
+              <th scope="col" class="col-xs-3">Duration</th>
+              <th scope="col" class="col-xs-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for interval in timer.intervals_today %}
+            <tr>
+              <td>{{ interval.start|date:'h:m:s' }}</td>
+              <td>{{ interval.end|date:'h:m:s' }}</td>
+              <td>{{ interval.length|format_timedelta }}</td>
+              <td></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+          <tfoot>
+          </tfoot>
+        </table>
+      </div> <!-- .modal-body -->
+
+      <div class="modal-footer">
+        <div class="control-group">
+          <div class="controls">
+            <button type="button" class="btn" data-dismiss="modal">
+              Ok
+            </button>
+          </div>
+        </div>
+      </div> <!-- .modal-footer -->
+
+    </div> <!-- .modal-content -->
+  </div> <!-- .modal-dialog -->
+</div> <!-- #timer_history_{{ timer.id }} -->
+
+<div class="modal fade" id="timer_edit_{{ timer.id }}"
+    tabindex="-1" role="dialog" aria-hidden="true"
+    aria-labelledby="timer_edit_label_{{ timer.id }}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="{% url 'edit_timer' timer_id=timer.id %}"
+          class="form-horizontal">
+        {% csrf_token %}
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"
+              aria-hidden="true">
+            &times;
+          </button>
+          <h4 class="modal-title" id="timer_edit_{{ timer.id }}">
+            Edit Timer: {{ timer.name }}
+          </h4>
+        </div> <!-- .modal-header -->
+  
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="new_timer_name_{{ timer.id }}"
+                class="col-xs-2 control-label">
+              Name
+            </label>
+            <div class="col-xs-10">
+              <input type="text" name="new_timer_name"
+                  class="form-control" value="{{ timer.name }}" 
+                  id="new_timer_name_{{ timer.id }}" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="new_timer_category_{{ timer.id }}"
+                class="col-xs-2 control-label">
+              Category
+            </label>
+            <div class="col-xs-10">
+              <select name="new_timer_category" class="form-control"
+                  id="new_timer_category_{{ timer.id }}">
+              {% for category in all_categories %}
+                <option value="{{ category.id }}"
+                    {% if timer.category == category %}
+                      selected="selected"
+                    {% endif %}>
+                  {{ category.hierarchy_display }}
+                </option>
+              {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div> <!-- .modal-body -->
+  
+        <div class="modal-footer">
+          <div class="control-group">
+            <div class="controls">
+              <button type="submit" class="btn" data-dismiss="modal">
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-primary">
+                Edit
+              </button>
+            </div>
+          </div>
+        </div> <!-- .modal-footer -->
+
+      </form>
+    </div> <!-- .modal-content -->
+  </div> <!-- .modal-dialog -->
+</div> <!-- #timer_edit_{{ timer.id }} -->

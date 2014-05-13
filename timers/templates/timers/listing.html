@@ -29,16 +29,11 @@
     </thead>
     <tbody>
     {% for timer in cat.timer_set.all %}
-      <tr{% if timer.active %} class="active"{% endif %}>
+      <tr id="timer_{{ timer.id }}"
+          {% if timer.active %}class="active"{% endif %}>
         <td>
-        {% if not timer in active_timers %}
-          {# active timer modals are already included in the header #}
-          {% include 'timers/timer_modal.html' with timer=timer %}
-        {% endif %}
-          <a href="#" data-toggle="modal"
-              data-target="#timer_detail_{{ timer.id }}">
-            {{ timer.name }}
-          </a>
+          {% include 'timers/timer_modals.html' with timer=timer %}
+          {{ timer.name }}
         </td>
         <td>
           {{ timer.today|format_timedelta }}
@@ -47,17 +42,46 @@
           <form method="post" action="{% url 'startstop' timer_id=timer.id %}"
               class="form-inline startstop-form">
             {% csrf_token %}
+            <div class="btn-group">
             {% if timer.active %}
               <button type="submit" class="btn btn-danger"
                   id="startstop_{{ timer.id }}">
                 Stop
+              </button>
+              <button type="button" class="btn btn-danger dropdown-toggle"
+                  data-toggle="dropdown">
+                <span class="caret"></span>
+                <span class="accessibility">Toggle Dropdown</span>
               </button>
             {% else %}
               <button type="submit" class="btn btn-success"
                   id="startstop_{{ timer.id }}">
                 Start
               </button>
+              <button type="button" class="btn btn-success dropdown-toggle"
+                  data-toggle="dropdown">
+                <span class="caret"></span>
+                <span class="accessibility">Toggle Dropdown</span>
+              </button>
             {% endif %}
+              <ul class="dropdown-menu pull-right" role="menu">
+                <li>
+                  <a href="#" data-toggle="modal"
+                      data-target="#timer_history_{{ timer.id }}">
+                    View history
+                  </a>
+                </li>
+                <li>
+                  <a href="#" data-toggle="modal"
+                      data-target="#timer_edit_{{ timer.id }}">
+                    Edit details
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li><a href="#">Archive this timer</a></li>
+                <li><a href="#">Delete this timer</a></li>
+              </ul>
+            </div>
           </form>
         </td>
       </tr>

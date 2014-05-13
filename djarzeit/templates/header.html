@@ -24,7 +24,7 @@
   {% if user.is_authenticated %}
     {% for timer in active_timers %}
       {# doing this for-loop up here to let spaceless work down below #}
-      {% include 'timers/timer_modal.html' with timer=timer %}
+      {% include 'timers/timer_modals.html' with timer=timer %}
     {% endfor %}
     <span class="pull-right">
       Active:
@@ -33,9 +33,7 @@
           {% if forloop.counter0 > 0 %}
             <span>, </span>
           {% endif %}
-          <a href="#" data-toggle="modal"
-              data-target="#timer_detail_{{ timer.id }}"
-            >{{ timer.name }}</a>
+          <a href="#timer_{{ timer.id }}">{{ timer.name }}</a>
         {% empty %}
           (none)
         {% endfor %}

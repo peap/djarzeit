@@ -43,6 +43,16 @@ class Category(models.Model):
         else:
             return self.parent.root_parent
 
+    @property
+    def hierarchy_display(self):
+        """
+        Root Category > Child Category > This Category
+        """
+        if self.is_root_category:
+            return self.name
+        else:
+            return '{0.hierarchy_display} > {1.name}'.format(self.parent, self)
+
     def stop_all_timers(self):
         for category in self.category_set.all():
             category.stop_all_timers()

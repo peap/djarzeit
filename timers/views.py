@@ -14,11 +14,14 @@ class TimersContext(ArZeitContext):
 
 @login_required
 def timers(request):
-    root_categories = Category.objects.filter(user=request.user.id, parent=None)
+    root_categories = Category.objects.filter(user=request.user, parent=None)
+    all_categories = Category.objects.filter(user=request.user)
+    all_categories = sorted(all_categories, key=lambda cat: cat.hierarchy_display)
     active_timers = Timer.objects.filter(
-        category__user=request.user.id, active=True)
+        category__user=request.user, active=True)
     context = {
         'root_categories': root_categories,
+        'all_categories': all_categories,
         'active_timers': active_timers,
     }
     context = TimersContext(
@@ -28,6 +31,16 @@ def timers(request):
         extra_js=['timers/timers.js'],
     )
     return render_to_response('timers/timers.html', {}, context)
+
+
+@login_required
+def startstop(request, timer_id):
+    timer = get_object_or_404(Timer, id=timer_id)
+    if timer.active:
+        timer.stop()
+    else:
+        timer.start()
+    return redirect('timers')
 
 
 @login_required
@@ -51,21 +64,27 @@ def new_timer(request):
     return redirect('timers')
 
 
-def timer(request, timer_id):
-    timer = get_object_or_404(Timer, id=timer_id)
-    context = {
-        'timer': timer,
-    }
-    return render_to_response('timers/timer.html', context)
-
-
 @login_required
-def startstop(request, timer_id):
+def edit_timer(request, timer_id):
     timer = get_object_or_404(Timer, id=timer_id)
-    if timer.active:
-        timer.stop()
-    else:
-        timer.start()
+    name = request.POST.get('new_timer_name').strip()
+    if not name:
+        messages.error(request, 'Invalid timer name.')
+        return redirect('timers')
+    category_id = request.POST.get('new_timer_category').strip()
+    try:
+        category = Category.objects.get(user=request.user, pk=int(category_id))
+    except Category.DoesNotExist as e:
+        messages.error(request, 'Unknown category.')
+        return redirect('timers')
+    except ValueError as e:
+        messages.error(request, 'Invalid category.')
+        return redirect('timers')
+    timer.name = name
+    timer.category = category
+    timer.full_clean()
+    timer.save()
+    messages.success(request, 'Successfully edited timer.')
     return redirect('timers')
 
 
