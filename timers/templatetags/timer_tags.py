@@ -13,5 +13,5 @@ def format_timedelta(value):
     if isinstance(value, timedelta):
         hours, remainder = divmod(value.seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
-        new_value = '{0:02}h {1:02}\' {2:02}"'.format(hours, minutes, seconds)
+        new_value = '{0:02}:{1:02}'.format(hours, minutes)
     return new_value
