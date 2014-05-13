@@ -1,3 +1,5 @@
+import pytz
+
 from django.db import models
 from django.utils.timezone import datetime, now, timedelta
 
@@ -53,7 +55,8 @@ class Timer(models.Model):
 
     @property
     def intervals_today(self):
-        today = now()
+        user_tz = pytz.timezone(self.category.user.profile.timezone)
+        today = user_tz.normalize(now().astimezone(user_tz))
         today_midnight = datetime(today.year, today.month, today.day)
         return Interval.objects.filter(
             timer=self,
