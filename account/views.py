@@ -1,6 +1,6 @@
+from django.conf import settings
 from django.contrib import messages
 from django.db import IntegrityError
-from django.http import HttpResponse
 from django.shortcuts import redirect, render_to_response
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
@@ -9,6 +9,7 @@ from django.contrib.auth import logout as dj_logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
+from account.models import Profile
 from djarzeit.context import ArZeitContext
 
 
@@ -63,6 +64,9 @@ def new_account(request):
                 messages.error(request, err)
         else:
             user.save()
+            profile = Profile(user=user, timezone=settings.TIME_ZONE)
+            profile.full_clean()
+            profile.save()
             messages.success(request, 'New user created!')
             user = authenticate(username=username, password=password)
             dj_login(request, user)

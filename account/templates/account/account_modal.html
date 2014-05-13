@@ -29,6 +29,20 @@
             <dd>{{ user.email }}</dd>
             <dt>Date Joined</dt>
             <dd>{{ user.date_joined }}</dd>
+            <dt>Timezone</dt>
+            <dd>
+              <select name="user_timezone">
+              {% for tz_val, tz_disp in user.profile.TZ_CHOICES %}
+                <option value="{{ tz_val }}"
+                    {% if tz_val == user.profile.timezone %}
+                      selected="selected"
+                    {% endif %}
+                    >
+                  {{ tz_disp }}
+                </option>
+              {% endfor %}
+              </select>
+            </dd>
           </dl>
         </div> <!-- .modal-body -->
 
