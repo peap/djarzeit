@@ -56,11 +56,12 @@ class Timer(models.Model):
     def get_intervals_on_date(self, date):
         user_tz = pytz.timezone(self.category.user.profile.timezone)
         local_date = user_tz.normalize(date.astimezone(user_tz))
-        local_date_midnight = datetime(
+        local_date_start = datetime(
             local_date.year, local_date.month, local_date.day)
-        return Interval.objects.filter(
-            timer=self,
-            start__gt=local_date_midnight,
+        local_date_end = datetime(
+            local_date.year, local_date.month, local_date.day, 23, 59, 59)
+        return self.interval_set.filter(
+            start__range=(local_date_start, local_date_end),
         )
 
     def get_total_time_on_date(self, date):
