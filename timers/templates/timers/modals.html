@@ -34,8 +34,8 @@
             </tr>
           {% for interval in timer.intervals_today %}
             <tr class="active">
-              <td>{{ interval.start|date:'H:m:s' }}</td>
-              <td>{{ interval.end|date:'H:m:s' }}</td>
+              <td>{{ interval.start|date:'H:i:s' }}</td>
+              <td>{{ interval.end|date:'H:i:s' }}</td>
               <td>{{ interval.length|format_timedelta_long }}</td>
               <td></td>
             </tr>
@@ -53,8 +53,8 @@
             </tr>
           {% for interval in timer.intervals_yesterday %}
             <tr>
-              <td>{{ interval.start|date:'H:m:s' }}</td>
-              <td>{{ interval.end|date:'H:m:s' }}</td>
+              <td>{{ interval.start|date:'H:i:s' }}</td>
+              <td>{{ interval.end|date:'H:i:s' }}</td>
               <td>{{ interval.length|format_timedelta_long }}</td>
               <td></td>
             </tr>
