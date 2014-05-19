@@ -5,6 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% if auto_refresh %}
+    <meta http-equiv="refresh" content="{{ auto_refresh }}">
+  {% endif %}
     <title>ArZeit</title>
     <link rel="stylesheet"
         href="{% static 'djarzeit/bootstrap/css/bootstrap.min.css' %}">

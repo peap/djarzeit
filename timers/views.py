@@ -10,6 +10,7 @@ from timers.models import Timer
 
 class TimersContext(ArZeitContext):
     active_tab = 'timers'
+    auto_refresh = 300
 
 
 @login_required
