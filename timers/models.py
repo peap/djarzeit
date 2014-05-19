@@ -111,6 +111,10 @@ class Timer(models.Model):
             total += interval.length
         return total
 
+    @property
+    def hierarchy_display(self):
+        return '{0} :: {1}'.format(self.category.hierarchy_display, self)
+
 
 class Interval(models.Model):
 

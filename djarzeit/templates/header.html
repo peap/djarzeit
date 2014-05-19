@@ -28,7 +28,7 @@
           {% if forloop.counter0 > 0 %}
             <span>, </span>
           {% endif %}
-          <a href="#timer_{{ timer.id }}">{{ timer.name }}</a>
+          <a href="#timer_{{ timer.id }}" title="{{ timer.hierarchy_display }}">{{ timer.name }}</a>
         {% empty %}
           (none)
         {% endfor %}
