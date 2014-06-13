@@ -4,6 +4,7 @@ from django.shortcuts import render_to_response
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
+from categories.models import Category
 from djarzeit.context import ArZeitContext
 
 
@@ -33,6 +34,7 @@ def daily_summary(request):
     report_date = parse_date_or_today(request.GET.get('report_date'))
     context = ReportsContext(request, {
         'report_date': report_date,
+        'categories': Category.objects.filter(user=request.user),
     })
     return render_to_response('reports/daily_summary.html', {}, context)
 

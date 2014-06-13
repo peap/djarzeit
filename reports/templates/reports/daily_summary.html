@@ -23,6 +23,14 @@
 <div class="well">
   <div class="row">
     <div class="col-xs-12">
+      <ul>
+      {% for cat in categories %}
+        <li>
+          <span class="pull-left">{{ cat.name }}</span>
+          <span class="pull-right">{{ cat.today }}</span>
+        </li>
+      {% endfor %}
+      </ul>
     </div>
   </div>
 </div>
