@@ -12,3 +12,21 @@ class ReportsContext(ArZeitContext):
 def reports(request):
     context = ReportsContext(request, {})
     return render_to_response('reports/reports.html', {}, context)
+
+
+@login_required
+def daily_summary(request):
+    context = ReportsContext(request, {})
+    return render_to_response('reports/daily_summary.html', {}, context)
+
+
+@login_required
+def weekly_summary(request):
+    context = ReportsContext(request, {})
+    return render_to_response('reports/weekly_summary.html', {}, context)
+
+
+@login_required
+def intervals(request):
+    context = ReportsContext(request, {})
+    return render_to_response('reports/intervals.html', {}, context)
