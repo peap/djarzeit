@@ -1,7 +1,21 @@
+from datetime import datetime
+
 from django.shortcuts import render_to_response
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 from djarzeit.context import ArZeitContext
+
+
+def parse_date_or_today(date_string):
+    if date_string:
+        try:
+            report_date = datetime.strptime(date_string, '%m/%d/%Y')
+        except ValueError:
+            report_date = datetime.today()
+    else:
+        report_date = datetime.today()
+    return report_date
 
 
 class ReportsContext(ArZeitContext):
@@ -16,7 +30,10 @@ def reports(request):
 
 @login_required
 def daily_summary(request):
-    context = ReportsContext(request, {})
+    report_date = parse_date_or_today(request.GET.get('report_date'))
+    context = ReportsContext(request, {
+        'report_date': report_date,
+    })
     return render_to_response('reports/daily_summary.html', {}, context)
 
 
