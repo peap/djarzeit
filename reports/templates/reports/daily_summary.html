@@ -24,11 +24,8 @@
   <div class="row">
     <div class="col-xs-12">
       <ul>
-      {% for cat in categories %}
-        <li>
-          <span class="pull-left">{{ cat.name }}</span>
-          <span class="pull-right">{{ cat.today }}</span>
-        </li>
+      {% for cat in root_categories %}
+        {% include 'reports/daily_summary__listing.html' with cat=cat %}
       {% endfor %}
       </ul>
     </div>

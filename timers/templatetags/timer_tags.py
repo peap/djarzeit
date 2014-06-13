@@ -26,3 +26,8 @@ def format_timedelta_long(value):
         minutes, seconds = divmod(remainder, 60)
         new_value = '{0:02}:{1:02}:{2:02}'.format(hours, minutes, seconds)
     return new_value
+
+
+@register.filter
+def time_on_date(cat_or_timer, date):
+    return cat_or_timer.get_total_time_on_date(date)
