@@ -3,9 +3,6 @@ from django.utils.timezone import now
 
 from timers.models import Timer
 
-TABS = ('timers', 'categories', 'tags', 'reports')
-
-
 class ArZeitContext(RequestContext):
     active_tab = None
     auto_refresh = 0
@@ -16,7 +13,6 @@ class ArZeitContext(RequestContext):
             active=True
         )
         context.update({
-            'TABS': TABS,
             'active_tab': self.active_tab,
             'auto_refresh': self.auto_refresh,
             'server_time': now(),
