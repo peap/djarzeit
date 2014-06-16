@@ -31,3 +31,8 @@ def format_timedelta_long(value):
 @register.filter
 def time_on_date(cat_or_timer, date):
     return cat_or_timer.get_total_time_on_date(date)
+
+
+@register.filter
+def time_on_date_week(cat_or_timer, date):
+    return cat_or_timer.get_total_time_on_date_week(date)

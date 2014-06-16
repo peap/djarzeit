@@ -35,16 +35,14 @@ class Timer(models.Model):
     def start(self):
         self.category.root_parent.stop_all_timers()
 
-        interval = Interval()
-        interval.timer = self
+        interval = Interval(timer=self)
         interval.save()
 
         self.active = True
         self.save()
 
     def stop(self):
-        interval = Interval.objects.get(
-            timer=self,
+        interval = self.interval_set.get(
             end=None,
         )
         interval.end = now()
@@ -64,7 +62,24 @@ class Timer(models.Model):
             start__range=(local_date_start, local_date_end),
         )
 
+    def get_intervals_on_date_week(self, date):
+        user_tz = pytz.timezone(self.category.user.profile.timezone)
+        local_date = user_tz.normalize(date.astimezone(user_tz))
+        year, week, dow = local_date.isocalendar()
+        print(week)
+        return self.interval_set.filter(
+            start__year=year,
+            week=week,
+        )
+
     def get_total_time_on_date(self, date):
+        intervals = self.get_intervals_on_date(date)
+        total = timedelta(0)
+        for interval in intervals:
+            total += interval.length
+        return total
+
+    def get_total_time_on_date_week(self, date):
         intervals = self.get_intervals_on_date(date)
         total = timedelta(0)
         for interval in intervals:

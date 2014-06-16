@@ -40,14 +40,21 @@ def daily_summary(request):
     context = ReportsContext(request, {
         'report_date': report_date,
         'root_categories': root_categories,
+        'listing_template': 'reports/daily_summary_listing.html',
     })
-    return render_to_response('reports/daily_summary.html', {}, context)
+    return render_to_response('reports/summary_base.html', {}, context)
 
 
 @login_required
 def weekly_summary(request):
-    context = ReportsContext(request, {})
-    return render_to_response('reports/weekly_summary.html', {}, context)
+    report_date = parse_date_or_today(request)
+    root_categories = Category.objects.filter(user=request.user, parent=None)
+    context = ReportsContext(request, {
+        'report_date': report_date,
+        'root_categories': root_categories,
+        'listing_template': 'reports/weekly_summary_listing.html',
+    })
+    return render_to_response('reports/summary_base.html', {}, context)
 
 
 @login_required

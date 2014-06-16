@@ -73,6 +73,14 @@ class Category(models.Model):
             total += timer.get_total_time_on_date(date)
         return total
 
+    def get_total_time_on_date_week(self, date):
+        total = timedelta(0)
+        for category in self.category_set.all():
+            total += category.get_total_time_on_date_week(date)
+        for timer in self.timer_set.all():
+            total += timer.get_total_time_on_date_week(date)
+        return total
+
     @property
     def today(self):
         """

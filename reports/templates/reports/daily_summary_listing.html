@@ -2,10 +2,10 @@
 
 <li>
 
-  <span class="-pull-left">
+  <span>
     {{ cat.name }}
   </span>
-  <span class="-pull-right">
+  <span>
     {{ cat|time_on_date:report_date|format_timedelta }}
   </span>
 
@@ -13,10 +13,10 @@
   {% for timer in cat.timer_set.all %}
     {% if timer|time_on_date:report_date %}
       <li>
-        <span class="-pull-left">
+        <span>
           {{ timer.name }}
         </span>
-        <span class="-pull-right">
+        <span>
           {{ timer|time_on_date:report_date|format_timedelta }}
         </span>
       </li>
@@ -25,15 +25,13 @@
   </ul>
 
   {% if cat.category_set.all %}
-    {% with template_name='reports/daily_summary__listing.html' %}
-      {% for subcat in cat.category_set.all %}
-        <ul>
-        {% if subcat|time_on_date:report_date %}
-          {% include template_name with cat=subcat %}
-        {% endif %}
-        </ul>
-      {% endfor %}
-    {% endwith %}
+    {% for subcat in cat.category_set.all %}
+      <ul>
+      {% if subcat|time_on_date:report_date %}
+        {% include listing_template with cat=subcat %}
+      {% endif %}
+      </ul>
+    {% endfor %}
   {% endif %}
 
 </li>
