@@ -12,7 +12,7 @@ TIMEDELTA_REGEX = re.compile(r'^(.*)(\.[0-9]*)$')
 def format_timedelta(value):
     new_value = ''
     if isinstance(value, timedelta):
-        hours, remainder = divmod(value.seconds, 3600)
+        hours, remainder = divmod(round(value.total_seconds()), 3600)
         minutes, seconds = divmod(remainder, 60)
         new_value = '{0:02}:{1:02}'.format(hours, minutes)
     return new_value
@@ -22,7 +22,7 @@ def format_timedelta(value):
 def format_timedelta_long(value):
     new_value = ''
     if isinstance(value, timedelta):
-        hours, remainder = divmod(value.seconds, 3600)
+        hours, remainder = divmod(round(value.total_seconds()), 3600)
         minutes, seconds = divmod(remainder, 60)
         new_value = '{0:02}:{1:02}:{2:02}'.format(hours, minutes, seconds)
     return new_value

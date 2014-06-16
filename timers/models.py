@@ -66,7 +66,6 @@ class Timer(models.Model):
         user_tz = pytz.timezone(self.category.user.profile.timezone)
         local_date = user_tz.normalize(date.astimezone(user_tz))
         year, week, dow = local_date.isocalendar()
-        print(week)
         return self.interval_set.filter(
             start__year=year,
             week=week,
@@ -80,7 +79,7 @@ class Timer(models.Model):
         return total
 
     def get_total_time_on_date_week(self, date):
-        intervals = self.get_intervals_on_date(date)
+        intervals = self.get_intervals_on_date_week(date)
         total = timedelta(0)
         for interval in intervals:
             total += interval.length

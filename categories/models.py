@@ -29,6 +29,9 @@ class Category(models.Model):
         null=True,
     )
 
+    def __str__(self):
+        return self.name
+
     @property
     def is_root_category(self):
         return self.parent is None
