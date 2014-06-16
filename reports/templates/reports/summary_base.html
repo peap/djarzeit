@@ -6,14 +6,16 @@
   <div class="row">
     <div class="col-xs-12">
       <form action="." method="get" class="form-inline" role="form">
-        <div class="form-group">
-          <label for="report_date" class="form-label">Report Date: </label>
+        <div class="input-group">
+          <label for="report_date" class="accessibility">Report Date</label>
           <input type="date" name="report_date" id="report_date"
               class="form-control" placeholder="mm/dd/yyyy"
               value="{{ report_date|date:'m/d/Y' }}">
-          <button type="submit" class="btn btn-primary">
-            Go
-          </button>
+          <span class="input-group-btn">
+            <button type="submit" class="btn btn-primary">
+              Change Date
+            </button>
+          </span>
         </div>
       </form>
     </div>
