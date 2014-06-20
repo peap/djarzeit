@@ -92,7 +92,7 @@ def intervals(request):
                         value += ' / ' + str(interval.timer)
                     else:
                         value += str(interval.timer)
-            if not previous_timer_active:
+            if not previous_timer_active or value:
                 cells.append({'rowspan': rowspan, 'value': value})
         rows.append(cells)
 
