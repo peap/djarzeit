@@ -4,7 +4,6 @@ from django.db import models
 from django.utils.timezone import datetime, now, timedelta
 
 from categories.models import Category
-from tags.models import Tag
 
 
 class Timer(models.Model):
@@ -156,12 +155,6 @@ class Interval(models.Model):
         verbose_name='End Time',
         blank=True,
         null=True,
-    )
-
-    tags = models.ManyToManyField(Tag,
-        blank=True,
-        null=True,
-        db_index=True,
     )
 
     notes = models.CharField(

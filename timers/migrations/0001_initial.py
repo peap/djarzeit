@@ -9,7 +9,6 @@ class Migration(SchemaMigration):
 
     depends_on = (
         ('categories', '0001_initial'),
-        ('tags', '0001_initial'),
     )
 
     def forwards(self, orm):

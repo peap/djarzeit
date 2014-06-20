@@ -122,7 +122,6 @@ INSTALLED_APPS = (
     'account',
     'categories',
     'reports',
-    'tags',
     'timers',
 )
 
