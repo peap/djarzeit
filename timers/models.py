@@ -54,7 +54,7 @@ class Timer(models.Model):
         user_tz = pytz.timezone(self.category.user.profile.timezone)
         local_date = user_tz.normalize(date.astimezone(user_tz))
         local_date_start = datetime(
-            local_date.year, local_date.month, local_date.day)
+            local_date.year, local_date.month, local_date.day, 0, 0, 0)
         local_date_end = datetime(
             local_date.year, local_date.month, local_date.day, 23, 59, 59)
         return self.interval_set.filter(
@@ -177,8 +177,20 @@ class Interval(models.Model):
         """
         Length of the interval. Returns datetime.timedelta object.
         """
-        if self.end is None:
-            length = now() - self.start
-        else:
-            length = self.end - self.start
-        return length
+        end = self.end if self.end is not None else now()
+        return end - self.start
+
+    @classmethod
+    def user_intervals(cls, user):
+        return cls.objects.filter(timer__category__user=user)
+
+    def active_at(self, dt):
+        active = False
+        if self.start <= dt:
+            if self.end is None:
+                active = dt <= now()
+            else:
+                active = self.end >= dt
+        return active
+
+

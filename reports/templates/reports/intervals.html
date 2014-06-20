@@ -1,13 +1,28 @@
-{% extends 'base.html' %}
+{% extends 'reports/reports_base.html' %}
 
-{% block arzeit_content %}
+{% block reports_content %}
 
-<div class="well">
-  <div class="row">
-    <div class="col-xs-12">
-      Reports are not yet implemented.
-    </div>
-  </div>
-</div>
+<table class="table">
 
-{% endblock arzeit_content %}
+  <thead>
+    <tr>
+      <th scope="col">Start</th>
+    {% for cat in root_categories %}
+      <th scope="col">{{ cat.name }}</th>
+    {% endfor %}
+    </tr>
+  </thead>
+
+  <tbody>
+  {% for cells in rows %}
+    <tr>
+    {% for cell in cells %}
+      <td rowspan="{{ cell.rowspan }}">{{ cell.value }}</td>
+    {% endfor %}
+    </tr>
+  {% endfor %}
+  </tbody>
+
+</table>
+
+{% endblock reports_content %}
