@@ -100,10 +100,10 @@ def intervals(request):
 
     root_category_cells = []
     for cat in root_categories:
-        interval_list = user_intervals.filter(
-            timer__category=cat,
-            start__range=(min_datetime, max_datetime),
-        ).order_by('start')
+        interval_list = []
+        for interval in all_intervals:
+            if interval.timer.category.root_parent == cat:
+                interval_list.append(interval)
         cells = []
         for interval in interval_list:
             start = interval.start.astimezone(tz=tz).strftime(TIME_FORMAT)
