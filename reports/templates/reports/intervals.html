@@ -2,27 +2,41 @@
 
 {% block reports_content %}
 
-<table class="table">
+<div class="row">
 
-  <thead>
-    <tr>
-      <th scope="col">Start</th>
-    {% for cat in root_categories %}
-      <th scope="col">{{ cat.name }}</th>
-    {% endfor %}
-    </tr>
-  </thead>
-
-  <tbody>
-  {% for cells in rows %}
-    <tr>
-    {% for cell in cells %}
-      <td rowspan="{{ cell.rowspan }}">{{ cell.value }}</td>
-    {% endfor %}
-    </tr>
+  <div class="col-xs-2 interval-container" style="height: {{ total_height }}px;">
+    <div class="interval interval-header">
+    </div>
+  {% for cell in time_cells %}
+    <div class="interval {{ cell.classes }}"
+        style="height: {{ cell.height }}px; top: {{ cell.top }}px;">
+      {{ cell.value }}
+    </div>
   {% endfor %}
-  </tbody>
+  </div>
 
-</table>
+  {% for cat, cells in root_category_cells %}
+    <div class="col-xs-{{ category_width }} interval-container">
+      <div class="interval interval-header">
+        {{ cat.name }}
+      </div>
+      {% for cell in cells %}
+        <div class="interval" title="{{ cell.title }}"
+            style="height: {{ cell.height }}px; top: {{ cell.top }}px;">
+          <div class="interval-start">
+            {{ cell.start }}
+          </div>
+          <div class="interval-details">
+            {{ cell.interval.timer }}
+          </div>
+          <div class="interval-end">
+            {{ cell.end }}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+
+</div>
 
 {% endblock reports_content %}

@@ -3,7 +3,7 @@ import pytz
 
 from django.contrib import messages
 from django.shortcuts import render_to_response
-from django.utils.timezone import datetime, timedelta
+from django.utils.timezone import datetime, timedelta, now
 from django.contrib.auth.decorators import login_required
 
 from categories.models import Category
@@ -11,7 +11,133 @@ from djarzeit.context import ArZeitContext
 from timers.models import Interval
 
 
-def parse_date_or_today(request):
+class ReportsContext(ArZeitContext):
+    active_tab = 'reports'
+    extra_css = ('reports/reports.css',)
+
+
+@login_required
+def daily_summary(request):
+    report_date = _parse_date_or_today(request)
+    root_categories = Category.objects.filter(user=request.user, parent=None)
+    context = ReportsContext(request, {
+        'report_date': report_date,
+        'root_categories': root_categories,
+        'listing_template': 'reports/daily_summary_listing.html',
+    })
+    return render_to_response('reports/summary_base.html', {}, context)
+
+
+@login_required
+def weekly_summary(request):
+    report_date = _parse_date_or_today(request)
+    root_categories = Category.objects.filter(user=request.user, parent=None)
+    context = ReportsContext(request, {
+        'report_date': report_date,
+        'root_categories': root_categories,
+        'listing_template': 'reports/weekly_summary_listing.html',
+    })
+    return render_to_response('reports/summary_base.html', {}, context)
+
+
+@login_required
+def intervals(request):
+    report_date = _parse_date_or_today(request)
+    year, month, day = report_date.year, report_date.month, report_date.day
+    tz = report_date.tzinfo
+    nowtz = now().astimezone(tz=tz)
+    is_today = _date_is_today(report_date, tz)
+
+    root_categories = Category.objects.filter(user=request.user, parent=None)
+    category_width = _get_category_width(root_categories.count())
+    user_intervals = Interval.user_intervals(request.user)
+
+    PX_PER_HOUR = 100
+    PX_OFFSET = 75
+    TIME_FORMAT = '%I:%M %p'
+
+    def timedelta_height(td):
+        hours = td.total_seconds() / 3600
+        height = PX_PER_HOUR * hours
+        return int(height)
+
+    min_datetime = datetime(year, month, day, 0, 0, 0, 0, tz)
+    max_datetime = datetime(year, month, day, 23, 59, 59, 0, tz)
+    all_intervals = user_intervals.filter(
+        start__range=(min_datetime, max_datetime),
+    ).order_by('start')
+
+    if all_intervals.count() > 0:
+        min_interval_time = all_intervals[0].start.astimezone(tz=tz)
+        max_interval_time = all_intervals.latest('start').start.astimezone(tz=tz)
+        if max_interval_time < nowtz:
+            max_interval_time = nowtz
+    else:
+        min_interval_time = datetime(year, month, day, 8, 0, 0, 0, tz)
+        max_interval_time = datetime(year, month, day, 18, 0, 0, 0, tz)
+
+    def time_top(dt):
+        offset = dt - min_interval_time
+        return timedelta_height(offset) + PX_OFFSET
+
+    time_cells = []
+    for hour in range(min_interval_time.hour, max_interval_time.hour+1):
+        start_time = datetime(year, month, day, hour, 0, 0, 0, tz)
+        an_hour = timedelta(hours=1)
+        time_cells.append({
+            'height': timedelta_height(an_hour),
+            'top': time_top(start_time),
+            'value': start_time.strftime(TIME_FORMAT),
+            'classes': 'time-cell',
+        })
+    if is_today:
+        time_cells.append({
+            'height': 1,
+            'top': time_top(nowtz),
+            'value': '',
+            'classes': 'current-time',
+        })
+
+    root_category_cells = []
+    for cat in root_categories:
+        interval_list = user_intervals.filter(
+            timer__category=cat,
+            start__range=(min_datetime, max_datetime),
+        ).order_by('start')
+        cells = []
+        for interval in interval_list:
+            start = interval.start.astimezone(tz=tz).strftime(TIME_FORMAT)
+            end = '[active]'
+            if interval.end is not None:
+                end = interval.end.astimezone(tz=tz).strftime(TIME_FORMAT)
+            title = '{0} ({1}-{2})'.format(
+                interval.timer.hierarchy_display, start, end)
+            cells.append({
+                'height': timedelta_height(interval.length),
+                'top': time_top(interval.start.astimezone(tz=tz)),
+                'interval': interval,
+                'timer': interval.timer,
+                'title': title,
+                'start': start,
+                'end': end,
+            })
+        root_category_cells.append((cat, cells))
+
+    context = {
+        'report_date': report_date,
+        'category_width': category_width,
+        'total_height': timedelta_height(max_interval_time - min_interval_time),
+        'time_cells': time_cells,
+        'root_category_cells': root_category_cells,
+    }
+    context = ReportsContext(
+        request,
+        context,
+    )
+    return render_to_response('reports/intervals.html', {}, context)
+
+
+def _parse_date_or_today(request):
     user_tz = pytz.timezone(request.user.profile.timezone)
     date_string = request.GET.get('report_date')
     if date_string:
@@ -25,80 +151,17 @@ def parse_date_or_today(request):
     return user_tz.normalize(report_date.replace(tzinfo=user_tz))
 
 
-class ReportsContext(ArZeitContext):
-    active_tab = 'reports'
+def _date_is_today(dt, tz):
+    nowtz = now().astimezone(tz=tz)
+    year, month, day = dt.year, dt.month, dt.day
+    return all([year == nowtz.year, month == dt.month, day == nowtz.day])
 
 
-@login_required
-def daily_summary(request):
-    report_date = parse_date_or_today(request)
-    root_categories = Category.objects.filter(user=request.user, parent=None)
-    context = ReportsContext(request, {
-        'report_date': report_date,
-        'root_categories': root_categories,
-        'listing_template': 'reports/daily_summary_listing.html',
-    })
-    return render_to_response('reports/summary_base.html', {}, context)
-
-
-@login_required
-def weekly_summary(request):
-    report_date = parse_date_or_today(request)
-    root_categories = Category.objects.filter(user=request.user, parent=None)
-    context = ReportsContext(request, {
-        'report_date': report_date,
-        'root_categories': root_categories,
-        'listing_template': 'reports/weekly_summary_listing.html',
-    })
-    return render_to_response('reports/summary_base.html', {}, context)
-
-
-@login_required
-def intervals(request):
-    report_date = parse_date_or_today(request)
-    year, month, day = report_date.year, report_date.month, report_date.day
-    tz = report_date.tzinfo
-    root_categories = Category.objects.filter(user=request.user, parent=None)
-    user_intervals = Interval.user_intervals(request.user)
-    min_datetime = datetime(year, month, day, 6, 0, 0, 0, tz)
-    max_datetime = datetime(year, month, day, 20, 59, 59, 0, tz)
-
-    root_category_intervals = []
-    for cat in root_categories:
-        interval_list = user_intervals.filter(
-            timer__category=cat,
-            start__range=(min_datetime, max_datetime),
-        ).order_by('start')
-        root_category_intervals.append((cat, interval_list))
-
-    rows = []
-    for hour in range(6, 21):
-        hour_min = datetime(year, month, day, hour, 0, 0, 0, tz)
-        hour_max = datetime(year, month, day, hour, 59, 59, 0, tz)
-        cells = [{'rowspan': 1, 'value': hour_min.strftime('%H:%M')}]
-        for cat, intervals in root_category_intervals:
-            rowspan = 1
-            value = ''
-            previous_timer_active = False
-            for interval in intervals:
-                if interval.active_at(hour_min):
-                    previous_timer_active = True
-                if interval.start >= hour_min and interval.start < hour_max:
-                    rowspan = ceil((
-                        interval.length.total_seconds() /
-                        (hour_max-hour_min).total_seconds()
-                    ) / (60 * 60))
-                    if value:
-                        value += ' / ' + str(interval.timer)
-                    else:
-                        value += str(interval.timer)
-            if not previous_timer_active or value:
-                cells.append({'rowspan': rowspan, 'value': value})
-        rows.append(cells)
-
-    context = ReportsContext(request, {
-        'report_date': report_date,
-        'root_categories': root_categories,
-        'rows': rows,
-    })
-    return render_to_response('reports/intervals.html', {}, context)
+def _get_category_width(num):
+    cols_available = 10
+    if num > 0:
+        width = cols_available // num
+        width = width if width > 0 else 1
+    else:
+        width = cols_available
+    return width
