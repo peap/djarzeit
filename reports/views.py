@@ -41,6 +41,24 @@ def weekly_summary(request):
 
 
 @login_required
+def weekly_by_day(request):
+    report_date = _parse_date_or_today(request)
+    root_categories = Category.objects.filter(user=request.user, parent=None)
+
+    # TODO
+    dates = [report_date - timedelta(days=1), report_date]
+    all_categories = []
+
+    context = ReportsContext(request, {
+        'report_date': report_date,
+        'root_categories': root_categories,
+        'dates': dates,
+        'all_categories': all_categories,
+    })
+    return render_to_response('reports/weekly_by_day.html', {}, context)
+
+
+@login_required
 def intervals(request):
     report_date = _parse_date_or_today(request)
     year, month, day = report_date.year, report_date.month, report_date.day
