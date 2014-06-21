@@ -3,10 +3,20 @@
 {% block reports_content %}
 
 <div class="row">
+  <div class="col-xs-2">
+  </div>
+{% for cat, _ in root_category_cells %}
+  <div class="col-xs-{{ category_width }}">
+    <div class="interval-header">
+     {{ cat.name }}
+    </div>
+  </div>
+{% endfor %}
+</div>
+
+<div class="row">
 
   <div class="col-xs-2 interval-container" style="height: {{ total_height }}px;">
-    <div class="interval interval-header">
-    </div>
   {% for cell in time_cells %}
     <div class="interval {{ cell.classes }}"
         style="height: {{ cell.height }}px; top: {{ cell.top }}px;">
@@ -17,9 +27,6 @@
 
   {% for cat, cells in root_category_cells %}
     <div class="col-xs-{{ category_width }} interval-container">
-      <div class="interval interval-header">
-        {{ cat.name }}
-      </div>
       {% for cell in cells %}
         <div class="interval" title="{{ cell.title }}"
             style="height: {{ cell.height }}px; top: {{ cell.top }}px;">

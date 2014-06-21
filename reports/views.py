@@ -53,7 +53,6 @@ def intervals(request):
     user_intervals = Interval.user_intervals(request.user)
 
     PX_PER_HOUR = 100
-    PX_OFFSET = 75
     TIME_FORMAT = '%I:%M %p'
 
     def timedelta_height(td):
@@ -77,8 +76,9 @@ def intervals(request):
         max_interval_time = datetime(year, month, day, 18, 0, 0, 0, tz)
 
     def time_top(dt):
-        offset = dt - min_interval_time
-        return timedelta_height(offset) + PX_OFFSET
+        temp_min_time = min_interval_time.replace(minute=0, second=0)
+        offset = dt - temp_min_time
+        return timedelta_height(offset)
 
     time_cells = []
     for hour in range(min_interval_time.hour, max_interval_time.hour+1):
