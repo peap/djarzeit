@@ -15,8 +15,8 @@ class ArZeitContext(RequestContext):
             category__user=request.user.id,
             active=True
         )
-        extra_css = list(self.extra_css + kwargs.pop('extra_css', ()))
-        extra_js = list(self.extra_js + kwargs.pop('extra_js', ()))
+        extra_css = list(self.extra_css) + list(kwargs.pop('extra_css', ()))
+        extra_js = list(self.extra_js) + list(kwargs.pop('extra_js', ()))
 
         context.update({
             'active_tab': self.active_tab,
