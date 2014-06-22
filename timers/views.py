@@ -19,9 +19,25 @@ class TimersContext(ArZeitContext):
 
 class TimerDetailView(ArZeitBaseDetailView):
     pk_url_kwarg = 'timer_id'
+    action = 'modified'
 
     def get_queryset(self):
         return self.timers
+
+    def clean_and_save(self, timer):
+        try:
+            timer.full_clean()
+        except ValidationError as e:
+            msg = 'Error - '
+            for field, errors in e.message_dict.items():
+                msg += '{0}: {1}\n'.format(field, ' '.join(errors))
+            messages.error(self.request, msg)
+        else:
+            timer.save()
+            messages.success(
+                self.request,
+                'Successfully {0} timer: {1}.'.format(self.action, timer)
+            )
 
 
 class TimersListing(ArZeitTemplateView):
@@ -66,54 +82,37 @@ class StartStop(TimerDetailView):
         return redirect('timers')
 
 
-@login_required
-def edit_timer(request, timer_id):
-    timer = get_object_or_404(Timer, id=timer_id, category__user=request.user)
-    name = request.POST.get('new_timer_name').strip()
-    if not name:
-        messages.error(request, 'Invalid timer name.')
+class EditTimer(TimerDetailView):
+    action = 'edited'
+
+    def post(self, request, *args, **kwargs):
+        timer = self.get_object()
+        name = request.POST.get('new_timer_name').strip()
+        if not name:
+            messages.error(request, 'Invalid timer name.')
+            return redirect('timers')
+        category_id = request.POST.get('new_timer_category').strip()
+        try:
+            category = self.categories.get(pk=int(category_id))
+        except Category.DoesNotExist as e:
+            messages.error(request, 'Unknown category.')
+        except ValueError as e:
+            messages.error(request, 'Invalid category.')
+        else:
+            timer.name = name
+            timer.category = category
+            self.clean_and_save(timer)
         return redirect('timers')
-    category_id = request.POST.get('new_timer_category').strip()
-    try:
-        category = Category.objects.get(user=request.user, pk=int(category_id))
-    except Category.DoesNotExist as e:
-        messages.error(request, 'Unknown category.')
-        return redirect('timers')
-    except ValueError as e:
-        messages.error(request, 'Invalid category.')
-        return redirect('timers')
-    timer.name = name
-    timer.category = category
-    timer.full_clean()
-    timer.save()
-    messages.success(request, 'Edited timer: {0}.'.format(timer))
-    return redirect('timers')
 
 
-@login_required
-def archive_timer(request, timer_id):
-    timer = get_object_or_404(Timer, id=timer_id, category__user=request.user)
-    if timer.archived:
-        messages.error(request, 'Timer already archived.')
+class ArchiveTimer(TimerDetailView):
+    def post(self, request, *args, **kwargs):
+        timer = self.get_object()
+        if timer.archived:
+            timer.unarchive()
+        else:
+            timer.archive()
         return redirect('timers')
-    timer.archived = True
-    timer.full_clean()
-    timer.save()
-    messages.success(request, 'Archived timer: {0}.'.format(timer))
-    return redirect('timers')
-
-
-@login_required
-def unarchive_timer(request, timer_id):
-    timer = get_object_or_404(Timer, id=timer_id, category__user=request.user)
-    if not timer.archived:
-        messages.error(request, 'Timer not archived.')
-        return redirect('timers')
-    timer.archived = False
-    timer.full_clean()
-    timer.save()
-    messages.success(request, 'Un-archived timer: {0}.'.format(timer))
-    return redirect('timers')
 
 
 @login_required

@@ -4,9 +4,9 @@ from timers import views
 
 timer_patterns = patterns('',
     url(r'^startstop/$', views.StartStop.as_view(), name='startstop'),
-    url(r'^edit/$', views.edit_timer, name='edit_timer'),
-    url(r'^archive/$', views.archive_timer, name='archive_timer'),
-    url(r'^unarchive/$', views.unarchive_timer, name='unarchive_timer'),
+    url(r'^edit/$', views.EditTimer.as_view(), name='edit_timer'),
+    url(r'^archive/$', views.ArchiveTimer.as_view(), name='archive_timer'),
+    url(r'^unarchive/$', views.ArchiveTimer.as_view(), name='unarchive_timer'),
     url(r'^delete/$', views.delete_timer, name='delete_timer'),
 )
 

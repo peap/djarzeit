@@ -50,6 +50,14 @@ class Timer(models.Model):
         self.active = False
         self.save()
 
+    def archive(self):
+        self.archived = True
+        self.save()
+
+    def unarchive(self):
+        self.archived = False
+        self.save()
+
     def get_intervals_on_date(self, date):
         user_tz = pytz.timezone(self.category.user.profile.timezone)
         local_date = user_tz.normalize(date.astimezone(user_tz))
