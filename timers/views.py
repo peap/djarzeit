@@ -1,11 +1,11 @@
 from django.contrib import messages
-from django.shortcuts import render_to_response, redirect, get_object_or_404
-from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
+from django.shortcuts import redirect, get_object_or_404
 
 from categories.models import Category
 from djarzeit.context import ArZeitContext
-from djarzeit.views import ArZeitTemplateView
+from djarzeit.views import ArZeitBaseDetailView, ArZeitTemplateView
 from timers.models import Timer
 
 
@@ -14,6 +14,13 @@ class TimersContext(ArZeitContext):
     auto_refresh = 300
     extra_css = ('timers/timers.css',)
     extra_js = ('timers/timers.js',)
+
+
+class TimerDetailView(ArZeitBaseDetailView):
+    pk_url_kwarg = 'timer_id'
+
+    def get_queryset(self):
+        return self.timers
 
 
 class TimersView(ArZeitTemplateView):
@@ -27,16 +34,6 @@ class TimersView(ArZeitTemplateView):
             'all_categories': self.sorted_categories,
         })
         return ctx
-
-
-@login_required
-def startstop(request, timer_id):
-    timer = get_object_or_404(Timer, id=timer_id, category__user=request.user)
-    if timer.active:
-        timer.stop()
-    else:
-        timer.start()
-    return redirect('timers')
 
 
 @login_required
@@ -58,6 +55,16 @@ def new_timer(request):
         messages.success(request, 'Created new timer: {0}.'.format(timer))
 
     return redirect('timers')
+
+
+class StartStopView(TimerDetailView):
+    def post(self, request, *args, **kwargs):
+        timer = self.get_object()
+        if timer.active:
+            timer.stop()
+        else:
+            timer.start()
+        return redirect('timers')
 
 
 @login_required

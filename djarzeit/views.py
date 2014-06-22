@@ -3,12 +3,14 @@ import pytz
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import View, TemplateView
+from django.views.generic.detail import BaseDetailView
 
 from djarzeit.context import ArZeitContext
 from timers.models import Timer
 
 
 class ArZeitViewMixin:
+
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         self.user = request.user
@@ -37,6 +39,10 @@ class ArZeitViewMixin:
 
 
 class ArZeitView(ArZeitViewMixin, View):
+    pass
+
+
+class ArZeitBaseDetailView(ArZeitViewMixin, BaseDetailView):
     pass
 
 
