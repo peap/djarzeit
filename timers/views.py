@@ -19,28 +19,32 @@ class TimersContext(ArZeitContext):
 
 class TimerDetailView(ArZeitBaseDetailView):
     pk_url_kwarg = 'timer_id'
-    action = 'modified'
 
     def get_queryset(self):
         return self.timers
 
-    def clean_and_save(self, timer):
-        try:
-            timer.full_clean()
-        except ValidationError as e:
-            msg = 'Error - '
-            for field, errors in e.message_dict.items():
-                msg += '{0}: {1}\n'.format(field, ' '.join(errors))
-            messages.error(self.request, msg)
-        else:
-            timer.save()
-            messages.success(
-                self.request,
-                'Successfully {0} timer: {1}.'.format(self.action, timer)
-            )
+    def process(self):
+        pass
+
+    def add_error(self, action, msg):
+        messages.error(
+            self.request,
+            'Error {0} timer "{1}": {2}'.format(action, self.timer, msg),
+        )
+
+    def add_success(self, action):
+        messages.success(
+            self.request,
+            'Successfully {0} timer "{1}".'.format(action, self.timer),
+        )
+
+    def post(self, request, *args, **kwargs):
+        self.timer = self.get_object()
+        self.process()
+        return redirect('timers')
 
 
-class TimersListing(ArZeitTemplateView):
+class Listing(ArZeitTemplateView):
     context_class = TimersContext
     template_name = 'timers/timers.html'
 
@@ -53,7 +57,7 @@ class TimersListing(ArZeitTemplateView):
         return ctx
 
 
-class NewTimer(CategoryDetailView):
+class New(CategoryDetailView):
     def post(self, request, *args, **kwargs):
         category = self.get_object()
         name = request.POST.get('timer_name')
@@ -62,62 +66,64 @@ class NewTimer(CategoryDetailView):
         try:
             timer.full_clean()
         except ValidationError as e:
-            msg = 'Error creating new timer - '
+            msg = 'Error creating new timer: \n'
             for field, errors in e.message_dict.items():
-                msg += '{0}: {1}\n'.format(field, ' '.join(errors))
+                msg += '{0}: {1}\n'.format(field, ', '.join(errors))
             messages.error(request, msg)
         else:
             timer.save()
-            messages.success(request, 'Created new timer: {0}.'.format(timer))
+            messages.success(
+                request,
+                'Successfully created new timer "{0}".'.format(timer),
+            )
         return redirect('timers')
 
 
-class StartStop(TimerDetailView):
-    def post(self, request, *args, **kwargs):
-        timer = self.get_object()
-        if timer.active:
-            timer.stop()
-        else:
-            timer.start()
-        return redirect('timers')
-
-
-class EditTimer(TimerDetailView):
-    action = 'edited'
-
-    def post(self, request, *args, **kwargs):
-        timer = self.get_object()
-        name = request.POST.get('new_timer_name').strip()
+class Edit(TimerDetailView):
+    def process(self):
+        name = self.request.POST.get('new_timer_name').strip()
         if not name:
-            messages.error(request, 'Invalid timer name.')
+            self.add_error('editing', 'Invalid timer name.')
             return redirect('timers')
-        category_id = request.POST.get('new_timer_category').strip()
+        category_id = self.request.POST.get('new_timer_category').strip()
         try:
             category = self.categories.get(pk=int(category_id))
         except Category.DoesNotExist as e:
-            messages.error(request, 'Unknown category.')
+            self.add_error('editing', 'Unknown category.')
         except ValueError as e:
-            messages.error(request, 'Invalid category.')
+            self.add_error('editing', 'Invalid category.')
         else:
-            timer.name = name
-            timer.category = category
-            self.clean_and_save(timer)
-        return redirect('timers')
+            self.timer.name = name
+            self.timer.category = category
+            try:
+                self.timer.full_clean()
+            except ValidationError as e:
+                msg = '\n'
+                for field, errors in e.message_dict.items():
+                    msg += '{0}: {1}\n'.format(field, ', '.join(errors))
+                self.add_error('editing', msg)
+            else:
+                self.timer.save()
+                self.add_success('edited')
 
 
-class ArchiveTimer(TimerDetailView):
-    def post(self, request, *args, **kwargs):
-        timer = self.get_object()
-        if timer.archived:
-            timer.unarchive()
+class StartStop(TimerDetailView):
+    def process(self):
+        if self.timer.active:
+            self.timer.stop()
         else:
-            timer.archive()
-        return redirect('timers')
+            self.timer.start()
 
 
-@login_required
-def delete_timer(request, timer_id):
-    timer = get_object_or_404(Timer, id=timer_id, category__user=request.user)
-    timer.delete()
-    messages.success(request, 'Deleted timer: {0}.'.format(timer))
-    return redirect('timers')
+class Archive(TimerDetailView):
+    def process(self):
+        if self.timer.archived:
+            self.timer.unarchive()
+        else:
+            self.timer.archive()
+
+
+class Delete(TimerDetailView):
+    def process(self):
+        self.timer.delete()
+        self.add_success('deleted')
