@@ -5,33 +5,28 @@ from django.contrib.auth.decorators import login_required
 
 from categories.models import Category
 from djarzeit.context import ArZeitContext
+from djarzeit.views import ArZeitTemplateView
 from timers.models import Timer
 
 
 class TimersContext(ArZeitContext):
     active_tab = 'timers'
     auto_refresh = 300
+    extra_css = ('timers/timers.css',)
+    extra_js = ('timers/timers.js',)
 
 
-@login_required
-def timers(request):
-    root_categories = Category.objects.filter(user=request.user, parent=None)
-    all_categories = Category.objects.filter(user=request.user)
-    all_categories = sorted(all_categories, key=lambda cat: cat.hierarchy_display)
-    active_timers = Timer.objects.filter(
-        category__user=request.user, active=True)
-    context = {
-        'root_categories': root_categories,
-        'all_categories': all_categories,
-        'active_timers': active_timers,
-    }
-    context = TimersContext(
-        request,
-        context,
-        extra_css=['timers/timers.css'],
-        extra_js=['timers/timers.js'],
-    )
-    return render_to_response('timers/timers.html', {}, context)
+class TimersView(ArZeitTemplateView):
+    context_class = TimersContext
+    template_name = 'timers/timers.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx.update({
+            'root_categories': self.root_categories,
+            'all_categories': self.sorted_categories,
+        })
+        return ctx
 
 
 @login_required

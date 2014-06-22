@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from categories.models import Category
 from djarzeit.context import ArZeitContext
 from timers.models import Interval
+from reports.utils import get_report_date, date_is_today
 
 
 class ReportsContext(ArZeitContext):
@@ -18,7 +19,7 @@ class ReportsContext(ArZeitContext):
 
 @login_required
 def daily_summary(request):
-    report_date = _parse_date_or_today(request)
+    report_date = get_report_date(request)
     root_categories = Category.objects.filter(user=request.user, parent=None)
     context = ReportsContext(request, {
         'report_date': report_date,
@@ -30,7 +31,7 @@ def daily_summary(request):
 
 @login_required
 def weekly_summary(request):
-    report_date = _parse_date_or_today(request)
+    report_date = get_report_date(request)
     root_categories = Category.objects.filter(user=request.user, parent=None)
     context = ReportsContext(request, {
         'report_date': report_date,
@@ -42,7 +43,7 @@ def weekly_summary(request):
 
 @login_required
 def weekly_by_day(request):
-    report_date = _parse_date_or_today(request)
+    report_date = get_report_date(request)
     root_categories = Category.objects.filter(user=request.user, parent=None)
 
     # TODO
@@ -60,11 +61,11 @@ def weekly_by_day(request):
 
 @login_required
 def intervals(request):
-    report_date = _parse_date_or_today(request)
+    report_date = get_report_date(request)
     year, month, day = report_date.year, report_date.month, report_date.day
     tz = report_date.tzinfo
     nowtz = now().astimezone(tz=tz)
-    is_today = _date_is_today(report_date, tz)
+    is_today = date_is_today(report_date)
 
     root_categories = Category.objects.filter(user=request.user, parent=None)
     category_width = _get_category_width(root_categories.count())
@@ -153,26 +154,6 @@ def intervals(request):
         context,
     )
     return render_to_response('reports/intervals.html', {}, context)
-
-
-def _parse_date_or_today(request):
-    user_tz = pytz.timezone(request.user.profile.timezone)
-    date_string = request.GET.get('report_date')
-    if date_string:
-        try:
-            report_date = datetime.strptime(date_string, '%m/%d/%Y')
-        except ValueError:
-            messages.error(request, 'Invalid date.')
-            report_date = datetime.today()
-    else:
-        report_date = datetime.today()
-    return user_tz.normalize(report_date.replace(tzinfo=user_tz))
-
-
-def _date_is_today(dt, tz):
-    nowtz = now().astimezone(tz=tz)
-    year, month, day = dt.year, dt.month, dt.day
-    return all([year == nowtz.year, month == dt.month, day == nowtz.day])
 
 
 def _get_category_width(num):

@@ -3,6 +3,7 @@ from django.utils.timezone import now
 
 from timers.models import Timer
 
+
 class ArZeitContext(RequestContext):
     active_tab = None
     auto_refresh = 0

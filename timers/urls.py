@@ -11,7 +11,7 @@ timer_patterns = patterns('',
 )
 
 urlpatterns = patterns('',
-    url(r'^$', views.timers, name='timers'),
+    url(r'^$', views.TimersView.as_view(), name='timers'),
     url(r'^new/$', views.new_timer, name='new_timer'),
     url(r'^(?P<timer_id>[0-9]{1,20})/', include(timer_patterns)),
 )
