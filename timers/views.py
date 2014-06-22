@@ -4,8 +4,9 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, get_object_or_404
 
 from categories.models import Category
+from categories.views import CategoryDetailView
 from djarzeit.context import ArZeitContext
-from djarzeit.views import ArZeitBaseDetailView, ArZeitTemplateView
+from djarzeit.views import ArZeitView, ArZeitBaseDetailView, ArZeitTemplateView
 from timers.models import Timer
 
 
@@ -23,7 +24,7 @@ class TimerDetailView(ArZeitBaseDetailView):
         return self.timers
 
 
-class TimersView(ArZeitTemplateView):
+class TimersListing(ArZeitTemplateView):
     context_class = TimersContext
     template_name = 'timers/timers.html'
 
@@ -36,28 +37,26 @@ class TimersView(ArZeitTemplateView):
         return ctx
 
 
-@login_required
-def new_timer(request):
-    name = request.POST.get('timer_name')
-    category_id = request.POST.get('category_id')
-    category = get_object_or_404(Category, id=category_id, user=request.user)
-
-    timer = Timer(category=category, name=name)
-    try:
-        timer.full_clean()
-    except ValidationError as e:
-        msg = 'Error creating new timer - '
-        for field, errors in e.message_dict.items():
-            msg += '{0}: {1}\n'.format(field, ' '.join(errors))
-        messages.error(request, msg)
-    else:
-        timer.save()
-        messages.success(request, 'Created new timer: {0}.'.format(timer))
-
-    return redirect('timers')
+class NewTimer(CategoryDetailView):
+    def post(self, request, *args, **kwargs):
+        category = self.get_object()
+        name = request.POST.get('timer_name')
+        category_id = request.POST.get('category_id')
+        timer = Timer(category=category, name=name)
+        try:
+            timer.full_clean()
+        except ValidationError as e:
+            msg = 'Error creating new timer - '
+            for field, errors in e.message_dict.items():
+                msg += '{0}: {1}\n'.format(field, ' '.join(errors))
+            messages.error(request, msg)
+        else:
+            timer.save()
+            messages.success(request, 'Created new timer: {0}.'.format(timer))
+        return redirect('timers')
 
 
-class StartStopView(TimerDetailView):
+class StartStop(TimerDetailView):
     def post(self, request, *args, **kwargs):
         timer = self.get_object()
         if timer.active:

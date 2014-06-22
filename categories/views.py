@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import requires_csrf_token
 
 from djarzeit.context import ArZeitContext
+from djarzeit.views import ArZeitBaseDetailView
 from categories.models import Category
 
 FAKE_ROOT_PARENT = {
@@ -13,8 +14,16 @@ FAKE_ROOT_PARENT = {
     'description': 'The root "category" to which all categories belong',
 }
 
+
 class CategoriesContext(ArZeitContext):
     active_tab = 'categories'
+
+
+class CategoryDetailView(ArZeitBaseDetailView):
+    pk_url_kwarg = 'category_id'
+
+    def get_queryset(self):
+        return self.categories
 
 
 @login_required

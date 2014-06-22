@@ -121,9 +121,8 @@
       <tr class="hide" id="add_new_timer_in_{{ cat.id }}">
         <td colspan="4">
           <form id="new_timer_{{ cat.id }}" method="post" class="form-inline"
-              action="{% url 'new_timer' %}">
+              action="{% url 'new_timer' category_id=cat.id %}">
             {% csrf_token %}
-            <input type="hidden" name="category_id" value="{{ cat.id }}" />
             <div class="input-group">
               <label for="timer_name_{{ cat.id }}" aria-hidden="true"
                   class="accessibility">Timer name</label>
