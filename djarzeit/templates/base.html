@@ -26,12 +26,12 @@
       <div class="row" id="arzeit-nav">
         <div class="col-xs-12">
           <ul class="nav nav-tabs">
-            {% with tab='timers' %}
+            {% with tab='categories' %}
             <li class="{% if tab == active_tab %}active{% endif %}">
               <a href="{% url tab %}">{{ tab|title }}</a>
             </li>
             {% endwith %}
-            {% with tab='categories' %}
+            {% with tab='timers' %}
             <li class="{% if tab == active_tab %}active{% endif %}">
               <a href="{% url tab %}">{{ tab|title }}</a>
             </li>
