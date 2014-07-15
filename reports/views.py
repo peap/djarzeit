@@ -23,17 +23,16 @@ def daily_summary(request):
     root_categories = Category.objects.filter(user=request.user, parent=None)
 
     dates = [report_date]
-    all_categories = [
-        cat for cat in Category.objects.filter(user=request.user)
-        if cat.get_total_time_on_date(report_date).total_seconds() > 0
+    totals_by_root_cat = [
+        (cat, utils.get_totals_for_dates(cat, dates))
+        for cat in root_categories
     ]
 
     context = ReportsContext(request, {
         'report_date': report_date,
         'root_categories': root_categories,
         'dates': dates,
-        'all_categories': all_categories,
-        'listing_template': 'reports/daily_summary_listing.html',
+        'totals_by_root_cat': totals_by_root_cat,
     })
     return render_to_response('reports/summary_base.html', {}, context)
 
@@ -44,25 +43,18 @@ def weekly_summary(request):
     root_categories = Category.objects.filter(user=request.user, parent=None)
 
     dates = utils.get_dates_for_week_of(report_date)
-    all_categories = [
-        cat for cat in Category.objects.filter(user=request.user)
-        if cat.get_total_time_on_date_week(report_date).total_seconds() > 0
+    totals_by_root_cat = [
+        (cat, utils.get_totals_for_dates(cat, dates))
+        for cat in root_categories
     ]
 
     context = ReportsContext(request, {
         'report_date': report_date,
         'root_categories': root_categories,
         'dates': dates,
-        'all_categories': all_categories,
-        'listing_template': 'reports/weekly_summary_listing.html',
+        'totals_by_root_cat': totals_by_root_cat,
     })
     return render_to_response('reports/summary_base.html', {}, context)
-
-
-@login_required
-def weekly_by_day(request):
-    report_date = utils.get_report_date(request)
-    root_categories = Category.objects.filter(user=request.user, parent=None)
 
 
 @login_required

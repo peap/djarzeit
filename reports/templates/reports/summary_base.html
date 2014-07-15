@@ -1,25 +1,17 @@
 {% extends 'reports/reports_base.html' %}
 
 {% block reports_content %}
-<div class="well">
-  <div class="row">
-    <div class="col-xs-12">
-      {% include 'reports/time_table.html' %}
+
+{% with table_template='reports/time_table.html' %}
+  {% for root_cat, root_cat_totals in totals_by_root_cat %}
+  <div class="well">
+    <div class="row">
+      <div class="col-xs-12">
+        {% include table_template %}
+      </div>
     </div>
   </div>
-</div>
+  {% endfor %}
+{% endwith %}
 
-<div class="well">
-  <div class="row">
-    <div class="col-xs-12">
-
-      <ul>
-      {% for cat in root_categories %}
-        {% include listing_template %}
-      {% endfor %}
-      </ul>
-
-    </div>
-  </div>
-</div>
 {% endblock reports_content %}
