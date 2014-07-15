@@ -19,7 +19,7 @@
       <th scope="row">{{ cat.name }}</td>
     {% for d in dates %}
       <td>
-        {{ category|time_on_date:d }}
+        {{ cat|time_on_date:d|format_timedelta_blank }}
       </td>
     {% endfor %}
     </tr>

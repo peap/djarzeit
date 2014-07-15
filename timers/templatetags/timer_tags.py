@@ -19,6 +19,17 @@ def format_timedelta(value):
 
 
 @register.filter
+def format_timedelta_blank(value):
+    new_value = ''
+    if isinstance(value, timedelta):
+        if value.total_seconds() > 0:
+            hours, remainder = divmod(round(value.total_seconds()), 3600)
+            minutes, seconds = divmod(remainder, 60)
+            new_value = '{0:02}:{1:02}'.format(hours, minutes)
+    return new_value
+
+
+@register.filter
 def format_timedelta_long(value):
     new_value = ''
     if isinstance(value, timedelta):

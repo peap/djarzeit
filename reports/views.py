@@ -22,9 +22,11 @@ def daily_summary(request):
     report_date = utils.get_report_date(request)
     root_categories = Category.objects.filter(user=request.user, parent=None)
 
-    # TODO
     dates = [report_date]
-    all_categories = []
+    all_categories = [
+        cat for cat in Category.objects.filter(user=request.user)
+        if cat.get_total_time_on_date(report_date).total_seconds() > 0
+    ]
 
     context = ReportsContext(request, {
         'report_date': report_date,
@@ -41,9 +43,11 @@ def weekly_summary(request):
     report_date = utils.get_report_date(request)
     root_categories = Category.objects.filter(user=request.user, parent=None)
 
-    # TODO
     dates = utils.get_dates_for_week_of(report_date)
-    all_categories = []
+    all_categories = [
+        cat for cat in Category.objects.filter(user=request.user)
+        if cat.get_total_time_on_date_week(report_date).total_seconds() > 0
+    ]
 
     context = ReportsContext(request, {
         'report_date': report_date,
