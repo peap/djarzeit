@@ -16,7 +16,7 @@
   <tbody>
   {% for cat in all_categories %}
     <tr>
-      <th scope="row">{{ cat.name }}</td>
+      <th scope="row">{{ cat.hierarchy_display }}</td>
     {% for d in dates %}
       <td>
         {{ cat|time_on_date:d|format_timedelta_blank }}
