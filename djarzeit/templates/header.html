@@ -23,7 +23,7 @@
 <div class="row">
   <div class="col-xs-12">
   {% if user.is_authenticated %}
-    <span class="">
+    <span id="active-timers">
       Active:
       {% spaceless %}
         {% for timer in active_timers %}

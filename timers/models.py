@@ -136,6 +136,14 @@ class Timer(models.Model):
     def hierarchy_display(self):
         return '{0} :: {1}'.format(self.category.hierarchy_display, self)
 
+    @property
+    def ajax_dict(self):
+        return {
+            'id': self.pk,
+            'name': self.name,
+            'hierarchy': self.hierarchy_display,
+        }
+
 
 class Interval(models.Model):
 

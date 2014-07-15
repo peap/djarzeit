@@ -37,6 +37,7 @@ $(document).ready(function () {
         var data = $form.serialize();
         var url = $form.attr('action');
         $.post(url, data, function(data){
+            updatePageData(data);
             var $form_btns = $form.find('button');
             var $startstop_btn = $form.find('button[type="submit"]');
             var old_text = $startstop_btn.text().trim();
@@ -56,3 +57,21 @@ $(document).ready(function () {
 
 });
 
+function updatePageData(data){
+    $('#server_time').text(data.server_time);
+    var $active = $('#active-timers');
+    if (data.active_timers.length === 0) {
+        $active.text('Active: (none)');
+    } else {
+        var timers = [];
+        for (var i = 0; i < data.active_timers.length; i++) {
+            var timer = data.active_timers[i];
+            timers.push(
+                '<a href="#timer_' + timer.id + '" ' +
+                'title="' + timer.hierarchy + '">' +
+                timer.name + '</a>'
+            );
+        }
+        $active.html('Active: ' + timers.join(', '));
+    }
+}

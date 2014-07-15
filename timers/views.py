@@ -1,11 +1,15 @@
+import json
+
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 from django.shortcuts import redirect
+from django.utils.timezone import now
 
 from categories.models import Category
 from categories.views import CategoryDetailView
 from djarzeit.context import ArZeitContext
+from djarzeit.json import get_base_json_data
 from djarzeit.views import ArZeitBaseDetailView, ArZeitTemplateView
 from timers.models import Timer
 
@@ -26,8 +30,13 @@ class TimerDetailView(ArZeitBaseDetailView):
     def process(self):
         pass
 
+    def get_ajax_data(self):
+        return {}
+
     def get_ajax_response(self):
-        return HttpResponse('ok')
+        data = get_base_json_data(self.user)
+        data.update(self.get_ajax_data())
+        return HttpResponse(json.dumps(data), content_type='application/json')
 
     def add_error(self, action, msg):
         messages.error(
