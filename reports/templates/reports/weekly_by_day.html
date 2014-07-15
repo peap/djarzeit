@@ -2,32 +2,38 @@
 {% load timer_tags %}
 
 {% block reports_content %}
+<div class="well">
+  <div class="row">
+    <div class="col-xs-12">
 
-<table class="table table-condensed table-bordered">
-  <thead>
-    <tr>
-      <th scope="col">Category</th>
-    {% for d in dates %}
-      <th scope="col" {% if d == report_date %}class="today"{% endif %}>
-        {{ d|date:'m/d' }}
-      </th>
-    {% endfor %}
-    </tr>
-  </thead>
-  <tfoot>
-  </tfoot>
-  <tbody>
-  {% for cat in all_categories %}
-    <tr>
-      <th scope="row">{{ cat.name }}</td>
-    {% for d in dates %}
-      <td>
-        {{ category|time_on_date:d }}
-      </td>
-    {% endfor %}
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
+      <table class="table table-condensed table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Category</th>
+          {% for d in dates %}
+            <th scope="col" {% if d == report_date %}class="today"{% endif %}>
+              {{ d|date:'m/d' }}
+            </th>
+          {% endfor %}
+          </tr>
+        </thead>
+        <tfoot>
+        </tfoot>
+        <tbody>
+        {% for cat in all_categories %}
+          <tr>
+            <th scope="row">{{ cat.name }}</td>
+          {% for d in dates %}
+            <td>
+              {{ category|time_on_date:d }}
+            </td>
+          {% endfor %}
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
 
+    </div>
+  </div>
+</div>
 {% endblock reports_content %}

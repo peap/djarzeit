@@ -1,49 +1,56 @@
 {% extends 'reports/reports_base.html' %}
 
 {% block reports_content %}
+<div class="well">
+  <div class="row">
+    <div class="col-xs-12">
 
-<div class="row">
-  <div class="col-xs-2">
-  </div>
-{% for cat, _ in root_category_cells %}
-  <div class="col-xs-{{ category_width }}">
-    <div class="interval-header">
-     {{ cat.name }}
-    </div>
-  </div>
-{% endfor %}
-</div>
-
-<div class="row">
-
-  <div class="col-xs-2 interval-container" style="height: {{ total_height }}px;">
-  {% for cell in time_cells %}
-    <div class="interval {{ cell.classes }}"
-        style="height: {{ cell.height }}px; top: {{ cell.top }}px;">
-      {{ cell.value }}
-    </div>
-  {% endfor %}
-  </div>
-
-  {% for cat, cells in root_category_cells %}
-    <div class="col-xs-{{ category_width }} interval-container">
-      {% for cell in cells %}
-        <div class="interval" title="{{ cell.title }}"
-            style="height: {{ cell.height }}px; top: {{ cell.top }}px;">
-          <div class="interval-start">
-            {{ cell.start }}
-          </div>
-          <div class="interval-details">
-            {{ cell.interval.timer }}
-          </div>
-          <div class="interval-end">
-            {{ cell.end }}
+      <div class="row">
+        <div class="col-xs-2">
+        </div>
+      {% for cat, _ in root_category_cells %}
+        <div class="col-xs-{{ category_width }}">
+          <div class="interval-header">
+           {{ cat.name }}
           </div>
         </div>
       {% endfor %}
+      </div>
+
+      <div class="row">
+
+        <div class="col-xs-2 interval-container"
+            style="height: {{ total_height }}px;">
+        {% for cell in time_cells %}
+          <div class="interval {{ cell.classes }}"
+              style="height: {{ cell.height }}px; top: {{ cell.top }}px;">
+            {{ cell.value }}
+          </div>
+        {% endfor %}
+        </div>
+
+        {% for cat, cells in root_category_cells %}
+          <div class="col-xs-{{ category_width }} interval-container">
+            {% for cell in cells %}
+              <div class="interval" title="{{ cell.title }}"
+                  style="height: {{ cell.height }}px; top: {{ cell.top }}px;">
+                <div class="interval-start">
+                  {{ cell.start }}
+                </div>
+                <div class="interval-details">
+                  {{ cell.interval.timer }}
+                </div>
+                <div class="interval-end">
+                  {{ cell.end }}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+
+      </div>
+
     </div>
-  {% endfor %}
-
+  </div>
 </div>
-
 {% endblock reports_content %}
