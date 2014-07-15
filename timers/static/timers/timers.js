@@ -31,4 +31,28 @@ $(document).ready(function () {
         }
     });
 
+    $('form.startstop-form').on('submit', function (e) {
+        e.preventDefault();
+        var $form = $(this);
+        var data = $form.serialize();
+        var url = $form.attr('action');
+        $.post(url, data, function(data){
+            var $form_btns = $form.find('button');
+            var $startstop_btn = $form.find('button[type="submit"]');
+            var old_text = $startstop_btn.text().trim();
+            if (old_text === 'Start') {
+                $form.closest('.root-category-panel').find('button')
+                     .removeClass('btn-danger').addClass('btn-success');
+                $form.closest('.root-category-panel').find('button[type="submit"]')
+                     .text('Start');
+                $form_btns.removeClass('btn-success').addClass('btn-danger');
+                $startstop_btn.text('Stop');
+            } else {
+                $form_btns.removeClass('btn-danger').addClass('btn-success');
+                $startstop_btn.text('Start');
+            }
+        });
+    });
+
 });
+

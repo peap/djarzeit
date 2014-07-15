@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.core.exceptions import ValidationError
+from django.http import HttpResponse
 from django.shortcuts import redirect
 
 from categories.models import Category
@@ -25,6 +26,9 @@ class TimerDetailView(ArZeitBaseDetailView):
     def process(self):
         pass
 
+    def get_ajax_response(self):
+        return HttpResponse('ok')
+
     def add_error(self, action, msg):
         messages.error(
             self.request,
@@ -40,7 +44,10 @@ class TimerDetailView(ArZeitBaseDetailView):
     def post(self, request, *args, **kwargs):
         self.timer = self.get_object()
         self.process()
-        return redirect('timers')
+        if self.request.is_ajax():
+            return self.get_ajax_response()
+        else:
+            return redirect('timers')
 
 
 class Listing(ArZeitTemplateView):
