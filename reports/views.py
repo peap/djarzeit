@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from categories.models import Category
 from djarzeit.context import ArZeitContext
 from timers.models import Interval
-from reports.utils import get_report_date, date_is_today
+from reports import utils
 
 
 class ReportsContext(ArZeitContext):
@@ -19,7 +19,7 @@ class ReportsContext(ArZeitContext):
 
 @login_required
 def daily_summary(request):
-    report_date = get_report_date(request)
+    report_date = utils.get_report_date(request)
     root_categories = Category.objects.filter(user=request.user, parent=None)
 
     # TODO
@@ -38,11 +38,11 @@ def daily_summary(request):
 
 @login_required
 def weekly_summary(request):
-    report_date = get_report_date(request)
+    report_date = utils.get_report_date(request)
     root_categories = Category.objects.filter(user=request.user, parent=None)
 
     # TODO
-    dates = [report_date - timedelta(days=1), report_date]
+    dates = utils.get_dates_for_week_of(report_date)
     all_categories = []
 
     context = ReportsContext(request, {
@@ -57,17 +57,17 @@ def weekly_summary(request):
 
 @login_required
 def weekly_by_day(request):
-    report_date = get_report_date(request)
+    report_date = utils.get_report_date(request)
     root_categories = Category.objects.filter(user=request.user, parent=None)
 
 
 @login_required
 def intervals(request):
-    report_date = get_report_date(request)
+    report_date = utils.get_report_date(request)
     year, month, day = report_date.year, report_date.month, report_date.day
     tz = report_date.tzinfo
     nowtz = now().astimezone(tz=tz)
-    is_today = date_is_today(report_date)
+    is_today = utils.date_is_today(report_date)
 
     root_categories = Category.objects.filter(user=request.user, parent=None)
     category_width = _get_category_width(root_categories.count())

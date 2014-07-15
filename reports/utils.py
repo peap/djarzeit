@@ -23,3 +23,9 @@ def date_is_today(date):
     nowtz = now().astimezone(tz=tz)
     year, month, day = date.year, date.month, date.day
     return all([year == nowtz.year, month == nowtz.month, day == nowtz.day])
+
+
+def get_dates_for_week_of(date):
+    year, week, dow = date.isocalendar()
+    deltas = [(d + 1 - dow) for d in range(7)]
+    return [(date + timedelta(days=d)) for d in deltas]
