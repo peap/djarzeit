@@ -21,9 +21,16 @@ class ReportsContext(ArZeitContext):
 def daily_summary(request):
     report_date = get_report_date(request)
     root_categories = Category.objects.filter(user=request.user, parent=None)
+
+    # TODO
+    dates = [report_date]
+    all_categories = []
+
     context = ReportsContext(request, {
         'report_date': report_date,
         'root_categories': root_categories,
+        'dates': dates,
+        'all_categories': all_categories,
         'listing_template': 'reports/daily_summary_listing.html',
     })
     return render_to_response('reports/summary_base.html', {}, context)
@@ -31,18 +38,6 @@ def daily_summary(request):
 
 @login_required
 def weekly_summary(request):
-    report_date = get_report_date(request)
-    root_categories = Category.objects.filter(user=request.user, parent=None)
-    context = ReportsContext(request, {
-        'report_date': report_date,
-        'root_categories': root_categories,
-        'listing_template': 'reports/weekly_summary_listing.html',
-    })
-    return render_to_response('reports/summary_base.html', {}, context)
-
-
-@login_required
-def weekly_by_day(request):
     report_date = get_report_date(request)
     root_categories = Category.objects.filter(user=request.user, parent=None)
 
@@ -55,8 +50,15 @@ def weekly_by_day(request):
         'root_categories': root_categories,
         'dates': dates,
         'all_categories': all_categories,
+        'listing_template': 'reports/weekly_summary_listing.html',
     })
-    return render_to_response('reports/weekly_by_day.html', {}, context)
+    return render_to_response('reports/summary_base.html', {}, context)
+
+
+@login_required
+def weekly_by_day(request):
+    report_date = get_report_date(request)
+    root_categories = Category.objects.filter(user=request.user, parent=None)
 
 
 @login_required
