@@ -1,6 +1,7 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
 
 from account import views
+
 
 urlpatterns = patterns('',
     url(r'^$', views.account, name='account'),

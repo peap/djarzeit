@@ -1,5 +1,5 @@
 DjArZeit (Arbeit Zeit)
-======
+======================
 
 A time tracking app
 

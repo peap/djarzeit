@@ -50,7 +50,7 @@ def new_category(request, cat_id):
     else:
         try:
             parent_cat = Category.objects.get(pk=int(cat_id))
-        except (ValueError, ObjectDoesNotExist) as e:
+        except (ValueError, ObjectDoesNotExist):
             messages.error(request, 'Please choose a valid parent category.')
             return redirect('categories')
     name = request.POST.get('category_name')

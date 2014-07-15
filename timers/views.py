@@ -1,12 +1,11 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect
 
 from categories.models import Category
 from categories.views import CategoryDetailView
 from djarzeit.context import ArZeitContext
-from djarzeit.views import ArZeitView, ArZeitBaseDetailView, ArZeitTemplateView
+from djarzeit.views import ArZeitBaseDetailView, ArZeitTemplateView
 from timers.models import Timer
 
 
@@ -61,7 +60,6 @@ class New(CategoryDetailView):
     def post(self, request, *args, **kwargs):
         category = self.get_object()
         name = request.POST.get('timer_name')
-        category_id = request.POST.get('category_id')
         timer = Timer(category=category, name=name)
         try:
             timer.full_clean()

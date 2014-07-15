@@ -5,8 +5,6 @@ import pytz
 from django.contrib import messages
 from django.utils.timezone import datetime, timedelta, now
 
-from categories.models import Category
-
 
 def get_report_date(request):
     user_tz = pytz.timezone(request.user.profile.timezone)

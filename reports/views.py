@@ -1,7 +1,3 @@
-from math import ceil
-import pytz
-
-from django.contrib import messages
 from django.shortcuts import render_to_response
 from django.utils.timezone import datetime, timedelta, now
 from django.contrib.auth.decorators import login_required

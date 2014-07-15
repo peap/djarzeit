@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 
 from timers import views
 
+
 timer_patterns = patterns('',
     url(r'^startstop/$', views.StartStop.as_view(), name='startstop'),
     url(r'^edit/$', views.Edit.as_view(), name='edit_timer'),
@@ -9,6 +10,7 @@ timer_patterns = patterns('',
     url(r'^unarchive/$', views.Archive.as_view(), name='unarchive_timer'),
     url(r'^delete/$', views.Delete.as_view(), name='delete_timer'),
 )
+
 
 urlpatterns = patterns('',
     url(r'^$', views.Listing.as_view(), name='timers'),
