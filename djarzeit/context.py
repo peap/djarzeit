@@ -14,7 +14,7 @@ class ArZeitContext(RequestContext):
 
     def __init__(self, request, context, **kwargs):
         active_timers = Timer.objects.filter(
-            category__user=request.user,
+            category__user=request.user.id,
             active=True
         )
         extra_css = list(self.extra_css) + list(kwargs.pop('extra_css', ()))
