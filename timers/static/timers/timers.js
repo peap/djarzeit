@@ -14,6 +14,7 @@ $(document).ready(function () {
     });
 
     $('.panel-body').collapse();
+    $('.panel-body').collapse('hide');
     $('.panel-heading').on('click', function (e) {
         var $panel = $(this).closest('.panel');
         var $panel_body = $panel.find('.panel-body');
