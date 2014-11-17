@@ -93,6 +93,14 @@ class Timer(models.Model):
         return total
 
     @property
+    def total_time(self):
+        intervals = self.interval_set.all()
+        total = timedelta(0)
+        for interval in intervals:
+            total += interval.length
+        return total
+
+    @property
     def intervals_yesterday(self):
         yesterday = now() - timedelta(days=1)
         return self.get_intervals_on_date(yesterday)

@@ -67,6 +67,11 @@
           {% endfor %}
           </tbody>
           <tfoot>
+            <tr>
+              <td colspan="4">
+                All time: {{ timer.total_time|format_timedelta_long }}
+              </td>
+            </tr>
           </tfoot>
         </table>
       </div> <!-- .modal-body -->
