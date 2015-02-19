@@ -4,9 +4,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import requires_csrf_token
 
-from djarzeit.context import ArZeitContext
-from djarzeit.views import ArZeitBaseDetailView
 from categories.models import Category
+from core.context import ArZeitContext
+from core.views import ArZeitBaseDetailView
 
 FAKE_ROOT_PARENT = {
     'id': 'root',

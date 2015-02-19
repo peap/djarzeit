@@ -8,9 +8,9 @@ from django.utils.timezone import now
 
 from categories.models import Category
 from categories.views import CategoryDetailView
-from djarzeit.context import ArZeitContext
-from djarzeit.json import get_base_json_data
-from djarzeit.views import ArZeitBaseDetailView, ArZeitTemplateView
+from core.context import ArZeitContext
+from core.json import get_base_json_data
+from core.views import ArZeitBaseDetailView, ArZeitTemplateView
 from timers.models import Timer
 
 

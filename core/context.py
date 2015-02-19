@@ -1,7 +1,7 @@
 from django.template import RequestContext
 from django.utils.timezone import now
 
-from djarzeit.json import get_server_time_str
+from core.json import get_server_time_str
 from timers.models import Timer
 
 

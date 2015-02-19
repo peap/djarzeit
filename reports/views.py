@@ -3,7 +3,7 @@ from django.utils.timezone import datetime, timedelta, now
 from django.contrib.auth.decorators import login_required
 
 from categories.models import Category
-from djarzeit.context import ArZeitContext
+from core.context import ArZeitContext
 from timers.models import Interval
 from reports import utils
 

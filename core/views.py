@@ -5,7 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View, TemplateView
 from django.views.generic.detail import BaseDetailView
 
-from djarzeit.context import ArZeitContext
+from core.context import ArZeitContext
 from timers.models import Timer
 
 

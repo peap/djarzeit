@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 from account.models import Profile
-from djarzeit.context import ArZeitContext
+from core.context import ArZeitContext
 
 
 class AccountContext(ArZeitContext):
