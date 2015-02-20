@@ -3,10 +3,10 @@
 <div class="panel-heading" data-toggle="collapse" data-target="#cat-body-{{ cat.id }}">
   <span class="panel-title">
     <div class="row">
-      <div class="col-xs-5">
+      <div class="col-xs-7 col-md-5">
         {{ cat.name }}
       </div>
-      <div class="col-xs-7">
+      <div class="col-xs-5 col-md-7">
         {{ cat.today|format_timedelta }}
       </div>
     </div>
@@ -18,23 +18,23 @@
   <table class="table">
     <thead>
       <tr>
-        <th scope="col" class="col-xs-5">Timer</th>
-        <th scope="col" class="col-xs-3">Today</th>
-        <th scope="col" class="col-xs-4">Actions</th>
+        <th scope="col" class="col-xs-7 col-md-5">Timer</th>
+        <th scope="col" class="hidden-xs col-md-3">Today</th>
+        <th scope="col" class="col-xs-5 col-md-4">Actions</th>
       </tr>
     </thead>
     <tbody>
     {% for timer in cat.unarchived_timers %}
       <tr id="timer_{{ timer.id }}"
           {% if timer.active %}class="active"{% endif %}>
-        <td>
+        <td class="col-xs-7 col-md-5">
           {% include 'timers/modals.html' with timer=timer %}
           {{ timer.name }}
         </td>
-        <td>
+        <td class="hidden-xs col-md-3">
           {{ timer.today|format_timedelta }}
         </td>
-        <td>
+        <td class="col-xs-5 col-md-4">
           <form method="post" action="{% url 'startstop' timer_id=timer.id %}"
               class="form-inline startstop-form">
             {% csrf_token %}
