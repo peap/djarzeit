@@ -26,6 +26,11 @@ $(document).ready(function () {
         });
     });
 
+    $('a.create-timer-and-more').on('click', function (e) {
+        var $this = $(this);
+        $this.next('button[type="submit"]').click();
+    });
+
 });
 
 function updatePageData(data){

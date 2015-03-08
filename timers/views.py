@@ -71,6 +71,7 @@ class New(CategoryDetailView):
     def post(self, request, *args, **kwargs):
         category = self.get_object()
         name = request.POST.get('timer_name')
+        action = request.POST.get('create-action')
         timer = Timer(category=category, name=name)
         try:
             timer.full_clean()
@@ -81,10 +82,16 @@ class New(CategoryDetailView):
             messages.error(request, msg)
         else:
             timer.save()
-            messages.success(
-                request,
-                'Created new timer, {0}.'.format(timer.linkify()),
-            )
+            msg = 'Created new timer, {0}'.format(timer.linkify())
+            if action == 'create':
+                msg += '.'
+            if action == 'start':
+                timer.start()
+                msg += ', and started it.'
+            if action == 'archive':
+                timer.archive()
+                msg += ', and archived it.'
+            messages.success(request, msg)
         return redirect('timers')
 
 

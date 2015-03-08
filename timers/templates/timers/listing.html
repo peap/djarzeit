@@ -1,7 +1,7 @@
 {% load timer_tags %}
 
 <div class="panel-heading" data-toggle="collapse" data-target="#cat-body-{{ cat.id }}">
-  <span class="panel-title">
+  <div class="panel-title">
     <div class="row">
       <div class="col-xs-7 col-md-5">
         {{ cat.name }}
@@ -10,7 +10,7 @@
         {{ cat.today|format_timedelta }}
       </div>
     </div>
-  </span>
+  </div>
 </div> <!-- .panel-heading -->
 
 <div class="panel-body panel-collapse collapse in" id="cat-body-{{ cat.id }}">
@@ -60,15 +60,17 @@
                 <span class="accessibility">Toggle Dropdown</span>
               </button>
             {% endif %}
-              <ul class="dropdown-menu pull-right" role="menu">
+              <ul class="dropdown-menu dropdown-menu-right" role="menu">
                 <li>
                   <a href="#" data-toggle="modal"
+                      id="timer_history_label_{{ timer.id }}"
                       data-target="#timer_history_{{ timer.id }}">
                     View history
                   </a>
                 </li>
                 <li>
                   <a href="#" data-toggle="modal"
+                      id="timer_edit_label_{{ timer.id }}"
                       data-target="#timer_edit_{{ timer.id }}">
                     Edit details
                   </a>
@@ -76,12 +78,14 @@
                 <li class="divider"></li>
                 <li>
                   <a href="#" data-toggle="modal"
+                      id="timer_archive_label_{{ timer.id }}"
                       data-target="#timer_archive_{{ timer.id }}">
                     Archive this timer
                   </a>
                 </li>
                 <li>
                   <a href="#" data-toggle="modal"
+                      id="timer_delete_label_{{ timer.id }}"
                       data-target="#timer_delete_{{ timer.id }}">
                     Delete this timer
                   </a>
@@ -93,29 +97,29 @@
       </tr>
     {% empty %}
       <tr>
-        <td colspan="4">
+        <td colspan="3">
           You haven't created any timers in this category.
         </td>
       </tr>
     {% endfor %}
     </tbody>
     <tfoot>
-      <tr>
-        <td colspan="4">
-        {% with n_archived=cat.archived_timers.count %}
-          {% if n_archived > 0 %}
-            {% include 'categories/archived_timers_modal.html' with cat=cat %}
-            Not showing
-            <a href="#" data-toggle="modal"
-                data-target="#archived_timers_{{ cat.id }}">
-              {{ n_archived }} archived timer{{ n_archived|pluralize }}.
-            </a>
-          {% endif %}
-        {% endwith %}
-        </td>
-      </tr>
+    {% with n_archived=cat.archived_timers.count %}
+      {% if n_archived > 0 %}
+        <tr>
+          <td colspan="3">
+              {% include 'categories/archived_timers_modal.html' with cat=cat %}
+              Not showing
+              <a href="#" data-toggle="modal"
+                  data-target="#archived_timers_{{ cat.id }}">
+                {{ n_archived }} archived timer{{ n_archived|pluralize }}.
+              </a>
+          </td>
+        </tr>
+      {% endif %}
+    {% endwith %}
       <tr id="add_new_timer_in_{{ cat.id }}">
-        <td colspan="4">
+        <td colspan="3">
           <form id="new_timer_{{ cat.id }}" method="post" class="form-inline"
               action="{% url 'new_timer' category_id=cat.id %}">
             {% csrf_token %}
@@ -125,12 +129,38 @@
               <input type="text" name="timer_name" id="timer_name_{{ cat.id }}"
                   class="form-control" placeholder="new {{ cat.name }} timer..."
                   required>
-              <span class="input-group-btn">
-                <button type="submit" class="btn btn-primary" id="new_timer_btn">
+              <div class="input-group-btn">
+                <button type="submit" class="btn btn-primary"
+                    name="create-action" value="create">
                   Create
                 </button>
-              </span>
-            </div>
+                <button type="button" class="btn btn-primary dropdown-toggle"
+                    data-toggle="dropdown">
+                  <span class="caret"></span>
+                  <span class="accessibility">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                  <li>
+                    <a href="#" class="create-timer-and-more">
+                      Create and Start
+                    </a>
+                    <button type="submit" class="accessibility"
+                        name="create-action" value="start">
+                      Create and Start
+                    </button>
+                  </li>
+                  <li>
+                    <a href="#" class="create-timer-and-more">
+                      Create and Archive
+                    </a>
+                    <button type="submit" class="accessibility"
+                        name="create-action" value="archive">
+                      Create and Archive
+                    </button>
+                  </li>
+                </ul>
+              </div> <!-- .input-group-btn -->
+            </div> <!-- .input-group -->
           </form>
         </td>
       </tr>
@@ -149,3 +179,4 @@
   {% endif %}
 
 </div> <!-- .panel-body -->
+
