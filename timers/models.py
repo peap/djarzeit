@@ -1,7 +1,7 @@
 import pytz
 
 from django.db import models
-from django.utils.timezone import datetime, now, timedelta
+from django.utils.timezone import datetime, make_aware, now, timedelta
 
 from categories.models import Category
 
@@ -66,7 +66,10 @@ class Timer(models.Model):
         local_date_end = datetime(
             local_date.year, local_date.month, local_date.day, 23, 59, 59)
         return self.interval_set.filter(
-            start__range=(local_date_start, local_date_end),
+            start__range=(
+                make_aware(local_date_start, user_tz),
+                make_aware(local_date_end, user_tz)
+            ),
         )
 
     def get_intervals_on_date_week(self, date):
