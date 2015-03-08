@@ -50,4 +50,8 @@ function updatePageData(data){
         }
         $active.html('Active: ' + timers.join(', '));
     }
+    document.title = document.title.replace(
+        /[0-9]+ active/,
+        data.active_timers.length + ' active'
+    );
 }
