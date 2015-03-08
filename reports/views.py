@@ -14,14 +14,15 @@ class ReportsContext(ArZeitContext):
 
 
 @login_required
-def daily_summary(request):
+def daily_summary(request, full=False):
     report_date = utils.get_report_date(request)
     root_categories = Category.objects.filter(user=request.user, parent=None)
 
     dates = [report_date]
     totals_by_root_cat = [
-        (cat, utils.get_totals_for_dates(cat, dates))
+        (cat, utils.get_totals_for_dates(cat, dates, full=full))
         for cat in root_categories
+        if full or cat.show_in_selective_reports
     ]
 
     context = ReportsContext(request, {
@@ -34,14 +35,15 @@ def daily_summary(request):
 
 
 @login_required
-def weekly_summary(request):
+def weekly_summary(request, full=False):
     report_date = utils.get_report_date(request)
     root_categories = Category.objects.filter(user=request.user, parent=None)
 
     dates = utils.get_dates_for_week_of(report_date)
     totals_by_root_cat = [
-        (cat, utils.get_totals_for_dates(cat, dates))
+        (cat, utils.get_totals_for_dates(cat, dates, full=full))
         for cat in root_categories
+        if full or cat.show_in_selective_reports
     ]
 
     context = ReportsContext(request, {

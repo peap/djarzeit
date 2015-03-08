@@ -47,10 +47,11 @@ def get_flat_list_of_categories_and_timers(base_cat):
     return _add_to_list(base_cat)
 
 
-def get_totals_for_dates(base_cat, dates):
+def get_totals_for_dates(base_cat, dates, full=False):
     """
-    Get a flat list of 3-tuples for every category and timer of the given base
-    category, summarizing the time logged on the given dates.
+    Get a flat list of 3-tuples for every reportable category and timer of the
+    given base category, summarizing the time logged on the given dates. If
+    full is True, do this for EVERY category and timer.
     Return format:
     [
         (<category|timer>, total, [time on dates[0], time2 on dates[1], ...]),
@@ -59,6 +60,8 @@ def get_totals_for_dates(base_cat, dates):
     """
     all_totals = []
     for item in get_flat_list_of_categories_and_timers(base_cat):
+        if not full and not item.show_in_selective_reports:
+            continue
         totals = [item.get_total_time_on_date(date) for date in dates]
         total = reduce(operator.add, totals)
         if total.total_seconds() > 0:

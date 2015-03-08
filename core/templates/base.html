@@ -49,14 +49,21 @@
               </a>
               <ul class="dropdown-menu">
                 <li>
-                  <a href="{% url 'daily_summary' %}">Daily Summary</a>
-                </li>
-                <li>
-                  <a href="{% url 'weekly_summary' %}">Weekly Summary</a>
+                  <a href="{% url 'intervals' %}">Intervals by Day</a>
                 </li>
                 <li class="divider"></li>
                 <li>
-                  <a href="{% url 'intervals' %}">Intervals</a>
+                  <a href="{% url 'daily_summary' %}">Selective Summary by Day</a>
+                </li>
+                <li>
+                  <a href="{% url 'weekly_summary' %}">Selective Summary by Week</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                  <a href="{% url 'daily_summary_full' %}">Full Summary by Day</a>
+                </li>
+                <li>
+                  <a href="{% url 'weekly_summary_full' %}">Full Summary by Week</a>
                 </li>
               </ul>
             </li>

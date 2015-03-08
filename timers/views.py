@@ -102,6 +102,7 @@ class Edit(TimerDetailView):
             self.add_error('editing', 'Invalid timer name.')
             return redirect('timers')
         category_id = self.request.POST.get('new_timer_category').strip()
+        reportable = bool(self.request.POST.get('new_timer_reportable'))
         try:
             category = self.categories.get(pk=int(category_id))
         except Category.DoesNotExist as e:
@@ -111,6 +112,7 @@ class Edit(TimerDetailView):
         else:
             self.timer.name = name
             self.timer.category = category
+            self.timer.reportable = reportable
             try:
                 self.timer.full_clean()
             except ValidationError as e:
@@ -124,7 +126,6 @@ class Edit(TimerDetailView):
                     self.request,
                     'Edited timer "{0}".'.format(self.timer.linkify()),
                 )
-
 
 
 class StartStop(TimerDetailView):

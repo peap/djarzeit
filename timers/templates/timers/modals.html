@@ -140,6 +140,18 @@
               </select>
             </div>
           </div>
+          <div class="form-group">
+            <label for="new_timer_reportable_{{ timer.id }}"
+                class="col-xs-2 control-label">
+              Reportable
+            </label>
+            <div class="col-xs-10">
+              <input type="checkbox" name="new_timer_reportable"
+                  class="form-control"
+                  {% if timer.reportable %}checked="checked"{% endif %}
+                  id="new_timer_reportable_{{ timer.id }}" />
+            </div>
+          </div>
         </div> <!-- .modal-body -->
 
         <div class="modal-footer">

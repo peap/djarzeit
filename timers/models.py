@@ -18,6 +18,11 @@ class Timer(models.Model):
         max_length=100,
     )
 
+    reportable = models.BooleanField(
+        verbose_name='Reportable',
+        default=False,
+    )
+
     active = models.BooleanField(
         verbose_name='Active',
         default=False,
@@ -33,6 +38,10 @@ class Timer(models.Model):
 
     def linkify(self):
         return '<a href="#timer_{0.id}">{0}</a>'.format(self)
+
+    @property
+    def show_in_selective_reports(self):
+        return self.reportable and not self.archived
 
     def start(self):
         self.category.root_parent.stop_all_timers()

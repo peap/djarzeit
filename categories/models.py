@@ -33,6 +33,16 @@ class Category(models.Model):
         return self.name
 
     @property
+    def show_in_selective_reports(self):
+        for timer in self.timer_set.all():
+            if timer.show_in_selective_reports:
+                return True
+        for category in self.category_set.all():
+            if category.show_in_selective_reports:
+                return True
+        return False
+
+    @property
     def is_root_category(self):
         return self.parent is None
 
