@@ -41,13 +41,8 @@ class TimerDetailView(ArZeitBaseDetailView):
     def add_error(self, action, msg):
         messages.error(
             self.request,
-            'Error {0} timer "{1}": {2}'.format(action, self.timer, msg),
-        )
-
-    def add_success(self, action):
-        messages.success(
-            self.request,
-            'Successfully {0} timer "{1}".'.format(action, self.timer),
+            'Error {0} timer "{1}": {2}'.format(
+                action, self.timer.linkify(), msg),
         )
 
     def post(self, request, *args, **kwargs):
@@ -88,7 +83,7 @@ class New(CategoryDetailView):
             timer.save()
             messages.success(
                 request,
-                'Successfully created new timer "{0}".'.format(timer),
+                'Created new timer, {0}.'.format(timer.linkify()),
             )
         return redirect('timers')
 
@@ -118,7 +113,11 @@ class Edit(TimerDetailView):
                 self.add_error('editing', msg)
             else:
                 self.timer.save()
-                self.add_success('edited')
+                messages.success(
+                    self.request,
+                    'Edited timer "{0}".'.format(self.timer.linkify()),
+                )
+
 
 
 class StartStop(TimerDetailView):
@@ -139,5 +138,7 @@ class Archive(TimerDetailView):
 
 class Delete(TimerDetailView):
     def process(self):
+        timer = str(self.timer)
         self.timer.delete()
-        self.add_success('deleted')
+        messages.success(self.request, 'Deleted timer "{0}".'.format(timer))
+

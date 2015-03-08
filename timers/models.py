@@ -31,6 +31,9 @@ class Timer(models.Model):
     def __str__(self):
         return self.name
 
+    def linkify(self):
+        return '<a href="#timer_{0.id}">{0}</a>'.format(self)
+
     def start(self):
         self.category.root_parent.stop_all_timers()
 
