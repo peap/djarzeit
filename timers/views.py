@@ -21,6 +21,13 @@ class TimersContext(ArZeitContext):
     extra_js = ('timers/timers.js',)
 
 
+class TimelineContext(ArZeitContext):
+    active_tab = 'timeline'
+    auto_refresh = 300
+    extra_css = ('timers/timeline.css',)
+    extra_js = ('core/d3-3.5.9.min.js', 'timers/timeline.js',)
+
+
 class TimerDetailView(ArZeitBaseDetailView):
     pk_url_kwarg = 'timer_id'
 
@@ -150,3 +157,7 @@ class Delete(TimerDetailView):
         self.timer.delete()
         messages.success(self.request, 'Deleted timer "{0}".'.format(timer))
 
+
+class Timeline(ArZeitTemplateView):
+    context_class = TimelineContext
+    template_name = 'timers/timeline.html'

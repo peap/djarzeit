@@ -18,4 +18,5 @@ urlpatterns = patterns('',
         views.New.as_view(),
         name='new_timer'),
     url(r'^(?P<timer_id>[0-9]{1,20})/', include(timer_patterns)),
+    url(r'^timeline/$', views.Timeline.as_view(), name='timeline'),
 )
