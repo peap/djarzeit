@@ -6,7 +6,6 @@
     <div class="pull-right text-right" id="arzeit-account-controls">
       <div>
       {% if user.is_authenticated %}
-        {% include 'account/account_modal.html' %}
         <a href="#account_info" role="button" data-toggle="modal"
             >{{ user.username }}</a>
         |
@@ -19,6 +18,10 @@
     </div>
   </div> <!-- .col-xs-12 -->
 </div> <!-- .row -->
+
+{% if user.is_authenticated %}
+  {% include 'account/account_modal.html' %}
+{% endif %}
 
 <div class="row">
   <div class="col-xs-12">
