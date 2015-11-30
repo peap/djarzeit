@@ -14,9 +14,9 @@ def get_report_date(request):
             report_date = datetime.strptime(date_string, '%m/%d/%Y')
         except ValueError:
             messages.error(request, 'Invalid date.')
-            report_date = datetime.today()
+            report_date = now().astimezone(tz=user_tz)
     else:
-        report_date = datetime.today()
+        report_date = now().astimezone(tz=user_tz)
     return user_tz.normalize(report_date.replace(tzinfo=user_tz))
 
 
