@@ -3,7 +3,7 @@ import operator
 import pytz
 
 from django.contrib import messages
-from django.utils.timezone import datetime, timedelta, now
+from django.utils import timezone
 
 
 def get_report_date(request):
@@ -11,18 +11,20 @@ def get_report_date(request):
     date_string = request.GET.get('report_date')
     if date_string:
         try:
-            report_date = datetime.strptime(date_string, '%m/%d/%Y')
+            report_date = user_tz.localize(
+                timezone.datetime.strptime(date_string, '%m/%d/%Y')
+            )
         except ValueError:
             messages.error(request, 'Invalid date.')
-            report_date = now().astimezone(tz=user_tz)
+            report_date = user_tz.normalize(timezone.now())
     else:
-        report_date = now().astimezone(tz=user_tz)
-    return user_tz.normalize(report_date.replace(tzinfo=user_tz))
+        report_date = user_tz.normalize(timezone.now())
+    return report_date
 
 
 def date_is_today(date):
     tz = date.tzinfo
-    nowtz = now().astimezone(tz=tz)
+    nowtz = timezone.now().astimezone(tz=tz)
     year, month, day = date.year, date.month, date.day
     return all([year == nowtz.year, month == nowtz.month, day == nowtz.day])
 
@@ -34,7 +36,7 @@ def get_dates_for_week_of(date):
     """
     year, week, dow = date.isocalendar()
     deltas = [(d + 1 - dow) for d in range(7)]
-    return [(date + timedelta(days=d)) for d in deltas]
+    return [(date + timezone.timedelta(days=d)) for d in deltas]
 
 
 def get_flat_list_of_categories_and_timers(base_cat):
