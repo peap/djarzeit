@@ -42,6 +42,20 @@
       ),
       'nCategories': {{ data.interval_data|length }},
       'dateStr': '{{ report_date|date:'m/d/Y' }}',
+      'intervals': [
+      {% for cat, cat_data in data.interval_data.items %}
+        {% for interval in cat_data.intervals %}
+          {
+              'categoryNum': {{ forloop.parentloop.counter }},
+              'intervalId': '{{ interval.interval_id }}',
+              'timerId': '{{ interval.timer_id }}',
+              'timerName': '{{ interval.timer_name }}',
+              'start': new Date('{{ interval.start.isoformat }}'),
+              'end': new Date('{{ interval.end.isoformat }}'),
+          },
+        {% endfor %}
+      {% endfor %}
+      ],
   };
 </script>
 

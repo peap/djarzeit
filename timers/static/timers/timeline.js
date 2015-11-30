@@ -50,7 +50,44 @@ $(document).ready(function(){
         .attr('transform', 'rotate(90)')
         .style('text-anchor', 'start');
 
-    // TODO: Add data
+    // Add data
+    function intervalX(d) { return margin.left + timeScale(d.start); }
+    function intervalY(d) { return margin.top + d.categoryNum * 50; }
+    function intervalGroupTransform(d) {
+        return 'translate(' + intervalX(d) + ',' + intervalY(d) + ')';
+    }
+    function intervalClass(d) { return 'interval-of-category-' + d.categoryNum; }
+    function intervalWidth(d) { return timeScale(d.end) - timeScale(d.start); }
+    function intervalHeight(d) { return 35; }
+    function intervalText(d) { return d.timerName; }
+    function intervalTextX(d) { return intervalWidth(d) / 2.0; }
+    function intervalTextY(d) { return intervalHeight(d) - 5; }
 
+    // Create interval groups
+    var intervals = window.timelineData.intervals;
+    var intervalGroups = svg.selectAll('g.interval')
+        .data(intervals)
+        .enter()
+      .append('g')
+        .attr('class', 'interval')
+        .attr('transform', intervalGroupTransform);
+
+    // add rectangles to groups
+    intervalGroups.append('rect')
+        .attr('class', intervalClass)
+        .attr('width', intervalWidth)
+        .attr('height', intervalHeight);
+
+    // add labels to groups
+    intervalGroups.append('text')
+        .text(intervalText)
+        .attr('x', intervalTextX)
+        .attr('y', intervalTextY);
+
+    // TODO: add category group labels on left-hand side
+
+    // TODO: add hover handlers for showing more interval info
+
+    // TODO: add click handlers for creating/editing/deleting intervals
 
 });

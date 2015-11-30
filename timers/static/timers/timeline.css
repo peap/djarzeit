@@ -7,3 +7,24 @@
     stroke: #000;
     shape-rendering: crispEdges;
 }
+
+.interval rect {
+    fill: none;
+    stroke: #000;
+}
+
+.interval text {
+    text-anchor: middle;
+}
+
+.interval rect.interval-of-category-1 {
+    fill: lightblue;
+}
+
+.interval rect.interval-of-category-2 {
+    fill: lightgreen;
+}
+
+.interval rect.interval-of-category-3 {
+    fill: lightred;
+}
