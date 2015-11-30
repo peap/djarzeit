@@ -1,0 +1,9 @@
+.title {
+    font-size: 22px;
+}
+
+.time-axis line, .time-axis path {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
