@@ -13,10 +13,6 @@
     stroke: #000;
 }
 
-.interval text {
-    text-anchor: middle;
-}
-
 .interval rect.interval-of-category-1 {
     fill: lightblue;
 }

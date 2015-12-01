@@ -60,7 +60,7 @@ $(document).ready(function(){
     function intervalWidth(d) { return timeScale(d.end) - timeScale(d.start); }
     function intervalHeight(d) { return 35; }
     function intervalText(d) { return d.timerName; }
-    function intervalTextX(d) { return intervalWidth(d) / 2.0; }
+    function intervalTextX(d) { return 5; }
     function intervalTextY(d) { return intervalHeight(d) - 5; }
 
     // Create interval groups
@@ -82,7 +82,8 @@ $(document).ready(function(){
     intervalGroups.append('text')
         .text(intervalText)
         .attr('x', intervalTextX)
-        .attr('y', intervalTextY);
+        .attr('y', intervalTextY)
+        .style('text-anchor', 'start');
 
     // TODO: add category group labels on left-hand side
 
