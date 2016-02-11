@@ -1,4 +1,6 @@
-Django==1.7.4
-gunicorn==18.0
-psycopg2==2.5.2
-pytz==2014.10
+# Python 3.4
+
+Django==1.7.*
+gunicorn==19.4.*
+psycopg2==2.6.*
+pytz
