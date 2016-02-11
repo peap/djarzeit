@@ -11,7 +11,8 @@ class Category(models.Model):
 
     user = models.ForeignKey(User)
 
-    parent = models.ForeignKey('self',
+    parent = models.ForeignKey(
+        'self',
         blank=True,
         null=True,
         db_index=True,

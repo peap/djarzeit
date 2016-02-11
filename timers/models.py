@@ -231,5 +231,3 @@ class Interval(models.Model):
             else:
                 active = self.end >= dt
         return active
-
-

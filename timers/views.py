@@ -188,8 +188,8 @@ class Timeline(ArZeitTemplateView):
         max_datetime = datetime(y, m, d, 23, 59, 59, 999999, tz)
         intervals = (
             user_intervals
-                .filter(start__range=(min_datetime, max_datetime))
-                .order_by('start')
+            .filter(start__range=(min_datetime, max_datetime))
+            .order_by('start')
         )
 
         nowtz = now().astimezone(tz=tz)
