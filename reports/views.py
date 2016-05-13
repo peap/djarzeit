@@ -167,7 +167,6 @@ def totals(request):
                 (item, item.get_total_time_between_dates(start_date, end_date))
             )
         flat_totals_by_root.append((cat, cat_totals))
-    print(flat_totals_by_root)
     context = ReportsContext(request, {
         'start_date': start_date,
         'end_date': end_date,
