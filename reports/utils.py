@@ -22,6 +22,17 @@ def get_report_date(request):
     return report_date
 
 
+def get_normalized_date(date_string, user):
+    user_tz = pytz.timezone(user.profile.timezone)
+    if date_string:
+        normalized = user_tz.localize(
+            timezone.datetime.strptime(date_string, '%m/%d/%Y')
+        )
+    else:
+        normalized = user_tz.normalize(timezone.now())
+    return normalized
+
+
 def date_is_today(date):
     tz = date.tzinfo
     nowtz = timezone.now().astimezone(tz=tz)

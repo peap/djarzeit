@@ -152,6 +152,30 @@ def intervals(request):
     return render_to_response('reports/intervals.html', {}, context)
 
 
+@login_required
+def totals(request):
+    start_date_str = request.GET.get('start_date')
+    end_date_str = request.GET.get('end_date')
+    start_date = utils.get_normalized_date(start_date_str, request.user)
+    end_date = utils.get_normalized_date(end_date_str, request.user)
+    root_categories = Category.objects.filter(user=request.user, parent=None)
+    flat_totals_by_root = []
+    for cat in root_categories:
+        cat_totals = []
+        for item in utils.get_flat_list_of_categories_and_timers(cat):
+            cat_totals.append(
+                (item, item.get_total_time_between_dates(start_date, end_date))
+            )
+        flat_totals_by_root.append((cat, cat_totals))
+    print(flat_totals_by_root)
+    context = ReportsContext(request, {
+        'start_date': start_date,
+        'end_date': end_date,
+        'flat_totals_by_root': flat_totals_by_root,
+    })
+    return render_to_response('reports/totals_between_dates.html', {}, context)
+
+
 def _get_category_width(num):
     cols_available = 10
     if num > 0:

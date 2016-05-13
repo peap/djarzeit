@@ -70,6 +70,33 @@ class Timer(models.Model):
         self.archived = False
         self.save()
 
+    def get_intervals_between_dates(self, start_date, end_date):
+        user_tz = pytz.timezone(self.category.user.profile.timezone)
+        local_start_date = user_tz.normalize(start_date.astimezone(user_tz))
+        local_end_date = user_tz.normalize(end_date.astimezone(user_tz))
+        local_date_start = datetime(
+            local_start_date.year,
+            local_start_date.month,
+            local_start_date.day,
+            0,
+            0,
+            0,
+        )
+        local_date_end = datetime(
+            local_end_date.year,
+            local_end_date.month,
+            local_end_date.day,
+            23,
+            59,
+            59,
+        )
+        return self.interval_set.filter(
+            start__range=(
+                make_aware(local_date_start, user_tz),
+                make_aware(local_date_end, user_tz)
+            ),
+        )
+
     def get_intervals_on_date(self, date):
         user_tz = pytz.timezone(self.category.user.profile.timezone)
         local_date = user_tz.normalize(date.astimezone(user_tz))
@@ -92,6 +119,13 @@ class Timer(models.Model):
             start__year=year,
             week=week,
         )
+
+    def get_total_time_between_dates(self, start_date, end_date):
+        intervals = self.get_intervals_between_dates(start_date, end_date)
+        total = timedelta(0)
+        for interval in intervals:
+            total += interval.length
+        return total
 
     def get_total_time_on_date(self, date):
         intervals = self.get_intervals_on_date(date)
