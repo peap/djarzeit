@@ -9,6 +9,14 @@ TIMEDELTA_REGEX = re.compile(r'^(.*)(\.[0-9]*)$')
 
 
 @register.filter
+def format_date(value):
+    new_value = ''
+    if hasattr(value, 'strftime'):
+        new_value = value.strftime('%m/%d/%Y')
+    return new_value
+
+
+@register.filter
 def format_timedelta(value):
     new_value = ''
     if isinstance(value, timedelta):

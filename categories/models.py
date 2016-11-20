@@ -79,6 +79,50 @@ class Category(models.Model):
         for timer in self.timer_set.filter(active=True):
             timer.stop()
 
+    def get_intervals_between_dates(self, start_date, end_date):
+        intervals = []
+        for category in self.category_set.all():
+            intervals += category.get_intervals_between_dates(start_date, end_date)
+        for timer in self.timer_set.all():
+            intervals += timer.get_intervals_between_dates(start_date, end_date)
+        return intervals
+
+    def get_first_interval_after(self, date):
+        earliest = None
+
+        def update_earliest(candidate):
+            nonlocal earliest
+            if earliest is None:
+                earliest = candidate
+            else:
+                if candidate is not None:
+                    if candidate < earliest:
+                        earliest = candidate
+
+        for category in self.category_set.all():
+            update_earliest(category.get_first_interval_after(date))
+        for timer in self.timer_set.all():
+            update_earliest(timer.get_first_interval_after(date))
+        return earliest
+
+    def get_last_interval_before(self, date):
+        latest = None
+
+        def update_earliest(candidate):
+            nonlocal latest
+            if latest is None:
+                latest = candidate
+            else:
+                if candidate is not None:
+                    if candidate > latest:
+                        latest = candidate
+
+        for category in self.category_set.all():
+            update_earliest(category.get_first_interval_after(date))
+        for timer in self.timer_set.all():
+            update_earliest(timer.get_first_interval_after(date))
+        return latest
+
     def get_total_time_on_date(self, date):
         total = timedelta(0)
         for category in self.category_set.all():

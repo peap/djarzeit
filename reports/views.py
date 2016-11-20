@@ -7,6 +7,9 @@ from core.context import ArZeitContext
 from timers.models import Interval
 from reports import utils
 
+PX_PER_HOUR = 100
+TIME_FORMAT = '%I:%M %p'
+
 
 class ReportsContext(ArZeitContext):
     active_tab = 'reports'
@@ -66,9 +69,6 @@ def intervals(request):
     root_categories = Category.objects.filter(user=request.user, parent=None)
     category_width = _get_category_width(root_categories.count())
     user_intervals = Interval.user_intervals(request.user)
-
-    PX_PER_HOUR = 100
-    TIME_FORMAT = '%I:%M %p'
 
     def timedelta_height(td):
         hours = td.total_seconds() / 3600
@@ -163,9 +163,10 @@ def totals(request):
     for cat in root_categories:
         cat_totals = []
         for item in utils.get_flat_list_of_categories_and_timers(cat):
-            cat_totals.append(
-                (item, item.get_total_time_between_dates(start_date, end_date))
-            )
+            total = item.get_total_time_between_dates(start_date, end_date)
+            earliest = item.get_first_interval_after(start_date)
+            latest = item.get_last_interval_before(end_date)
+            cat_totals.append((item, total, earliest, latest))
         flat_totals_by_root.append((cat, cat_totals))
     context = ReportsContext(request, {
         'start_date': start_date,

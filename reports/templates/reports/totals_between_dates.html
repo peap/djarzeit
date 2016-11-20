@@ -39,14 +39,18 @@
               Total
               ({{ start_date|date:'m/d/Y' }} - {{ end_date|date:'m/d/Y' }})
             </th>
+            <th scope="col">Earliest</th>
+            <th scope="col">Latest</th>
           </tr>
         </thead>
         <tbody>
-        {% for item, total in root_cat_totals %}
+        {% for item, total, earliest, latest in root_cat_totals %}
           {% if total %}
             <tr>
               <th scope="row">{{ item.hierarchy_display }}</th>
               <td>{{ total|format_timedelta }}</td>
+              <td>{{ earliest.start.date|date:'m/d/Y' }}</td>
+              <td>{{ latest.start.date|date:'m/d/Y' }}</td>
             </tr>
           {% endif %}
         {% endfor %}

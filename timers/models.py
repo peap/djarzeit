@@ -1,4 +1,5 @@
 import pytz
+from functools import total_ordering
 
 from django.db import models
 from django.utils.timezone import datetime, make_aware, now, timedelta
@@ -120,6 +121,38 @@ class Timer(models.Model):
             week=week,
         )
 
+    def get_first_interval_after(self, date):
+        user_tz = pytz.timezone(self.category.user.profile.timezone)
+        local_date = user_tz.normalize(date.astimezone(user_tz))
+        local_date_for_filter = datetime(
+            local_date.year,
+            local_date.month,
+            local_date.day,
+            0,
+            0,
+            0,
+        )
+        intervals = self.interval_set.filter(
+            start__gt=make_aware(local_date_for_filter, user_tz),
+        )
+        return intervals.first()
+
+    def get_last_interval_before(self, date):
+        user_tz = pytz.timezone(self.category.user.profile.timezone)
+        local_date = user_tz.normalize(date.astimezone(user_tz))
+        local_date_for_filter = datetime(
+            local_date.year,
+            local_date.month,
+            local_date.day,
+            23,
+            59,
+            59,
+        )
+        intervals = self.interval_set.filter(
+            start__lt=make_aware(local_date_for_filter, user_tz),
+        )
+        return intervals.last()
+
     def get_total_time_between_dates(self, start_date, end_date):
         intervals = self.get_intervals_between_dates(start_date, end_date)
         total = timedelta(0)
@@ -202,6 +235,7 @@ class Timer(models.Model):
         }
 
 
+@total_ordering
 class Interval(models.Model):
 
     class Meta:
@@ -244,6 +278,12 @@ class Interval(models.Model):
         kwargs['year'] = today.year
         kwargs['start'] = now()
         super().__init__(*args, **kwargs)
+
+    def __eq__(self, other):
+        return self.pk == other.pk
+
+    def __lt__(self, other):
+        return self.start < other.start
 
     @property
     def length(self):
