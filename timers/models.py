@@ -134,7 +134,7 @@ class Timer(models.Model):
         )
         intervals = self.interval_set.filter(
             start__gt=make_aware(local_date_for_filter, user_tz),
-        )
+        ).order_by('start')
         return intervals.first()
 
     def get_last_interval_before(self, date):
@@ -150,7 +150,7 @@ class Timer(models.Model):
         )
         intervals = self.interval_set.filter(
             start__lt=make_aware(local_date_for_filter, user_tz),
-        )
+        ).order_by('start')
         return intervals.last()
 
     def get_total_time_between_dates(self, start_date, end_date):

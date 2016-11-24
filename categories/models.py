@@ -118,9 +118,9 @@ class Category(models.Model):
                         latest = candidate
 
         for category in self.category_set.all():
-            update_earliest(category.get_first_interval_after(date))
+            update_earliest(category.get_last_interval_before(date))
         for timer in self.timer_set.all():
-            update_earliest(timer.get_first_interval_after(date))
+            update_earliest(timer.get_last_interval_before(date))
         return latest
 
     def get_total_time_on_date(self, date):
