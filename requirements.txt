@@ -1,6 +1,6 @@
 # Python 3.4
 
-Django~>1.8.19
+Django~>1.11.19  # TODO: actually update from 1.8 to 1.11
 gunicorn~>19.5.0
 psycopg2==2.6.*
 pytz
